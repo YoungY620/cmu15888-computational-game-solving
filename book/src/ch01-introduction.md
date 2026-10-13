@@ -4,12 +4,12 @@ This chapter lays out the basic language used throughout the course: the two cla
 
 ## The Heart of the Problem
 
-In single-agent settings, an agent's expected-utility-maximizing strategy is well defined: evaluate each candidate strategy by its expected utility and take the best. In multiagent settings, the outcome depends on the other agents' strategies as well — so an agent's best strategy may depend on what strategies the other agents choose, and vice versa. Game theory was developed specifically to handle this strategic interdependence, and it is the only sound approach for doing so.
+In single-agent settings, an agent's expected-utility-maximizing strategy is well defined: evaluate each candidate strategy by its expected utility and take the best. In multiagent settings, the outcome depends on the other agents' strategies as well, so an agent's best strategy may depend on what strategies the other agents choose, and vice versa. Game theory was developed specifically to handle this strategic interdependence, and it is the only sound approach for doing so.
 
 ## Terminology
 
 - **Agent**: a player.
-- **Action**: a move — a choice the agent can make at a point in the game.
+- **Action**: a move, a choice the agent can make at a point in the game.
 - **Strategy** $s_i$: a mapping from history (to the extent that agent $i$ can distinguish it) to actions. It can encompass "strategic", "operational", and "tactical" decisions at once.
 - **Strategy set** $S_i$: the strategies available to the agent.
 - **Strategy profile** $(s_1, s_2, \dots, s_{|A|})$: a tuple with one strategy for each agent.
@@ -34,7 +34,7 @@ $$
 \max_{\text{strategy}} \sum_{\text{outcome}} p(\text{outcome} \mid \text{strategy}) \, u_i(\text{outcome})
 $$
 
-If $u_i'(\cdot) = a\, u_i(\cdot) + b$ with $a > 0$, then the agent will choose exactly the same strategy under $u_i'$ as under $u_i$ — positive affine transformations do not change the preference order. (Note that $u_i$ must be finite for every possible outcome; otherwise the expected utility could be infinite for several strategies at once, and the strategies could no longer be compared.) Inter-agent utility comparison, however, is problematic: one cannot conclude from the numbers "whose payoff is larger".
+If $u_i'(\cdot) = a\, u_i(\cdot) + b$ with $a > 0$, then the agent will choose exactly the same strategy under $u_i'$ as under $u_i$: positive affine transformations do not change the preference order. (Note that $u_i$ must be finite for every possible outcome; otherwise the expected utility could be infinite for several strategies at once, and the strategies could no longer be compared.) Inter-agent utility comparison, however, is problematic: one cannot conclude from the numbers "whose payoff is larger".
 
 ## Classical Game Representations
 
@@ -45,7 +45,7 @@ There are two classical representations of a game:
 
 ![The same game in extensive form (left) and matrix form (right)](assets/ch01-introduction-2.png)
 
-On the left of the figure is the extensive form of a two-stage game: Player 1 first chooses Up/Down, Player 2 observes this and then chooses Left/Right, and the leaves $(u_1, u_2)$ give both players' payoffs. On the right is the matrix form of the same game: Player 1 has two strategies (Up, Down), while Player 2's strategy must specify an action at each of her two decision nodes, giving four strategies (Left,Left), (Left,Right), (Right,Left), (Right,Right). Notice that even this toy game already exhibits redundancy in matrix form — **converting from extensive form to matrix form causes a combinatorial explosion**. This is exactly why many algorithms in this course operate directly on the extensive form.
+On the left of the figure is the extensive form of a two-stage game. Player 1 first chooses Up/Down, Player 2 observes this and then chooses Left/Right, and the leaves $(u_1, u_2)$ give both players' payoffs. On the right is the matrix form of the same game. Player 1 has two strategies (Up, Down), while Player 2's strategy must specify an action at each of her two decision nodes, giving four strategies (Left,Left), (Left,Right), (Right,Left), (Right,Right). Notice that even this toy game already exhibits redundancy in matrix form: **converting from extensive form to matrix form causes a combinatorial explosion**. This is exactly why many algorithms in this course operate directly on the extensive form.
 
 ## Dominant Strategy Equilibrium
 
@@ -69,7 +69,7 @@ For each player, Defect is strictly better than Cooperate regardless of what the
 
 In many games, an agent's best response depends on the others' strategies, so no agent has a dominant strategy. The Nash equilibrium [Nash 1950] is a weaker stability concept:
 
-> **Definition (Nash equilibrium).** A strategy profile $s^*$ is a Nash equilibrium if and only if no player has an incentive to deviate unilaterally given that the others do not deviate — that is, for every agent $i$ and all $s_i'$,
+> **Definition (Nash equilibrium).** A strategy profile $s^*$ is a Nash equilibrium if and only if no player has an incentive to deviate unilaterally given that the others do not deviate; that is, for every agent $i$ and all $s_i'$,
 > $$u_i(s_i^*, s_{-i}^*) \ge u_i(s_i', s_{-i}^*).$$
 
 Every dominant strategy equilibrium is a Nash equilibrium, but not vice versa. In the Prisoners' Dilemma, (Defect, Defect) is the only Nash equilibrium. The Battle of the Sexes, by contrast, has no dominant strategies at all:
@@ -83,7 +83,7 @@ It has two pure-strategy Nash equilibria: (Boxing, Boxing) and (Ballet, Ballet).
 
 **Criticisms of Nash equilibrium** fall mainly into two points.
 
-1. **It is not unique** — as in the Battle of the Sexes. Approaches for addressing this problem include:
+1. **It is not unique**, as the Battle of the Sexes shows. Approaches for addressing this problem include:
    - **Refinements** (= strengthenings) of the equilibrium concept: eliminate weakly dominated strategies first; choose the Nash equilibrium with the highest welfare; subgame perfection; and so on;
    - Focal points, mediation, communication, convention, and learning.
 2. **It may fail to exist** (in pure strategies). For example, no pure-strategy profile of the following game is stable:
@@ -93,7 +93,7 @@ $$
 
 ## Imperfect-Information Games
 
-Take rock-paper-scissors as an example: if the players move **sequentially** (one player commits first and the other observes before acting), the second mover always wins and the game is trivial; only with **simultaneous moves** — equivalently, when the later mover cannot see the earlier mover's choice — is there any genuine strategic content. Most real-world games are **imperfect-information games**, because a player does not know everything about what the other players and nature have done. These games are the main focus of this course.
+Take rock-paper-scissors as an example: if the players move **sequentially** (one player commits first and the other observes before acting), the second mover always wins and the game is trivial; only with **simultaneous moves** (equivalently, when the later mover cannot see the earlier mover's choice) is there any genuine strategic content. Most real-world games are **imperfect-information games**, because a player does not know everything about what the other players and nature have done. These games are the main focus of this course.
 
 Techniques for perfect-information games (such as AlphaZero) do not apply here, because imperfect information brings additional issues:
 
@@ -105,11 +105,11 @@ Real-world imperfect-information games with sequential (or simultaneous) moves a
 
 ## Mixed Strategies and Information Sets
 
-Imperfect-information games may require **mixed strategies** — a probability distribution over pure strategies, chosen by the agent herself.
+Imperfect-information games may require **mixed strategies**: a probability distribution over pure strategies, chosen by the agent herself.
 
 ![Simultaneous-move rock-paper-scissors in extensive form: Player 2's three decision nodes are joined by a dashed line into a single information set](assets/ch01-introduction-3.png)
 
-The figure depicts simultaneous-move rock-paper-scissors in extensive form: Player 1 "moves" first and Player 2 moves second, but Player 2's three decision nodes belong to a single **information set** — the mover does not know which node of the set she is in, and therefore cannot condition her answer on Player 1's actual choice. Chance can also be a player: it is stochastic, not strategic. This game has a (mixed-strategy) **(Bayes-)Nash equilibrium**: each player plays rock, paper, and scissors each with probability $1/3$ — every agent uses a best-response strategy and holds mutually consistent beliefs.
+The figure depicts simultaneous-move rock-paper-scissors in extensive form: Player 1 "moves" first and Player 2 moves second, but Player 2's three decision nodes belong to a single **information set**: the mover does not know which node of the set she is in, and therefore cannot condition her answer on Player 1's actual choice. Chance can also be a player: it is stochastic, not strategic. This game has a (mixed-strategy) **(Bayes-)Nash equilibrium**: each player plays rock, paper, and scissors with probability $1/3$ each. Every agent uses a best-response strategy and holds mutually consistent beliefs.
 
 > **Fact.** In a mixed-strategy equilibrium, every pure strategy that occurs in agent $i$'s mix yields the same expected utility to $i$.
 
@@ -119,7 +119,7 @@ A closely related concept is the **behavioral strategy**: the agent has a probab
 
 ## Existence of Pure-Strategy Nash Equilibria
 
-> **Theorem.** Any finite game in which **every action node is alone in its information set** (i.e., at every point in the game, the agent whose turn it is to move knows all moves played so far) is dominance solvable by **backward induction** — at least as long as ties are ruled out.
+> **Theorem.** Any finite game in which **every action node is alone in its information set** (i.e., at every point in the game, the agent whose turn it is to move knows all moves played so far) is dominance solvable by **backward induction**, at least as long as ties are ruled out.
 
 **Proof idea (constructive).** Multi-player minimax search: working up from the leaves, each node takes the value of the child that is best for the player who moves there; this yields an equilibrium.
 
@@ -162,10 +162,10 @@ More generally, the theorem has a convex-analytic form:
 
 These properties have deep algorithmic and safety implications:
 
-- Consequently, **even if the opponent knows our mixed strategy**, he cannot make us get in expectation less than the game value.
-- Conversely, any **non-equilibrium strategy** obtained from machine learning, reinforcement learning, generative AI, or any other approach **cannot guarantee the game value** — that is, such a strategy is **exploitable**.
-- There is an amazing **safety property** in multi-step imperfect-information games: by playing a non-equilibrium strategy, our opponent can cause our beliefs to be wrong — but **not in a way that increases the opponent's own expected value**. It is therefore safe to play under the assumption that the opponent is rational: if the opponent is irrational, that can only help us.
-- Two-player zero-sum games are solvable by LP in time **polynomial in the size of the game tree** — but what if the tree has $10^{165}$ nodes? How to solve games whose size dwarfs the reach of exhaustive search and direct LP is precisely the question that the rest of this course (abstraction, CFR, subgame solving, and so on) sets out to answer.
+- Consequently, **even if the opponent knows our mixed strategy**, he cannot force our expected payoff below the game value.
+- Conversely, any **non-equilibrium strategy** obtained from machine learning, reinforcement learning, generative AI, or any other approach **cannot guarantee the game value**; that is, such a strategy is **exploitable**.
+- There is an amazing **safety property** in multi-step imperfect-information games: by playing a non-equilibrium strategy, our opponent can cause our beliefs to be wrong, but **not in a way that increases the opponent's own expected value**. It is therefore safe to play under the assumption that the opponent is rational: if the opponent is irrational, that can only help us.
+- Two-player zero-sum games are solvable by LP in time **polynomial in the size of the game tree**. But what if the tree has $10^{165}$ nodes? How should we solve games whose size dwarfs the reach of exhaustive search and direct LP? That is precisely the question that the rest of this course (abstraction, CFR, subgame solving, and so on) sets out to answer.
 
 ## Key Takeaways
 
@@ -174,4 +174,4 @@ These properties have deep algorithmic and safety implications:
 - A dominant strategy equilibrium is stronger than a Nash equilibrium but often fails to exist; a Nash equilibrium may be non-unique (calling for refinements, focal points, and similar mechanisms) and may fail to exist in pure strategies.
 - Imperfect-information games (negotiation, auctions, poker, security, and more) are the protagonists of this course; their core concept is the information set, and their strategies often need to be mixed. Kuhn's theorem guarantees the equivalence of mixed and behavioral strategies under perfect recall.
 - Finite perfect-information games can be solved by backward induction (constructive proof: multi-player minimax search); mixed equilibria always exist in general games (Nash, via Kakutani's fixed point theorem), but computationally: two-player zero-sum games are solvable in polytime by LP, two-player general games are PPAD-complete and finding an approximately good equilibrium is NP-complete, and three-player games are FIXP-complete.
-- Two-player zero-sum games have elegant properties: the minmax theorem (the game value exists), swappability of equilibria, and an equilibrium set that forms a convex polytope; equilibrium strategies guarantee the game value, while non-equilibrium strategies are exploitable — this provides both the goal and the safety benchmark for solving large-scale imperfect-information games.
+- Two-player zero-sum games have elegant properties: the minmax theorem (the game value exists), swappability of equilibria, and an equilibrium set that forms a convex polytope; equilibrium strategies guarantee the game value, while non-equilibrium strategies are exploitable. This provides both the goal and the safety benchmark for solving large-scale imperfect-information games.

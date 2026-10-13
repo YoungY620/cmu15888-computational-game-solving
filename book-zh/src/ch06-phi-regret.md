@@ -18,7 +18,7 @@ $$
 > **定义 1.1（粗相关均衡，CCE）.** 相关分布 $\boldsymbol{\mu}\in\Delta(\mathcal{A}_1\times\cdots\times\mathcal{A}_n)$ 称为 $\epsilon$-粗相关均衡，如果对任意玩家 $i\in[n]$ 和偏移动作 $a_i'\in\mathcal{A}_i$，
 > $$\mathbb{E}_{(a_1,\dots,a_n)\sim\boldsymbol{\mu}}\, u_i(a_1,\dots,a_n) \;\ge\; \mathbb{E}_{(a_1,\dots,a_n)\sim\boldsymbol{\mu}}\, u_i(a_i',\, a_{-i}) - \epsilon.$$
 
-该定义与纳什均衡类似，但允许底层分布 $\boldsymbol{\mu}$ 相关。由此立得：纳什均衡总是 CCE——纳什均衡就是一个"不相关的"（粗）相关均衡。但 CCE 的集合可以解锁新的、有时更理想的结果。
+该定义与纳什均衡类似，但允许底层分布 $\boldsymbol{\mu}$ 相关。由此立得：纳什均衡总是 CCE——纳什均衡就是一个“不相关的”（粗）相关均衡。但 CCE 的集合可以带来新的、有时更理想的结果。
 
 > **定义 1.2（相关均衡，CE，Aumann 1974）.** 相关分布 $\boldsymbol{\mu}\in\Delta(\mathcal{A}_1\times\cdots\times\mathcal{A}_n)$ 称为 $\epsilon$-相关均衡，如果对任意玩家 $i\in[n]$ 和偏移函数 $\phi_i:\mathcal{A}_i\to\mathcal{A}_i$，
 > $$\mathbb{E}_{(a_1,\dots,a_n)\sim\boldsymbol{\mu}}\, u_i(a_1,\dots,a_n) \;\ge\; \mathbb{E}_{(a_1,\dots,a_n)\sim\boldsymbol{\mu}}\, u_i\big(\phi_i(a_i),\, a_{-i}\big) - \epsilon.$$
@@ -54,15 +54,15 @@ R = \begin{bmatrix} 2&0&0&0\\ 0&2&0&0\\ 3&0&0&0\\ 0&3&0&0 \end{bmatrix},
 C = \begin{bmatrix} 2&0&3&0\\ 0&2&0&3\\ 0&0&0&0\\ 0&0&0&0 \end{bmatrix}.
 $$
 
-动作编号为 $1,2,3,4$。考虑分布 $\boldsymbol{\mu}=\tfrac12(1,1)+\tfrac12(2,2)$（这不是乘积分布）。可以验证 $\boldsymbol{\mu}$ 是精确 CCE：它对常值偏移是稳健的。但它不是 CE——其 CE 间隙为 1。取交换偏移 $\phi$：$1\mapsto 3$，$2\mapsto 4$（其余动作的映射无关紧要，因为在 $\boldsymbol{\mu}$ 下几乎必然不被使用）。在 $\boldsymbol{\mu}$ 下每位玩家得效用 2，而按 $\phi$ 偏移可得效用 3。这个例子说明：CE 中"看到建议后再决定如何偏移"的能力是有实质内容的。
+动作编号为 $1,2,3,4$。考虑分布 $\boldsymbol{\mu}=\tfrac12(1,1)+\tfrac12(2,2)$（这不是乘积分布）。可以验证 $\boldsymbol{\mu}$ 是精确 CCE：它对常值偏移是稳健的。但它不是 CE——其 CE 间隙为 1。取交换偏移 $\phi$：$1\mapsto 3$，$2\mapsto 4$（其余动作的映射无关紧要，因为在 $\boldsymbol{\mu}$ 下几乎必然不被使用）。在 $\boldsymbol{\mu}$ 下每位玩家得效用 2，而按 $\phi$ 偏移可得效用 3。这个例子说明：CE 中“看到建议后再决定如何偏移”的能力是有实质内容的。
 
 ### 计算性质
 
-CCE 与 CE 不仅解锁新结果，计算性质也优于纳什均衡：(C)CE 的集合是凸的，且可以用线性规划描述。
+CCE 与 CE 不仅带来新结果，计算性质也优于纳什均衡：(C)CE 的集合是凸的，且可以用线性规划描述。
 
 > **命题 1.5.** 存在一个具有 $\prod_{i=1}^{n}|\mathcal{A}_i|$ 个变量和 $\sum_{i=1}^{n}|\mathcal{A}_i|\,(|\mathcal{A}_i|-1)$ 个约束的线性规划，其解是博弈的一个精确相关均衡。
 
-虽然玩家 $i$ 的交换偏移总数达 $|\mathcal{A}_i|^{|\mathcal{A}_i|}$，但只需考虑只改变单个动作的偏移——称为**内部偏移（internal deviation）**，数目为 $|\mathcal{A}_i|(|\mathcal{A}_i|-1)$；证明留作练习。命题 1.5 的关键缺陷是：LP 的规模随玩家数指数增长，因为多人博弈中的相关分布本身就是指数对象——需要指定 $\prod_{i=1}^n|\mathcal{A}_i|-1$ 个坐标。因此该方法只适用于玩家数为常数的博弈；但至少我们知道常数玩家博弈中可以高效计算 CE。此外，还可以在该 LP 中加入任意线性目标函数，例如社会福利（玩家效用之和）。
+虽然玩家 $i$ 的交换偏移总数达 $|\mathcal{A}_i|^{|\mathcal{A}_i|}$，但只需考虑仅改变单个动作的偏移——称为**内部偏移（internal deviation）**，数目为 $|\mathcal{A}_i|(|\mathcal{A}_i|-1)$；证明留作练习。命题 1.5 的关键缺陷是：LP 的规模随玩家数指数增长，因为多人博弈中的相关分布本身就是指数对象——需要指定 $\prod_{i=1}^n|\mathcal{A}_i|-1$ 个坐标。因此该方法只适用于玩家数为常数的博弈；但至少我们知道常数玩家博弈中可以高效计算 CE。此外，还可以在该 LP 中加入任意线性目标函数，例如社会福利（玩家效用之和）。
 
 ## 2 Φ-后悔及其与相关均衡的联系
 
@@ -74,9 +74,9 @@ $$
 \Phi\mathrm{Reg}^{(T)} := \max_{\phi\in\Phi}\left\{\sum_{t=1}^{T}\big\langle\phi(\boldsymbol{x}^{(t)}),\,\boldsymbol{u}^{(t)}\big\rangle\right\} - \sum_{t=1}^{T}\big\langle\boldsymbol{x}^{(t)},\,\boldsymbol{u}^{(t)}\big\rangle.
 $$
 
-此前的讲座关注过特例：$\Phi$ 只含常值偏移，即 $\Phi_{\mathrm{const}}=\{\phi:\exists\,\boldsymbol{x}'\in\mathcal{X},\ \phi(\boldsymbol{x})=\boldsymbol{x}'\}$，这就是在线学习中最标准的**外部后悔（external regret）**。关键点是：偏移集 $\Phi$ 越丰富，诱导的"事后理性"（hindsight rationality）概念越强。谱系的另一端是 $\Phi$ 包含所有可能的偏移 $\mathcal{X}\to\mathcal{X}$，称为**交换后悔（swap regret）**。
+此前的讲座关注过特例：$\Phi$ 只含常值偏移，即 $\Phi_{\mathrm{const}}=\{\phi:\exists\,\boldsymbol{x}'\in\mathcal{X},\ \phi(\boldsymbol{x})=\boldsymbol{x}'\}$，这就是在线学习中最标准的**外部后悔（external regret）**。关键点是：偏移集 $\Phi$ 越丰富，诱导的“事后理性”（hindsight rationality）概念越强。谱系的另一端是 $\Phi$ 包含所有可能的偏移 $\mathcal{X}\to\mathcal{X}$，称为**交换后悔（swap regret）**。
 
-外部与交换之间还有一个经典概念：**内部后悔（internal regret）**，由 Foster 与 Vohra 提出。内部后悔只允许"把某个动作 $i$ 一律换成另一个动作 $j$"的偏移（其余动作不变），这样的偏移连同恒等映射共 $|\mathcal{A}|(|\mathcal{A}|-1)+1$ 个；交换后悔则允许全部 $|\mathcal{A}|^{|\mathcal{A}|}$ 个映射。由于任一交换偏移的增益可以按"原先动作"分解到各对 $(i,j)$ 上，交换后悔至多为内部后悔的 $|\mathcal{A}|$ 倍（Blum & Mansour, 2007）——因此在"是否次线性"的意义上两者等价，"无悔动态收敛到相关均衡"的结论用内部后悔陈述即可。
+外部与交换之间还有一个经典概念：**内部后悔（internal regret）**，由 Foster 与 Vohra 提出。内部后悔只允许“把某个动作 $i$ 一律换成另一个动作 $j$”的偏移（其余动作不变），这样的偏移连同恒等映射共 $|\mathcal{A}|(|\mathcal{A}|-1)+1$ 个；交换后悔则允许全部 $|\mathcal{A}|^{|\mathcal{A}|}$ 个映射。由于任一交换偏移的增益可以按“原先动作”分解到各对 $(i,j)$ 上，交换后悔至多为内部后悔的 $|\mathcal{A}|$ 倍（Blum & Mansour, 2007）——因此在“是否次线性”的意义上两者等价，“无悔动态收敛到相关均衡”的结论用内部后悔陈述即可。
 
 更一般地，在凸博弈（convex game，即策略集为凸紧集、效用函数多重线性的博弈）中，Gordon、Greenwald 与 Marks（2008）指出外部后悔与交换后悔之间存在一条严格加细的谱系：
 
@@ -84,7 +84,7 @@ $$
 \Phi_{\mathrm{EXT}} \;\subset\; \Phi_{\mathrm{EF}} \;\subset\; \Phi_{\mathrm{LIN}} \;\subset\; \Phi_{\mathrm{FE}} \;\subset\; \Phi_{\mathrm{SWAP}},
 $$
 
-且各层互不重合（例如存在无 $\Phi_{\mathrm{LIN}}$-后悔但 $\Phi_{\mathrm{FE}}$-后悔为正的情形）。其中：**线性后悔（linear regret）**取 $\Phi$ 为全体把 $\mathcal{X}$ 映入自身的线性映射；**有限元后悔（finite-element regret）**先把多面体策略集三角剖分，再用重心坐标（barycentric coordinates）把连续偏移表示为高维空间中的线性映射——Gordon 等人证明，在多面体凸博弈中无有限元后悔即足以使经验分布收敛到相关均衡；**扩展式后悔（extensive-form regret）**对应扩展式博弈中"原策略即将在某个选择点行动时改为执行另一子策略"的偏移，无扩展式后悔的动态收敛到**扩展式相关均衡**（extensive-form correlated equilibrium，Forges & von Stengel, 2002）。本讲只在外部与交换两端展开；其余各层的高效算法见 Gordon 等人的论文。
+且各层互不重合（例如存在无 $\Phi_{\mathrm{LIN}}$-后悔但 $\Phi_{\mathrm{FE}}$-后悔为正的情形）。其中：**线性后悔（linear regret）**取 $\Phi$ 为全体把 $\mathcal{X}$ 映入自身的线性映射；**有限元后悔（finite-element regret）**先把多面体策略集三角剖分，再用重心坐标（barycentric coordinates）把连续偏移表示为高维空间中的线性映射——Gordon 等人证明，在多面体凸博弈中无有限元后悔即足以使经验分布收敛到相关均衡；**扩展式后悔（extensive-form regret）**对应扩展式博弈中“原策略即将在某个选择点行动时改为执行另一子策略”的偏移，无扩展式后悔的动态收敛到**扩展式相关均衡**（extensive-form correlated equilibrium，Forges & von Stengel, 2002）。本讲只在外部与交换两端展开；其余各层的高效算法见 Gordon 等人的论文。
 
 外部后悔小并不意味着交换后悔小。设学习者在三个动作 $1,2,3$ 上选分布，效用与所选动作按下图模式循环（$T\equiv 0 \pmod 3$，第 $i$ 行是动作 $i$ 在各轮获得的效用）：
 
@@ -113,7 +113,7 @@ $$
 > $$\bar{\boldsymbol{\mu}} := \frac{1}{T}\sum_{t=1}^{T}\boldsymbol{x}_1^{(t)}\otimes\cdots\otimes\boldsymbol{x}_n^{(t)}$$
 > 是一个 $\epsilon$-Φ-均衡，其中 $\epsilon=\frac{1}{T}\max_{1\le i\le n}\Phi\mathrm{Reg}_i^{(T)}$。
 
-这里 $\boldsymbol{x}_1^{(t)}\otimes\cdots\otimes\boldsymbol{x}_n^{(t)}$ 是 $(\boldsymbol{x}_1^{(t)},\dots,\boldsymbol{x}_n^{(t)})$ 诱导的乘积分布（$\otimes$ 为张量积），故 $\bar{\boldsymbol{\mu}}$ 是 $T$ 个乘积分布的混合——相关性正是通过进行多轮博弈而产生的。作为特例：最小化交换后悔的玩家（按平均相关博弈分布）收敛到相关均衡，而外部后悔对应粗相关均衡。
+这里 $\boldsymbol{x}_1^{(t)}\otimes\cdots\otimes\boldsymbol{x}_n^{(t)}$ 是 $(\boldsymbol{x}_1^{(t)},\dots,\boldsymbol{x}_n^{(t)})$ 诱导的乘积分布（$\otimes$ 为张量积），故 $\bar{\boldsymbol{\mu}}$ 是 $T$ 个乘积分布的混合——相关性正是通过多轮博弈产生的。作为特例：最小化交换后悔的玩家（按平均相关博弈分布）收敛到相关均衡，而外部后悔对应粗相关均衡。
 
 **证明.** 对任意玩家 $i$，由多重线性性，
 
@@ -137,7 +137,7 @@ $$
 1. **不动点预言机（fixed-point oracle）**：对任意偏移 $\phi\in\Phi$，输出不动点 $\mathcal{X}\ni\boldsymbol{x}=\phi(\boldsymbol{x})$。
 2. **外部后悔最小化算法 $\mathfrak{R}_\Phi$**：在偏移集 $\Phi$ 上最小化外部后悔。
 
-关于第 1 条：先假设 $\Phi$ 由连续函数组成，从而由 Brouwer 不动点定理保证不动点存在。但"存在"不等于"能高效计算"——已知计算一般函数的近似不动点等价于求纳什均衡，那就本末倒置了。因此需要 $\Phi$ 有足够结构，例如 $\Phi$ 只含线性偏移时不动点容易计算：对 $\phi(\boldsymbol{x})=M\boldsymbol{x}$，不动点方程 $(M-I)\boldsymbol{x}=\boldsymbol{0}$ 归结为在约束 $\boldsymbol{x}\in\mathcal{X}$ 下求 $M-I$ 零空间中的点，多项式时间可解。另外，用近似不动点（$\|\boldsymbol{x}-\phi(\boldsymbol{x})\|\le\epsilon$）也足够：Gordon 等人取第 $t$ 轮的精度 $\epsilon_t=1/\sqrt{t}$，若效用的（次）梯度一致有界，则由 Hölder 不等式，以近似不动点代替精确不动点每轮至多额外引入 $O(\epsilon_t)$ 的误差，累计 $O\big(\sum_{t}\epsilon_t\big)=O(\sqrt{T})$，恰好被后悔界吸收。关于第 2 条：外部后悔算法作用的集合从 $\mathcal{X}$ 换成了偏移集 $\Phi$，后者显著更复杂——这正是高效 Φ-后悔算法的关键难点所在。
+关于第 1 条：先假设 $\Phi$ 由连续函数组成，从而由 Brouwer 不动点定理保证不动点存在。但“存在”不等于“能高效计算”——已知计算一般函数的近似不动点等价于求纳什均衡，那就本末倒置了。因此需要 $\Phi$ 有足够结构，例如 $\Phi$ 只含线性偏移时不动点容易计算：对 $\phi(\boldsymbol{x})=M\boldsymbol{x}$，不动点方程 $(M-I)\boldsymbol{x}=\boldsymbol{0}$ 归结为在约束 $\boldsymbol{x}\in\mathcal{X}$ 下求 $M-I$ 零空间中的点，多项式时间可解。另外，用近似不动点（$\|\boldsymbol{x}-\phi(\boldsymbol{x})\|\le\epsilon$）也足够：Gordon 等人取第 $t$ 轮的精度 $\epsilon_t=1/\sqrt{t}$，若效用的（次）梯度一致有界，则由 Hölder 不等式，以近似不动点代替精确不动点每轮至多额外引入 $O(\epsilon_t)$ 的误差，累计 $O\big(\sum_{t}\epsilon_t\big)=O(\sqrt{T})$，恰好被后悔界吸收。关于第 2 条：外部后悔算法作用的集合从 $\mathcal{X}$ 换成了偏移集 $\Phi$，后者显著更复杂——这正是高效 Φ-后悔算法的关键难点所在。
 
 **Gordon 等人的算法**（输入：偏移集 $\Phi$ 上的外部后悔最小化器 $\mathfrak{R}_\Phi$）：
 
@@ -151,7 +151,7 @@ ObserveUtility(u^(t)):
     R_Φ.ObserveUtility(u_Φ^(t))
 ```
 
-即：每轮先取 $\mathfrak{R}_\Phi$ 给出的下一个偏移 $\phi^{(t)}$，输出其任一不动点 $\boldsymbol{x}^{(t)}$ 作为自己的策略；观测到 $\boldsymbol{u}^{(t)}$ 后，把"偏移层面的效用" $u_\Phi^{(t)}:\phi\mapsto\langle\phi(\boldsymbol{x}^{(t)}),\boldsymbol{u}^{(t)}\rangle$ 反馈给 $\mathfrak{R}_\Phi$。
+即：每轮先取 $\mathfrak{R}_\Phi$ 给出的下一个偏移 $\phi^{(t)}$，输出其任一不动点 $\boldsymbol{x}^{(t)}$ 作为自己的策略；观测到 $\boldsymbol{u}^{(t)}$ 后，把“偏移层面的效用” $u_\Phi^{(t)}:\phi\mapsto\langle\phi(\boldsymbol{x}^{(t)}),\boldsymbol{u}^{(t)}\rangle$ 反馈给 $\mathfrak{R}_\Phi$。
 
 > **定理 2.1（Gordon et al., 2008）.** 若 $\mathrm{Reg}^{(T)}$ 是 $\mathfrak{R}_\Phi$ 的外部后悔，$\Phi\mathrm{Reg}^{(T)}$ 是上述算法的 Φ-后悔，则 $\mathrm{Reg}^{(T)}=\Phi\mathrm{Reg}^{(T)}$。
 
@@ -174,7 +174,7 @@ $$
 
 > **引理 2.2.** 任意线性函数 $\phi:\Delta(\mathcal{A})\to\Delta(\mathcal{A})$ 都可等价写成 $\boldsymbol{x}\mapsto M\boldsymbol{x}$，其中 $M$ 是（列）随机矩阵（stochastic matrix）。
 
-证明：$\phi$ 线性，故可写成 $\boldsymbol{x}\mapsto M\boldsymbol{x}$；$M$ 的每一列等于 $\phi$ 在"全部概率集中在对应动作"的分布上的输出，而 $\phi$ 的值域在 $\Delta(\mathcal{A})$ 内，故每列都是概率分布。
+证明：$\phi$ 线性，故可写成 $\boldsymbol{x}\mapsto M\boldsymbol{x}$；$M$ 的每一列等于 $\phi$ 在“全部概率集中在对应动作”的分布上的输出，而 $\phi$ 的值域在 $\Delta(\mathcal{A})$ 内，故每列都是概率分布。
 
 据此实现框架要求的两个预言机。**第 1 条（不动点）**：随机矩阵诱导 $\mathcal{A}$ 上的一个马尔可夫链（Markov chain，如下图所示），其任一平稳分布（stationary distribution）都是不动点，而解平稳分布只是解线性方程组，可高效计算。（更一般地，当 $\mathcal{X}$ 是多面体且 $\Phi$ 由线性偏移组成时，求不动点归结为线性规划，多项式时间可解。）
 
@@ -229,7 +229,7 @@ $$
 
 对学习率 $\eta$ 取最优即得定理结论。结合定理 1.8，所有玩家各自运行 Blum–Mansour 算法时，平均相关博弈分布收敛到相关均衡。
 
-值得一提的是，Blum 与 Mansour 的原始表述并未经过 Gordon 等人的框架，而是一个直接的黑盒归约：$|\mathcal{A}|$ 个外部后悔算法各自输出分布 $\boldsymbol{q}_a^{(t)}$，组成矩阵 $Q^{(t)}$，主算法取其平稳分布 $\boldsymbol{p}^{(t)}=\boldsymbol{p}^{(t)}Q^{(t)}$ 作为自己的策略——等价于"以概率 $\boldsymbol{p}^{(t)}[a]$ 选中子算法 $\mathfrak{R}_a$ 再按之行动"；观测到效用后把 $\boldsymbol{p}^{(t)}[a]\,\boldsymbol{u}^{(t)}$ 分发给 $\mathfrak{R}_a$。归约成立的关键恒等式是：各子算法感知到的损失之和恰等于主算法的真实损失，
+值得一提的是，Blum 与 Mansour 的原始表述并未经过 Gordon 等人的框架，而是一个直接的黑盒归约：$|\mathcal{A}|$ 个外部后悔算法各自输出分布 $\boldsymbol{q}_a^{(t)}$，组成矩阵 $Q^{(t)}$，主算法取其平稳分布 $\boldsymbol{p}^{(t)}=\boldsymbol{p}^{(t)}Q^{(t)}$ 作为自己的策略——等价于“以概率 $\boldsymbol{p}^{(t)}[a]$ 选中子算法 $\mathfrak{R}_a$ 再按之行动”；观测到效用后把 $\boldsymbol{p}^{(t)}[a]\,\boldsymbol{u}^{(t)}$ 分发给 $\mathfrak{R}_a$。归约成立的关键恒等式是：各子算法感知到的损失之和恰等于主算法的真实损失，
 
 $$
 \sum_{a\in\mathcal{A}} \boldsymbol{p}^{(t)}[a]\,\big\langle\boldsymbol{q}_a^{(t)},\,\boldsymbol{u}^{(t)}\big\rangle \;=\; \boldsymbol{p}^{(t)}Q^{(t)}\boldsymbol{u}^{(t)} \;=\; \boldsymbol{p}^{(t)}\boldsymbol{u}^{(t)},
@@ -246,5 +246,5 @@ $$
 - **计算**：(C)CE 集合是凸的，可用 LP 描述（$\prod_i|\mathcal{A}_i|$ 个变量、$\sum_i|\mathcal{A}_i|(|\mathcal{A}_i|-1)$ 个约束——只需内部偏移），但随玩家数指数增长，仅适合常数玩家；可叠加社会福利等线性目标。
 - **Φ-后悔**以偏移族 $\Phi$ 参数化事后理性：常值偏移 $\to$ 外部后悔（对应 CCE），全部偏移 $\to$ 交换后悔（对应 CE）。两者之间还有内部后悔（交换后悔 $\le|\mathcal{A}|\times$ 内部后悔，次线性意义下等价），以及凸博弈中的谱系 $\Phi_{\mathrm{EXT}}\subset\Phi_{\mathrm{EF}}\subset\Phi_{\mathrm{LIN}}\subset\Phi_{\mathrm{FE}}\subset\Phi_{\mathrm{SWAP}}$（扩展式后悔对应扩展式相关均衡）。外部后悔为零时交换后悔可达 $\Omega(T)$（如 MWU）。
 - **定理 1.8**：若每位玩家的 $\Phi_i$-后悔为 $\Phi\mathrm{Reg}_i^{(T)}$，则平均相关博弈分布 $\bar{\boldsymbol{\mu}}=\frac1T\sum_t\bigotimes_i\boldsymbol{x}_i^{(t)}$ 是 $\epsilon$-Φ-均衡，$\epsilon=\frac1T\max_i\Phi\mathrm{Reg}_i^{(T)}$。
-- **Gordon 等人的框架**：以"不动点预言机 + 偏移集 $\Phi$ 上的外部后悔最小化器"为子程序，输出 $\phi^{(t)}$ 的不动点为策略、反馈 $u_\Phi^{(t)}:\phi\mapsto\langle\phi(\boldsymbol{x}^{(t)}),\boldsymbol{u}^{(t)}\rangle$，则 Φ-后悔恰等于 $\mathfrak{R}_\Phi$ 的外部后悔（定理 2.1）。
+- **Gordon 等人的框架**：以“不动点预言机 + 偏移集 $\Phi$ 上的外部后悔最小化器”为子程序，输出 $\phi^{(t)}$ 的不动点为策略、反馈 $u_\Phi^{(t)}:\phi\mapsto\langle\phi(\boldsymbol{x}^{(t)}),\boldsymbol{u}^{(t)}\rangle$，则 Φ-后悔恰等于 $\mathfrak{R}_\Phi$ 的外部后悔（定理 2.1）。
 - **Blum–Mansour 算法**：线性偏移 $\leftrightarrow$ 列随机矩阵（引理 2.2）；不动点 $=$ 马尔可夫链平稳分布（原文取 $N$ 个子算法的合成矩阵 $Q^{(t)}$ 的平稳分布，关键恒等式：子算法感知损失之和 $=$ 主算法真实损失）；随机矩阵集合是单纯形的笛卡尔积，用后悔电路为每列配一个 MWU；交换后悔界 $O\big(\sqrt{T|\mathcal{A}|\log|\mathcal{A}|}\big)$（定理 2.4），从而收敛到相关均衡。自适应对手下的下界 $\Omega\big(\sqrt{T|\mathcal{A}|}\big)$；bandit 模型中归约仍成立（Stoltz 改进到同一 $O\big(\sqrt{T|\mathcal{A}|\log|\mathcal{A}|}\big)$ 界）。

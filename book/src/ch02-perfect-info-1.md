@@ -1,6 +1,6 @@
 # L2 Perfect-Information Games 1: Tree Search
 
-This lecture uses chess as its running example to present the classical machinery for solving sequential zero-sum complete-information games: minimax search, alpha-beta pruning, and a series of engineering and algorithmic improvements on top of them. This line of techniques culminated in 1997, when Deep Blue defeated world champion Garry Kasparov 3½–2½ (the six-game record was loss–win–draw–draw–draw–win from Deep Blue's perspective). The ideas behind it remain the starting point for understanding more modern game-solving methods.
+This lecture uses chess as its running example. It presents the classical machinery for solving sequential zero-sum perfect-information games: minimax search, alpha-beta pruning, and a series of engineering and algorithmic improvements on top of them. This line of techniques culminated in 1997, when Deep Blue defeated world champion Garry Kasparov 3½–2½ (the six-game record was loss–win–draw–draw–draw–win from Deep Blue's perspective). The ideas behind it remain the starting point for understanding more modern game-solving methods.
 
 ## A Rich History of Cumulative Ideas
 
@@ -32,15 +32,15 @@ Chess is a **game of perfect information**: whenever a player moves, they know t
 
 ![The chess game tree: the opening, middlegame, and endgame stages](assets/ch02-perfect-info-1-gametree.png)
 
-As shown above, the chess game tree grows from the initial position: there are 20 positions after White's first move, and 400 positions after one move by each side. The tree fans out at an average of 30–40 legal moves at each position, and the leaves are labeled win (W) / tie (D) / loss (L). Practical play handles the game in three stages:
+As shown above, the chess game tree grows from the initial position: there are 20 positions after White's first move, and 400 positions after one move by each side. The tree branches into 30–40 legal moves per position on average, and the leaves are labeled win (W) / tie (D) / loss (L). Practical play handles the game in three stages:
 
-- **Opening stage**: use an opening book; such databases usually cover the first 5–15 moves. Opening books are available electronically too. In some opening lines — for example the Marshall Counter Attack in the Ruy Lopez — the book analysis goes as deep as 16 moves (32 plies).
+- **Opening stage**: use an opening book; such databases usually cover the first 5–15 moves. Opening books are available electronically too. In some opening lines, for example the Marshall Counter Attack in the Ruy Lopez, the book analysis goes as deep as 16 moves (32 plies).
 - **Middlegame stage**: moves are selected by carrying out a large search guided by the minimax algorithm.
-- **Endgame stage**: use endgame databases — databases have been built for all 5-piece and some 6-piece endgames.
+- **Endgame stage**: use endgame databases; databases have been built for all 5-piece and some 6-piece endgames.
 
 ## Minimax Search
 
-Minimax is the basic algorithm for solving perfect-information zero-sum games: at each of its own nodes the MAX player (White) chooses the successor of maximum value, the MIN player (Black) chooses the successor of minimum value, leaf values come from the evaluation function, and values are backed up the tree level by level.
+Minimax is the basic algorithm for solving perfect-information zero-sum games. At each of its own nodes the MAX player (White) chooses the successor of maximum value, and the MIN player (Black) chooses the successor of minimum value; leaf values come from the evaluation function, and values are backed up the tree level by level.
 
 ![An example of the minimax algorithm (not all branches are shown)](assets/ch02-perfect-info-1-minimax.png)
 
@@ -49,16 +49,16 @@ Taking the two-level search in the figure as an example, the algorithm proceeds 
 1. Expand the game tree to a depth of two levels (note that not all moves at the first two levels are shown in the figure).
 2. Assign a score to each terminal position (this example uses only the material difference: in position D, White is up three pawns, so the score is +3).
 3. Assign backed-up scores to the non-terminal positions: a MIN node takes the minimum of its children, a MAX node the maximum. For instance, position B's two successors score +3 and +1, so its backed-up value is +1; position C's backed-up value is −3; the root position A (a MAX node) takes $\max\{+1, -3\} = +1$.
-4. Determine the principal continuation — the path of best responses by both sides (shown in bold in the figure).
+4. Determine the principal continuation, the path of best responses by both sides (shown in bold in the figure).
 5. Play the first move on that principal continuation.
 
 ### Search Depth Pathology
 
-Intuitively, deeper search yields stronger play (and in practice it does), but theoretical work has revealed a subtle problem — the **search depth pathology**:
+Intuitively, deeper search yields stronger play (and in practice it does), but theoretical work has revealed a subtle problem, the **search depth pathology**:
 
 - Beal (1980) and Nau (1982, 1983) analyzed whether values backed up by minimax search are more trustworthy than the heuristic values themselves. The analyses of their model showed that the backed-up values are somewhat **less** trustworthy.
 - The anomaly goes away if sibling nodes' values are highly correlated [Beal 1982; Bratko & Gams 1982; Nau 1982].
-- Pearl (1984) partly disagreed with this conclusion: he claimed that while strong dependencies between sibling nodes can eliminate the pathology, practical games like chess do not possess dependencies of sufficient strength — few chess positions are so strong that they cannot be spoiled abruptly if one really tries hard to do so. He concluded that the success of minimax is "based on the fact that common games do not possess a uniform structure but are riddled with early terminal positions, colloquially named blunders, pitfalls or traps. Close ancestors of such traps carry more reliable evaluations than the rest of the nodes, and when more of these ancestors are exposed by the search, the decisions become more valid."
+- Pearl (1984) partly disagreed with this conclusion: he claimed that while strong dependencies between sibling nodes can eliminate the pathology, practical games like chess do not possess dependencies of sufficient strength; few chess positions are so strong that they cannot be spoiled abruptly if one really tries hard to do so. He concluded that the success of minimax is "based on the fact that common games do not possess a uniform structure but are riddled with early terminal positions, colloquially named blunders, pitfalls or traps. Close ancestors of such traps carry more reliable evaluations than the rest of the nodes, and when more of these ancestors are exposed by the search, the decisions become more valid."
 - The problem is still not fully understood. For newer work, see the empirical study of the KRK endgame by Sadikov, Bratko, and Kononenko (2003), and the UAI-2010 / ICAPS-2010 papers by Ramanujan, Sabharwal, and Selman on sampling-style adversarial search.
 - The same phenomenon also appears in imperfect-information games when one party has limited lookahead [Kroer & Sandholm, IJCAI-15; Kroer, Farina & Sandholm, AAAI-18].
 
@@ -68,7 +68,7 @@ Alpha-beta pruning cuts away subtrees that provably cannot affect the final deci
 
 ![Alpha-beta pruning: an illustration of a deep cutoff](assets/ch02-perfect-info-1-alphabeta.png)
 
-The figure shows a deep cutoff. The subtree of move A has already returned +10, so the root (a MAX node) is guaranteed at least +10. After following move B down to a MIN node, if that branch's value can be proven not to exceed +10, it cannot change the decision at the root. When move E is found at node P (a MIN node) to give position Q a score of only +2, move E already "refutes" move D: the value of P is at most +2, so the branch along move B is worth at most +2 and cannot beat the +10 already held at the root — searching move F is therefore unnecessary and it is cut off. Cutoffs can propagate across several levels of the tree, not just between adjacent parent and child.
+The figure shows a deep cutoff. The subtree of move A has already returned +10, so the root (a MAX node) is guaranteed at least +10. After following move B down to a MIN node, if that branch's value can be proven not to exceed +10, it cannot change the decision at the root. When move E is found at node P (a MIN node) to give position Q a score of only +2, move E already "refutes" move D: the value of P is at most +2, so the branch along move B is worth at most +2 and cannot beat the +10 already held at the root. Searching move F is therefore unnecessary, and it is cut off. Cutoffs can propagate across several levels of the tree, not just between adjacent parent and child.
 
 The pseudocode is as follows (MAX-VALUE and MIN-VALUE are mutually recursive):
 
@@ -114,17 +114,17 @@ Let the branching factor be about $b = 30$ and the search depth be $d$. In the *
 - **Worst case**: no node can be pruned at all, and the complexity is $O(b^d)$, the same as minimax.
 - **Average case** (randomly ordered moves): the complexity drops from $O(b^d)$ to $O\big((b/\log b)^d\big)$.
 
-To approach the best case, the key is to **search better moves first** (move ordering): captures → threats → forward moves → backward moves; and to use **iterative deepening** — the values backed up in the previous iteration determine the ordering of successors in the current one. Because alpha-beta and quiescence search make different branches take very different amounts of time, iterative deepening (combined with time control) is used by all mainstream chess programs.
+To approach the best case, the key is to **search better moves first** (move ordering): captures → threats → forward moves → backward moves; and to use **iterative deepening**, where the values backed up in the previous iteration determine the ordering of successors in the current one. Because alpha-beta and quiescence search make different branches take very different amounts of time, iterative deepening (combined with time control) is used by all mainstream chess programs.
 
 ## The Evaluation Function
 
 The leaves at the cutoff frontier are scored by an evaluation function. The typical approach computes the difference between the two sides on a number of features: material, mobility, king position, bishop pair, rook pair, open rook files, control of the center (computed piece by piece), and others. For example, Deep Blue used piece-square tables to capture the positional value of pieces: in its knight table, a knight in the center earns a positive score, while one retreated to a corner or edge earns a negative score.
 
-- **Deep Blue**'s evaluation function implemented about **6,000 features in hardware**; after every real-world move, a **different weighting** of these features was downloaded to the chips based on the current situation on the board — this contributed greatly to its strong positional play.
+- **Deep Blue**'s evaluation function implemented about **6,000 features in hardware**; after every real-world move, a **different weighting** of these features was downloaded to the chips based on the current situation on the board. This contributed greatly to its strong positional play.
 - **Acquiring the weights**:
   - Weight learning based on a database of 900 grandmaster games (about 120 features): alter the weight of one feature → run a 5–6 ply search → if the moves match grandmaster play better, keep altering that parameter in the same direction (hill climbing); least-squares fitting with no search was also used.
   - Manually: grandmaster Joel Benjamin played "take-back chess" against the program; at possible errors, the evaluation was broken down, visualized, and the weighting possibly changed.
-- It is worth emphasizing that Deep Blue was **not** brute force — it was "smart search plus knowledge-engineered evaluation."
+- Deep Blue was **not** brute force; it was "smart search plus knowledge-engineered evaluation."
 - Other learning routes are also viable, for example Tesauro's backgammon programs: Neurogammon (1989) was taught with supervised learning on 400 games and reached the level of an intermediate human player; TD-Gammon (1992) used reinforcement learning (temporal difference) and reached the level of a world-class human tournament player.
 - Deep Blue did **not** use the grandmaster game database during play, but it used such games offline to learn its evaluation function.
 
@@ -138,8 +138,8 @@ In the figure, a series of checks by the black rook pushes White's inevitable pa
 
 There are two families of remedies:
 
-- **Quiescence search**: the (domain-specific) evaluation function returns a second number besides the evaluation — **stability**, determined by threats and other factors; if the position reached at the normal depth is unstable, the search continues deeper. The cost is variance in search time.
-- **Singular extension**: domain independent; if a node's value is much better than its siblings', that node is searched deeper — even 30–40 plies. Deep Blue used a variant of this method.
+- **Quiescence search**: the (domain-specific) evaluation function returns a second number besides the evaluation: **stability**, determined by threats and other factors; if the position reached at the normal depth is unstable, the search continues deeper. The cost is variance in search time.
+- **Singular extension**: domain independent; if a node's value is much better than its siblings', that node is searched deeper, even 30–40 plies. Deep Blue used a variant of this method.
 
 ## Transpositions and Transposition Tables
 
@@ -168,7 +168,7 @@ Once the table fills up, replacement strategies apply: keep positions with great
 
 ## Endgame Databases
 
-An endgame database **completely solves** an endgame and stores the result. The history goes back to Torres y Quevedo's automaton with a mating algorithm for KRK (king and rook versus king): the algorithm is described as a set of conditional rules (e.g., "if the black king is on the same side as the rook, move the rook to the other side away from the king; if the rook's rank extends more than one rank beyond the black king, retreat the rook one rank to shrink the black king's range; if the kings are an odd horizontal distance apart, the rook makes a waiting move..."), and it can be proven to force mate from any initial position; with the opponent's king placed on a6 and defending with optimal delay, mate takes at most 61 moves.
+An endgame database **completely solves** an endgame and stores the result. The history goes back to Torres y Quevedo's automaton with a mating algorithm for KRK (king and rook versus king). The algorithm is described as a set of conditional rules (e.g., "if the black king is on the same side as the rook, move the rook to the other side away from the king; if the rook's rank extends more than one rank beyond the black king, retreat the rook one rank to shrink the black king's range; if the kings are an odd horizontal distance apart, the rook makes a waiting move..."), and it can be proven to force mate from any initial position. With the opponent's king placed on a6 and defending with optimal delay, mate takes at most 61 moves.
 
 ### Automatic Generation: Retrograde Analysis
 
@@ -181,14 +181,14 @@ Endgame databases are built automatically by dynamic-programming-style **retrogr
 - Repeat until no more labelings occur; do the same for Black.
 - All remaining unmarked positions are draws.
 
-Compact representation methods help with the representation and generation of the database: exploit board symmetries (e.g., in the KRK database the black king only needs to be considered on a small half of the squares within one triangular region), and filter out illegitimate and in-check states up front during generation.
+Compact representation methods help with the representation and generation of the database: exploit board symmetries (e.g., in the KRK database the black king only needs to be considered on the small set of squares within one triangular region), and filter out illegitimate and in-check states up front during generation.
 
 ### How Endgame Databases Changed Chess
 
 - All 5-piece endgames have been solved (they can have more than $10^8$ states), and many 6-piece endgames too. For example, KRBKNN (about $10^{11}$ states): the longest path-to-reduction is 223 moves.
 - **Rule changes**: databases revealed that some endgames require far more moves to win than the old rules allowed, prompting changes to the rule on the maximum number of moves from a capture/pawn move to completion.
 - **Rewriting chess knowledge**: for example, the new insight in KRKQ that "the rook should be split from the king"; KRKN was thought to be a draw, but the databases show that White wins in 51% of WTM positions and 87% of BTM positions.
-- Classic cases: in 1977 Walter Browne, playing White, faced Ken Thompson's Belle in a KQKR endgame, and Belle used the database to hold a drawn position that was losing; similarly, a computer once used the database to force a draw against international master Hans Berliner. Databases also produce precise solutions humans find unbelievable, such as the complete move sequence for the KNNKP(d4) endgame — "White to move, mate in 84."
+- Classic cases: in 1977 Walter Browne, playing White, faced Ken Thompson's Belle in a KQKR endgame, and Belle used the database to hold a draw in a losing position; similarly, a computer once used the database to force a draw against international master Hans Berliner. Databases also produce precise solutions humans find unbelievable, such as the complete move sequence for the KNNKP(d4) endgame: "White to move, mate in 84."
 - Practical implication: when playing against a computer equipped with an endgame database, do **not** exchange pieces when the exchange would bring the game to a position that is in the database!
 
 ## Deep Blue's Search and Hardware
@@ -206,7 +206,7 @@ Compact representation methods help with the representation and generation of th
 
 ## The Role of Computing Power
 
-Self-play experiments with Belle and other programs (Thompson's two sets of experiments), together with curves relating programs' ratings to the size of the tree searched within three minutes per move, show that playing strength grows with search size — but with **diminishing returns to computation power**. One quantitative piece of evidence: the fraction of moves on which Belle's level-$l$ version disagreed with its level-$(l-1)$ version fell overall from about 33% at depth 4 versus 3 to about 18% at depth 11 versus 10 — the deeper the search, the less one more ply changes the chosen moves (of course, the strength gains over the same period also came from other algorithmic and knowledge improvements).
+Self-play experiments with Belle and other programs (Thompson's two sets of experiments) show that playing strength grows with search size, but with **diminishing returns to computation power**; curves relating programs' ratings to the size of the tree searched within three minutes per move show the same pattern. One quantitative piece of evidence: the fraction of moves on which Belle's level-$l$ version disagreed with its level-$(l-1)$ version fell overall from about 33% at depth 4 versus 3 to about 18% at depth 11 versus 10; the deeper the search, the less one more ply changes the chosen moves (of course, the strength gains over the same period also came from other algorithmic and knowledge improvements).
 
 Interestingly, the human-AI hybrids (centaurs) of **"Freestyle Chess"** were for a while stronger than either humans or AI alone.
 

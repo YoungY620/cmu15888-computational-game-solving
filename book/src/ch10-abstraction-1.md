@@ -1,6 +1,6 @@
 # L10 Game Abstraction 1
 
-For large imperfect-information games, even the best equilibrium-finding algorithms cannot be run on the original game directly. This chapter covers *practical* game abstraction: automatically compress the original game into a smaller abstract game, solve for an equilibrium in the abstract game, and map the solution back to the original game. We cover lossless abstraction (GameShrink), early lossy abstraction, potential-aware abstraction, and the 2014 state of the art—potential-aware, imperfect-recall abstraction with earth mover's distance—followed by hierarchical abstraction, which couples abstraction with distributed equilibrium computation, and Tartanian7, the champion agent built with these techniques. Abstraction with theoretical guarantees is the subject of the next chapter.
+For large imperfect-information games, even the best equilibrium-finding algorithms cannot be run on the original game directly. This chapter covers *practical* game abstraction: automatically compress the original game into a smaller abstract game, solve for an equilibrium in the abstract game, and map the solution back to the original game. We cover lossless abstraction (GameShrink), early lossy abstraction, potential-aware abstraction, and the 2014 state of the art (potential-aware, imperfect-recall abstraction with earth mover's distance). We then turn to hierarchical abstraction, which couples abstraction with distributed equilibrium computation, and Tartanian7, the champion agent built with these techniques. Abstraction with theoretical guarantees is the subject of the next chapter.
 
 ## The Automated Game Abstraction Framework
 
@@ -16,11 +16,11 @@ Lossless abstraction [Gilpin & Sandholm, EC-06, J. of the ACM 2007] merges only 
 
 ### Information Filters
 
-Observation: a game can be made smaller by **filtering the information a player receives**. Instead of observing a specific signal exactly, the player observes a filtered *set* of signals. In poker, for example, rather than knowing he holds A♥, the player receives the signal {A♠, A♣, A♥, A♦}—he knows only that his card is some ace. The coarser the filtering, the smaller the abstracted game.
+Observation: a game can be made smaller by **filtering the information a player receives**. Instead of observing a specific signal exactly, the player observes a filtered *set* of signals. In poker, for example, rather than knowing he holds A♥, the player receives the signal {A♠, A♣, A♥, A♦}: he knows only that his card is some ace. The coarser the filtering, the smaller the abstracted game.
 
 ### The Signal Tree
 
-The algorithm operates on the **signal tree** rather than the game tree itself. Each edge of the signal tree corresponds to the revelation of some signal by nature to at least one player. Because only the signal tree—not the full game tree—needs to be loaded into memory, extremely large games become tractable.
+The algorithm operates on the **signal tree** rather than the game tree itself. Each edge of the signal tree corresponds to the revelation of some signal by nature to at least one player. Because only the signal tree, not the full game tree, needs to be loaded into memory, extremely large games become tractable.
 
 ### The Isomorphic Relation
 
@@ -59,12 +59,12 @@ GameShrink:
 
 Rhode Island Hold'em was proposed as an AI challenge problem by Shi & Littman 01; its game tree has 3.1 billion nodes. GameShrink's performance on it:
 
-- Without abstraction, the linear program (LP) for an equilibrium has 91,224,226 rows and columns—unsolvable;
+- Without abstraction, the linear program (LP) for an equilibrium has 91,224,226 rows and columns (unsolvable);
 - GameShrink runs in **one second** to produce the lossless abstraction;
 - After that, the LP has only 1,237,238 rows and columns (50,428,638 non-zeros);
 - Solving this LP with the CPLEX barrier method took 8 days and 25 GB of RAM, yielding an **exact Nash equilibrium**.
 
-This was the largest imperfect-information game solved by then—by over four orders of magnitude.
+This was the largest imperfect-information game solved by then, by over four orders of magnitude.
 
 ## Lossy Game Abstraction
 
@@ -73,11 +73,11 @@ The example game for the rest of this lecture is Texas Hold'em. Its structure: n
 - Two-player **Limit** Texas Hold'em has roughly $10^{18}$ nodes;
 - Two-player **No-Limit** Texas Hold'em has roughly $10^{165}$ nodes.
 
-Even after lossless abstraction, the game is too big to solve, so it must be compressed further—this calls for **lossy** abstraction.
+Even after lossless abstraction, the game is too big to solve, so it must be compressed further; this calls for **lossy** abstraction.
 
 ### The First Abstraction Algorithm Applied to Texas Hold'em
 
-The first abstraction algorithm applied to Texas Hold'em [Gilpin & Sandholm, AAAI-06] makes GameShrink abstract "harder": it no longer requires a perfect matching between children, so approximately isomorphic nodes are merged as well. For the speed of the matching, a faster matching heuristic is used: two nodes are matched only if
+The first abstraction algorithm applied to Texas Hold'em [Gilpin & Sandholm, AAAI-06] makes GameShrink abstract "harder": it no longer requires a perfect matching between children, so approximately isomorphic nodes are merged as well. To speed up the matching, a faster matching heuristic is used: two nodes are matched only if
 
 $$|\text{wins}_{\text{node}_1} - \text{wins}_{\text{node}_2}| + |\text{losses}_{\text{node}_1} - \text{losses}_{\text{node}_2}| < k$$
 
@@ -85,7 +85,7 @@ $$|\text{wins}_{\text{node}_1} - \text{wins}_{\text{node}_2}| + |\text{losses}_{
 
 ### Clustering + Integer Programming
 
-A better and more scalable approach to lossy abstraction [Gilpin & Sandholm, AAMAS-07] operates on the signal tree of **one player's private signals together with the common signals**, one player at a time (no longer on the joint signal tree of both players' signals)—the state-of-the-art algorithm described later does the same. The method is "clustering + integer programming (IP)":
+A better and more scalable approach to lossy abstraction [Gilpin & Sandholm, AAMAS-07] operates on the signal tree of **one player's private signals together with the common signals**, one player at a time (no longer on the joint signal tree of both players' signals). The state-of-the-art algorithm described later does the same. The method is "clustering + integer programming (IP)":
 
 - For every betting round $i$, tell the algorithm how many buckets $K_i$ it is allowed to generate. $K_i$ determines the size of the abstraction and should be set based on the computational resources available for the equilibrium computation;
 - First round: run $k_1$-means clustering to bucket that round's nodes;
@@ -93,7 +93,7 @@ A better and more scalable approach to lossy abstraction [Gilpin & Sandholm, AAM
 
 ## Potential-Aware Abstraction
 
-All prior abstraction algorithms used "probability of winning (assuming no more betting)" as the similarity metric between hands, but this does not capture a hand's **potential**—a drawing hand may have a modest current chance of winning yet a large chance of becoming strong in later rounds. Moreover, potential is not one-dimensional ("positive" or "negative") but "multidimensional": a hand can improve in many different ways on different boards. Potential-aware abstraction [Gilpin, Sandholm & Sørensen, AAAI-07; Gilpin & Sandholm, AAAI-08] was designed precisely to capture potential.
+All prior abstraction algorithms used "probability of winning (assuming no more betting)" as the similarity metric between hands, but this does not capture a hand's **potential**: a drawing hand may have a modest current chance of winning yet a large chance of becoming strong in later rounds. Potential is not one-dimensional ("positive" or "negative") but "multidimensional": a hand can improve in many different ways on different boards. Potential-aware abstraction [Gilpin, Sandholm & Sørensen, AAAI-07; Gilpin & Sandholm, AAAI-08] was designed precisely to capture potential.
 
 ### Bottom-Up Pass to Determine the Round-1 Abstraction
 
@@ -127,7 +127,7 @@ The three main threads of practical lossy abstraction in this period were:
 - **Potential-aware abstraction** [Gilpin, Sandholm & Sørensen, AAAI-07; Gilpin & Sandholm, AAAI-08]: replacing the scalar win probability with the distribution over next-round buckets as the similarity metric;
 - **Imperfect recall** [Waugh et al., SARA-09; Johanson et al., AAMAS-13]: allowing players in the abstract game to "forget" which bucket they were in during earlier rounds, thereby decoupling the abstractions of the different rounds and drastically reducing the cost of both abstraction computation and equilibrium finding.
 
-Imperfect recall deserves a few more words [Brown et al., AAMAS-15]. Intuitively, a perfect-recall abstraction forces a player to distinguish at a later round everything he could distinguish at an earlier round, even when the distinction has no strategic significance later: for example, having distinguished K♥3♣ from K♥4♣ preflop, perfect recall forces the player to keep distinguishing these two hands on a flop of K♠J♦9♥, even though the 3♣ versus 4♣ difference is extremely unlikely to affect play; imperfect recall allows the agent to "forget" such distinctions once they are no longer relevant. The cost is the loss of theoretical guarantees: CFR-type algorithms have no convergence guarantee on imperfect-recall games (the exception being the guarantee of Lanctot et al., ICML-12 for a class of well-formed games), and Nash equilibria in behavioral strategies may even fail to exist. Yet in practice, poker agents using imperfect-recall abstractions have consistently outperformed agents using perfect-recall abstractions.
+Imperfect recall deserves a few more words [Brown et al., AAMAS-15]. Intuitively, a perfect-recall abstraction forces a player to distinguish at a later round everything he could distinguish at an earlier round, even when the distinction has no strategic significance later. For example, having distinguished K♥3♣ from K♥4♣ preflop, perfect recall forces the player to keep distinguishing these two hands on a flop of K♠J♦9♥, even though the 3♣ versus 4♣ difference is extremely unlikely to affect play. Imperfect recall allows the agent to "forget" such distinctions once they are no longer relevant. The cost is the loss of theoretical guarantees: CFR-type algorithms have no convergence guarantee on imperfect-recall games (the exception being the guarantee of Lanctot et al., ICML-12 for a class of well-formed games), and Nash equilibria in behavioral strategies may even fail to exist. Yet in practice, poker agents using imperfect-recall abstractions have consistently outperformed agents using perfect-recall abstractions.
 
 ## State of the Art: Potential-Aware + Imperfect Recall + Earth Mover's Distance
 
@@ -135,13 +135,13 @@ The 2014 state-of-the-art algorithm [Ganzfried & Sandholm, AAAI-14] is "potentia
 
 ### Expected Hand Strength (EHS)
 
-EHS (expected hand strength, aka equity) is defined as
+EHS (expected hand strength, also known as equity) is defined as
 
 $$\text{EHS} = \Pr[\text{win}] + \tfrac{1}{2}\Pr[\text{tie}],$$
 
 where the opponent's hand is drawn uniformly at random and the remaining public cards are dealt out by a uniform random rollout. Early poker abstraction approaches all used EHS (or EHS exponentiated to some power) to cluster hands [e.g., Billings et al., IJCAI-03; Gilpin & Sandholm, AAAI-06; Zinkevich et al., NIPS-07; Waugh et al., SARA-09].
 
-The shortcoming of EHS is that it fails to account for the **distribution of hand strength**. For example, 4♠4♥ and T♠J♠ have almost identical EHS (about 0.57), yet their distributional shapes are entirely different: 44's EHS frequently falls in the $[0.4, 0.6]$ range and rarely in $[0.7, 0.9]$, while exactly the reverse is true for T♠J♠ (a suited connector)—it often becomes a very strong hand, and often ends up with nothing. The figure below compares the EHS histograms of the two hands:
+The shortcoming of EHS is that it fails to account for the **distribution of hand strength**. For example, 4♠4♥ and T♠J♠ have almost identical EHS (about 0.57), yet their distributional shapes are entirely different: 44's EHS frequently falls in the $[0.4, 0.6]$ range and rarely in $[0.7, 0.9]$, while exactly the reverse is true for T♠J♠ (a suited connector): it often becomes a very strong hand, and often ends up with nothing. The figure below compares the EHS histograms of the two hands:
 
 ![EHS distribution histograms for 4s4h and TsJs: the means are almost identical, but the distributional shapes are completely different](assets/ch10-abstraction-1-3.png)
 
@@ -149,7 +149,7 @@ Clustering by EHS would put these two hands in the same bucket, but they should 
 
 ### Distribution-Aware Abstraction and Earth Mover's Distance
 
-Distribution-aware abstraction takes into account the **full distribution** of hand strength: each hand is represented as a histogram (over equities after all public cards are dealt, still assuming a uniform random hand for the opponent), and the distance between histograms is measured by the **earth mover's distance (EMD)**.
+Distribution-aware abstraction uses the **full distribution** of hand strength: each hand is represented as a histogram (over equities after all public cards are dealt, still assuming a uniform random hand for the opponent), and the distance between histograms is measured by the **earth mover's distance (EMD)**.
 
 > **Earth mover's distance (EMD):** the minimum cost of turning one pile of dirt into the other, where cost = amount of dirt moved × the distance by which it is moved.
 
@@ -157,11 +157,11 @@ EMD can be computed in linear time in the one-dimensional setting, but is more c
 
 ### Potential-Awareness + High-Dimensional EMD
 
-Distribution-awareness alone is still not enough: two hands can have very similar distributions over strength at the end, yet **realize their equity in different ways and at different rates**—one hand's strength may be settled by the next round, while another's is resolved only at the final round—so the two call for different betting strategies. Potential-aware abstraction [Gilpin, Sandholm & Soerensen, AAAI-07] considers all future rounds, not just the final round.
+Distribution-awareness alone is still not enough: two hands can have very similar distributions over strength at the end, yet **realize their equity in different ways and at different rates** (one hand's strength may be settled by the next round, while another's is resolved only at the final round), so the two call for different betting strategies. Potential-aware abstraction [Gilpin, Sandholm & Soerensen, AAAI-07] considers all future rounds, not just the final round.
 
-The key technical difficulty: in distribution-aware abstraction, histograms are over **cardinal** equity values, so the distance between bins is naturally defined; in potential-aware abstraction, histograms are over **non-ordinal** next-round information states—there is no natural distance between buckets—so EMD must be computed in a higher-dimensional space.
+The key technical difficulty: in distribution-aware abstraction, histograms are over **cardinal** equity values, so the distance between bins is naturally defined; in potential-aware abstraction, histograms are over **non-ordinal** next-round information states (there is no natural distance between buckets), so EMD must be computed in a higher-dimensional space.
 
-The example in the figure below illustrates the distinction. Private signal $x_1$ at node A transitions to B with probability 1, and from B reaches equity 0 or 1 with probability 1/2 each; private signal $x_2$ at node C transitions to D or E with probability 1/2 each, with D reaching equity 0 with probability 1 and E reaching equity 1 with probability 1. If we only look at the outcome at the end of the game, $x_1$ and $x_2$ have identical equity histograms (equity 0 and 1, half each); but the histograms over round-2 information states reached from round 1 are different—$x_1$ lands entirely on state B, while $x_2$ lands half on D and half on E. The two hands' "paths" are completely different, and potential-aware abstraction distinguishes hands using exactly the latter kind of histogram:
+The example in the figure below illustrates the distinction. Private signal $x_1$ at node A transitions to B with probability 1, and from B reaches equity 0 or 1 with probability 1/2 each; private signal $x_2$ at node C transitions to D or E with probability 1/2 each, with D reaching equity 0 with probability 1 and E reaching equity 1 with probability 1. If we only look at the outcome at the end of the game, $x_1$ and $x_2$ have identical equity histograms (equity 0 and 1, half each); but the histograms over round-2 information states reached from round 1 are different: $x_1$ lands entirely on state B, while $x_2$ lands half on D and half on E. The two hands' "paths" are completely different, and potential-aware abstraction distinguishes hands using exactly the latter kind of histogram:
 
 ![Example of private signals x1 and x2: the final equity distributions are the same, but the distributions over next-round information states differ](assets/ch10-abstraction-1-4.png)
 
@@ -170,7 +170,7 @@ The example in the figure below illustrates the distinction. Private signal $x_1
 The potential-aware imperfect-recall abstraction algorithm with EMD works as follows:
 
 - Perform one **bottom-up** pass over the tree, representing each node by its distribution histogram over next-round clusters;
-- EMD is now computed in a multi-dimensional space, with the **ground distance** taken to be the (next-round) EMD between the corresponding cluster means—i.e., distances are given recursively by the EMDs already computed for the next round;
+- EMD is now computed in a multi-dimensional space, with the **ground distance** taken to be the (next-round) EMD between the corresponding cluster means (i.e., distances are given recursively by the EMDs already computed for the next round);
 - The best general-purpose EMD implementation is far too slow for the scale of Texas Hold'em, so the paper develops a fast custom heuristic for approximating it in this setting;
 - Using this algorithm to compute the flop-round abstraction yields strategies that beat the best prior abstraction algorithm.
 
@@ -181,7 +181,7 @@ Note the two simplifications afforded by imperfect recall:
 
 ## Hierarchical Abstraction, Distributed Equilibrium Computation, and Post-Processing
 
-Tartanian7 [Brown, Ganzfried & Sandholm, AAMAS-15], the champion agent of the 2014 ACPC (Annual Computer Poker Competition), pushed this chapter's three-step framework to a much larger scale. The motivation comes from hardware: the strongest equilibrium-finding algorithm of the time, MCCFR, parallelizes easily on shared-memory machines, but shared-memory machines have limited memory and core counts; exploiting a supercomputer with more memory and more cores means facing **inter-blade memory access latency** (on the machine the authors used, same-blade access takes about 130 nanoseconds, cross-blade about one microsecond). Naively parallelized MCCFR reads and writes information sets scattered across different blades on every iteration—impractically slow. The solution is to make the abstraction itself fit the hardware: cut the game tree into **disjoint pieces** so that the sampling on each blade only accesses information sets located on that blade.
+Tartanian7 [Brown, Ganzfried & Sandholm, AAMAS-15], the champion agent of the 2014 ACPC (Annual Computer Poker Competition), pushed this chapter's three-step framework to a much larger scale. The motivation comes from hardware: the strongest equilibrium-finding algorithm of the time, MCCFR, parallelizes easily on shared-memory machines, but shared-memory machines have limited memory and core counts. Exploiting a supercomputer with more memory and more cores means facing **inter-blade memory access latency** (on the machine the authors used, same-blade access takes about 130 nanoseconds, cross-blade about one microsecond). Naively parallelized MCCFR reads and writes information sets scattered across different blades on every iteration, which is impractically slow. The solution is to make the abstraction itself fit the hardware: cut the game tree into **disjoint pieces** so that the sampling on each blade only accesses information sets located on that blade.
 
 ### The Hierarchical Abstraction Algorithm
 
@@ -190,13 +190,13 @@ Hierarchical abstraction has two levels:
 1. First cluster **public information** at some special early round $\hat{r}$ (the flop round for no-limit Texas Hold'em): the 1,755 public flops (after accounting for suit isomorphisms) are clustered into $C=60$ public buckets, each bucket assigned to one blade;
 2. Then, for each public bucket, cluster the compatible **private** information states **separately** for each round from $\hat{r}$ through the final round (500 private buckets per round per public bucket).
 
-Rounds before $\hat{r}$ (preflop) are handled separately with an arbitrary abstraction algorithm—the strongest agents use no abstraction preflop. This way, after leaving the preflop, each sampled trajectory accesses information sets on only one blade. The scheme requires players to remember the public bucket throughout the hand (so it is not full imperfect recall), but does not force them to remember other distinctions that are no longer relevant, thereby retaining most of the benefits of imperfect recall.
+Rounds before $\hat{r}$ (preflop) are handled separately with an arbitrary abstraction algorithm (the strongest agents use no abstraction preflop). This way, after leaving the preflop, each sampled trajectory accesses information sets on only one blade. The scheme requires players to remember the public bucket throughout the hand (so it is not full imperfect recall), but does not force them to remember other distinctions that are no longer relevant, thereby retaining most of the benefits of imperfect recall.
 
 ### A Similarity Metric for Public Information
 
-How should the distance between public flops be defined? The prior approach of Waugh et al., SARA-09 builds a transition table for each public board $f$: $T[f][i][j]$ is the probability (in a small perfect-recall base abstraction) of transitioning from preflop bucket $i$ to flop bucket $j$, and k-means is run with the $L_2$ distance between transition tables. Beyond the difficulty of scaling this to large base abstractions, there is a conceptual flaw: take two extremely similar public boards A♥K♠3♦ and A♥K♠2♦—if the base abstraction puts 4♣3♠-A♥K♠3♦ and 4♣2♠-A♥K♠2♦ into bucket 12 but the crossed combinations into bucket 13, then the two boards have probabilities 0 and 1, respectively, on that transition component, and the $L_2$ distance applies the maximum penalty—even though the boards map extremely similar hands into the same bucket and should be judged similar.
+How should the distance between public flops be defined? The prior approach of Waugh et al., SARA-09 builds a transition table for each public board $f$: $T[f][i][j]$ is the probability (in a small perfect-recall base abstraction) of transitioning from preflop bucket $i$ to flop bucket $j$, and k-means is run with the $L_2$ distance between transition tables. Beyond the difficulty of scaling this to large base abstractions, there is a conceptual flaw: take two extremely similar public boards A♥K♠3♦ and A♥K♠2♦. If the base abstraction puts 4♣3♠-A♥K♠3♦ and 4♣2♠-A♥K♠2♦ into bucket 12 but the crossed combinations into bucket 13, then the two boards have probabilities 0 and 1, respectively, on that transition component, and the $L_2$ distance applies the maximum penalty, even though the boards map extremely similar hands into the same bucket and should be judged similar.
 
-The new algorithm first computes a sufficiently strong base abstraction $A$ (in practice, a 169-5000-5000-5000 imperfect-recall abstraction), then counts, for each public board $i$, how many private hole-card combinations it sends into each flop bucket $b$ of $A$; denote the count by $c_i$ (given the public board there are $\binom{49}{2}=1176$ hole-card combinations). The similarity of two public boards is the sum over buckets of the overlap of the counts, $s_{i,j}=\sum_b \min(c_i, c_j)$, and the distance is defined as
+The new algorithm first computes a sufficiently strong base abstraction $A$ (in practice, a 169-5000-5000-5000 imperfect-recall abstraction), then counts, for each public board $i$, how many private hole-card combinations it sends into each flop bucket $b$ of $A$. Denote the count by $c_i$; given the public board there are $\binom{49}{2}=1176$ hole-card combinations. The similarity of two public boards is the sum over buckets of the overlap of the counts, $s_{i,j}=\sum_b \min(c_i, c_j)$, and the distance is defined as
 
 $$d_{i,j} = \frac{V - s_{i,j}}{V},$$
 
@@ -204,7 +204,7 @@ i.e., the fraction of private states that are **not** mapped into the same bucke
 
 ### Distributed Equilibrium Computation
 
-The accompanying equilibrium-finding algorithm is a distributed modification of external-sampling MCCFR: one **head blade** is designated to run MCCFR on the top of the tree (preflop); whenever a sampled trajectory exits the top of the tree (reaches the flop), the current state is sent to all $C$ child blades, and each child blade samples public cards from its own public bucket and continues its own MCCFR iteration; once the child blades return their values, the head blade computes a weighted average, weighing by the number of choices of public information (possible flops) in each bucket, so that each flop is weighed equally in expectation—guaranteeing that the estimate is **unbiased**. In practice a two-pass approach (first record which flop sequences are encountered and send them in batch to the child blades for evaluation, then use the returned values on a second pass) reduces communication; the inter-blade communication overhead is about 60 microseconds per iteration, negligible against the roughly 15 milliseconds each iteration takes.
+The accompanying equilibrium-finding algorithm is a distributed modification of external-sampling MCCFR: one **head blade** is designated to run MCCFR on the top of the tree (preflop); whenever a sampled trajectory exits the top of the tree (reaches the flop), the current state is sent to all $C$ child blades, and each child blade samples public cards from its own public bucket and continues its own MCCFR iteration. Once the child blades return their values, the head blade computes a weighted average, weighing by the number of choices of public information (possible flops) in each bucket, so that each flop is weighed equally in expectation. This guarantees that the estimate is **unbiased**. In practice a two-pass approach (first record which flop sequences are encountered and send them in batch to the child blades for evaluation, then use the returned values on a second pass) reduces communication; the inter-blade communication overhead is about 60 microseconds per iteration, negligible against the roughly 15 milliseconds each iteration takes.
 
 ### Post-Processing: Reverse Mapping, Thresholding, and Purification
 
@@ -214,7 +214,7 @@ Equilibrium finding only converges approximately and may leave positive probabil
 
 ### Tartanian7: Scale and Results
 
-The abstraction generated with these techniques was of unprecedented scale: 169 preflop buckets, 60 public flop buckets, and 500 private buckets for each of the flop/turn/river rounds within each public bucket (30,000 private buckets per round); the action abstraction had 6,104,546 nodes; the whole abstract game had $5.49\times10^{15}$ nodes, $6.6\times10^{10}$ information sets, and $1.8\times10^{11}$ infoset-action pairs (a measure directly proportional to CFR's memory usage)—six times larger than the largest abstractions used by prior no-limit Texas Hold'em agents, and the largest imperfect-information game tackled by an equilibrium-finding algorithm at the time. The equilibrium computation ran for 1,200 hours on the Blacklight supercomputer using 961 cores (60 blades × 16 cores + 1 core for the head blade), for a total of 1,153,200 core-hours. The resulting agent, Tartanian7, won the 2014 ACPC two-player no-limit Texas Hold'em competition, beating each opponent with statistical significance, with an average win rate of 479 mbb/h (milli big blinds per hand).
+The abstraction generated with these techniques was of unprecedented scale: 169 preflop buckets, 60 public flop buckets, and 500 private buckets for each of the flop/turn/river rounds within each public bucket (30,000 private buckets per round); the action abstraction had 6,104,546 nodes; the whole abstract game had $5.49\times10^{15}$ nodes, $6.6\times10^{10}$ information sets, and $1.8\times10^{11}$ infoset-action pairs (a measure directly proportional to CFR's memory usage), six times larger than the largest abstractions used by prior no-limit Texas Hold'em agents, and the largest imperfect-information game tackled by an equilibrium-finding algorithm at the time. The equilibrium computation ran for 1,200 hours on the Blacklight supercomputer using 961 cores (60 blades × 16 cores + 1 core for the head blade), for a total of 1,153,200 core-hours. The resulting agent, Tartanian7, won the 2014 ACPC two-player no-limit Texas Hold'em competition, beating each opponent with statistical significance, with an average win rate of 479 mbb/h (milli big blinds per hand).
 
 ## Conclusions
 

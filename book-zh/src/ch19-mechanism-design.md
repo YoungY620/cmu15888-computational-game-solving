@@ -158,11 +158,11 @@ $$\Longrightarrow\qquad \max_{\mu}\ \min_{i,\,\boldsymbol{x}_i}\ u_M(\mu,\boldsy
 
 > **命题.** 存在 $\lambda^*>0$，使得对所有 $\lambda>\lambda^*$：该零和博弈中最大化方的均衡策略，恰好就是原博弈的最优通信均衡。
 
-Zhang 等人（NeurIPS 2023）把最小的这样的 $\lambda^*$ 称为**临界拉格朗日乘子**（critical Lagrange multiplier），并证明了鞍点解 $(\mu^*,\boldsymbol{x}^*,\lambda^*)$ 的存在性（Proposition 3.1）。实际算法中并不需要预先知道 $\lambda^*$：把乘子随时间调大（如 $\lambda:=T^{1/4}$ 或 $\lambda:=T^{1/2}$），即可在平衡"均衡间隙"与"最优性间隙"的同时保证收敛。由此得到的速率（论文 Corollary 3.3、3.4 与 Theorem 3.5，按下文的 $\varepsilon$ 口径重述即课件中的版本）：CFR 型算法下调解人的**平均策略**以 $T^{-1/4}$ 收敛到最优均衡集；用乐观（optimism）技术加速到 $T^{-1/2}$；而借助化归出的零和博弈结构，乐观梯度下降/上升还能给出 $T^{-1/4}$ 的**末迭代**收敛。这些是首批可证明收敛到**最优**均衡（而非某个均衡）的学习动态。值得一提的是末迭代收敛的一层含义：论文同时证明，任何**无调解人的独立学习动态**要保证 $\varepsilon$-末迭代收敛都需要超多项式时间（Proposition D.2）——把调解人作为额外玩家引入学习过程恰好绕过了这一已知障碍。每轮迭代的复杂度方面：通信均衡与认证均衡在嵌套值域条件（nested range condition）下是多项式的；NFCCE、EFCCE、EFCE 则存在固定参数可解（FPT）的实现。
+Zhang 等人（NeurIPS 2023）把最小的这样的 $\lambda^*$ 称为**临界拉格朗日乘子**（critical Lagrange multiplier），并证明了鞍点解 $(\mu^*,\boldsymbol{x}^*,\lambda^*)$ 的存在性（Proposition 3.1）。实际算法中并不需要预先知道 $\lambda^*$：把乘子随时间调大（如 $\lambda:=T^{1/4}$ 或 $\lambda:=T^{1/2}$），即可在平衡"均衡间隙"与"最优性间隙"的同时保证收敛。由此得到的速率（论文 Corollary 3.3、3.4 与 Theorem 3.5，按下文的 $\varepsilon$ 口径重述即课件中的版本）：CFR 型算法下调解人的**平均策略**以 $T^{-1/4}$ 收敛到最优均衡集；用乐观（optimism）技术加速到 $T^{-1/2}$；而借助化归出的零和博弈结构，乐观梯度下降/上升还能给出 $T^{-1/4}$ 的**末迭代**收敛。这些是首批可证明收敛到**最优**均衡（而非某个均衡）的学习动态。末迭代收敛还有一层含义：论文同时证明，任何**无调解人的独立学习动态**要保证 $\varepsilon$-末迭代收敛都需要超多项式时间（Proposition D.2）——把调解人作为额外玩家引入学习过程恰好绕过了这一已知障碍。每轮迭代的复杂度方面：通信均衡与认证均衡在嵌套值域条件（nested range condition）下是多项式的；NFCCE、EFCCE、EFCE 则存在固定参数可解（FPT）的实现。
 
 ### 5.1 拉格朗日作为扩展式博弈
 
-这个 max–min 问题可以显式写成一个扩展式零和博弈（如下页图）：偏离者（Min）先选择代表哪个玩家 $i$；自然（Nature）以均匀随机决定玩家 $i$ 是否可以偏离；随后调解人（Max）与"全部直接玩家"或"除 $i$ 外直接、$i$ 由偏离者控制"的阵容对弈，终点 $z$ 的零和效用分别为 $2u_M(z)+2\lambda u_i(z)$ 与 $-2\lambda u_i(z)$。
+这个 max–min 问题可以显式写成一个扩展式零和博弈（见下图）：偏离者（Min）先选择代表哪个玩家 $i$；自然（Nature）均匀随机地决定玩家 $i$ 是否可以偏离；随后调解人（Max）与"全部直接玩家"或"除 $i$ 外直接、$i$ 由偏离者控制"的阵容对弈，终点 $z$ 的零和效用分别为 $2u_M(z)+2\lambda u_i(z)$ 与 $-2\lambda u_i(z)$。
 
 ![拉格朗日博弈树：偏离者选代表玩家，自然随机决定其是否可偏离，调解人在两种情形下对局；终点效用分别为 $2u_M(z)+2\lambda u_i(z)$ 与 $-2\lambda u_i(z)$](assets/ch19-mechanism-design-2.png)
 
@@ -222,7 +222,7 @@ $$\max_{\mu}\ \min\Big\{\ u_M(\mu,\boldsymbol{x}^*)-\tau,\ \ -\max_{i,\,\boldsym
 
 因此 **EFCE ≈ 信息设计 + 隐私约束**（调解人不能把一个玩家的信息透露给别的玩家）。沿"玩家是否可以说谎"和"隐私"两个维度，一般问题的几个重要子类形成如下方阵：
 
-![一般问题的子类：EFCE 与信息设计分别在“允许说谎”方向对应私有通信均衡与通信均衡；竖直方向为隐私约束](assets/ch19-mechanism-design-5.png)
+![一般问题的子类：EFCE 与信息设计分别在"允许说谎"方向对应私有通信均衡与通信均衡；竖直方向为隐私约束](assets/ch19-mechanism-design-5.png)
 
 更一般地，此前讨论过的所有均衡概念（以及更多概念）都被同一张蕴含图连接起来：标准式相关均衡（Aumann 1974）、标准式粗相关均衡（Moulin & Vial 1978）、EFCE（von Stengel & Forges 2008）、扩展式粗相关均衡（Farina, Bianchi & Sandholm 2020）、通信均衡（Myerson 1986；Forges 1986）、认证均衡（Forges & Koessler 2005）、调解均衡（Monderer & Tennenholtz 2009）、（序贯）机制设计、（序贯）信息设计 / 贝叶斯劝说（Kamenica & Gentzkow 2011）等；图中的每条有向边对应四种加强之一——调解人获得完美回忆、调解人获得更多信息、玩家失去不服从建议的能力、玩家失去说谎的能力。这与之前 Φ-后悔一讲中"均衡概念 = 对某类偏离无后悔"的视角遥相呼应。
 
@@ -234,7 +234,7 @@ $$\max_{\mu}\ \min\Big\{\ u_M(\mu,\boldsymbol{x}^*)-\tau,\ \ -\max_{i,\,\boldsym
 
 **求最优均衡的 LP 算法：** 机制设计——单次拍卖（Conitzer & Sandholm, UAI 2002；Sandholm, CP 2003）、单玩家（Zhang & Conitzer, NeurIPS 2021）、拍卖（Papadimitriou, Pierrakos, Psomas & Rubinstein, GEB 2014）；序贯信息设计——单玩家（Gan, Majumdar, Radanovic & Singla, AAAI 2022）、多短视玩家（Wu, Zhang, Feng, Wang, Yang & Jordan, EC 2022）；最优相关均衡（Zhang, Farina, Celli & Sandholm, EC 2022）。
 
-**拉格朗日方法：** 本讲的拉格朗日框架、收敛速率与全部实验出自 Zhang, Farina, Anagnostides, Cacciamani, McAleer, Haupt, Celli, Gatti, Conitzer & Sandholm（NeurIPS 2023）。"直接"拉格朗日在单步机制设计情形（Dütting, Feng, Narasimhan, Parkes & Ravindranath, JACM 2023）；"二分搜索"拉格朗日曾对 EFCE 与 NFCCE 被提出（但未加分析）（Farina, Ling, Fang & Sandholm, NeurIPS 2019）。
+**拉格朗日方法：** 本讲的拉格朗日框架、收敛速率与全部实验出自 Zhang, Farina, Anagnostides, Cacciamani, McAleer, Haupt, Celli, Gatti, Conitzer & Sandholm（NeurIPS 2023）。"直接"拉格朗日在单步机制设计情形（Dütting, Feng, Narasimhan, Parkes & Ravindranath, JACM 2023）；"二分搜索"拉格朗日曾对 EFCE 与 NFCCE 提出过（但未加分析）（Farina, Ling, Fang & Sandholm, NeurIPS 2019）。
 
 **计算单个均衡的无悔学习算法：** EFCE（Farina, Celli, Marchesi & Gatti, JACM 2022）；通信均衡（Fujii, arXiv 2023）；线性相关均衡（Farina & Pipis, NeurIPS 2023；Zhang, Farina & Sandholm, ICLR 2024）；标准式相关均衡——$\tilde{O}(n/\varepsilon)$ 收敛速率（$n$ 为节点数）（Peng & Rubinstein 2023；Dagan, Daskalakis, Fishelson & Golowich 2023），但能否像上述其他概念一样达到 $\mathrm{poly}(n,1/\varepsilon)$ 仍是公开问题。
 

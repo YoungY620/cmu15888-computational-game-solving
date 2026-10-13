@@ -10,7 +10,7 @@
 
 $$\Sigma_i := \{(j, a) : j \in \mathcal{J}_i,\ a \in A_j\}.$$
 
-对节点 $h \in \mathcal{J}_i$，记 $\sigma_i(h)$ 为该玩家在到达 $h$ 之前依次经过的（自己的）信息集与在这些信息集上所采取行动组成的有序列表。
+对节点 $h \in \mathcal{J}_i$，记 $\sigma_i(h)$ 为一个有序列表，依次记录该玩家在到达 $h$ 之前经过的（自己的）信息集以及在这些信息集上采取的行动。
 
 > **定义（完美回忆，perfect recall）。** 玩家 $i$ 具有完美回忆，如果对所有属于同一信息集 $j \in \mathcal{J}_i$ 的节点 $h, h'$，都有 $\sigma_i(h) = \sigma_i(h')$。若所有玩家都具有完美回忆，则称该博弈为完美回忆博弈。
 
@@ -63,7 +63,7 @@ $$\sum_{z \in \mathcal{Z}} u_i(z)\, p_c(z) \prod_{i' \in [n]} \prod_{\substack{(
 
 即使固定除一个玩家外的所有策略，该玩家的效用中仍含有自己策略变量之间的乘积，难以优化。这违反了第二条要求（第一条倒是满足的：行为策略集合是若干单纯形的笛卡尔积，是多项式约束可描述的凸多胞体）。**序列形式**（sequence form）表示巧妙地绕过了这个困难，它由 Romanovskii（1962）与 Koller、Megiddo、von Stengel（1996）独立发现。
 
-序列形式向量 $\boldsymbol{x}_i \in \mathbb{R}^{\Sigma_i}$ 的关键区别在于：对每个序列 $(j, a) \in \Sigma_i$，分量 $\boldsymbol{x}_i[(j, a)]$ 存放的是**从根到信息集 $j$ 采取行动 $a$ 的路径上玩家自己各概率的乘积**，即
+序列形式向量 $\boldsymbol{x}_i \in \mathbb{R}^{\Sigma_i}$ 与行为策略表示的关键区别在于：对每个序列 $(j, a) \in \Sigma_i$，分量 $\boldsymbol{x}_i[(j, a)]$ 存放的是**从根到信息集 $j$ 采取行动 $a$ 的路径上玩家自己各概率的乘积**，即
 
 $$\boldsymbol{x}_i[\sigma] := \prod_{(j, a) \preceq \sigma} \boldsymbol{b}_i[(j, a)], \qquad \forall \sigma \in \Sigma_i,$$
 
@@ -133,7 +133,7 @@ $$\mathcal{X}_j := \mathrm{co} \left\{ \begin{pmatrix} \boldsymbol{e}_1 \\ \math
 
 上一讲给出了单纯形上的多种高效无悔算法（RM、MWU 等）；上一节的分解表明序列形式多胞体可以仅用 i) 笛卡尔积、ii) 凸包两种操作由概率单纯形复合而成。**后悔电路**（regret circuits，Farina, Kroer & Sandholm, ICML 2019）回答的基本问题是：已知如何在某些集合上高效最小化后悔，能否把多个这样的后悔最小化器**组合**起来，以应对复合而成的更复杂的集合？由此只需为上述两种基本操作设计后悔电路，就能得到序列形式多胞体上的无悔算法——这正是 CFR。
 
-需要说明：上一讲在"学习者输出概率分布"的特殊情形下引入了后悔最小化框架，但定义可以直接推广到学习者输出一般凸集 $\mathcal{X}$（例如序列形式多胞体）中的点 $\boldsymbol{x}$、再获得线性效用函数 $\boldsymbol{x} \mapsto \langle \boldsymbol{x}, \boldsymbol{u} \rangle$ 的情形。此外，Farina et al. 还指出线性损失在如下意义下是**万有**的：即使效用是任意凸函数 $\ell^t$，由凸性 $\ell^t(\hat{\boldsymbol{x}}) \geq \ell^t(\boldsymbol{x}^t) + \langle \partial \ell^t(\boldsymbol{x}^t),\, \hat{\boldsymbol{x}} - \boldsymbol{x}^t \rangle$，把 $\ell^t$ 在 $\boldsymbol{x}^t$ 处的任一（次）梯度当作线性损失喂给只处理线性损失的后悔最小化器，其后悔不劣于原凸损失下的后悔。因此下面只为线性效用设计后悔电路即可，一般凸效用的情形自动涵盖。
+需要说明：上一讲在"学习者输出概率分布"的特殊情形下引入了后悔最小化框架，但定义可以直接推广到学习者输出一般凸集 $\mathcal{X}$（例如序列形式多胞体）中的点 $\boldsymbol{x}$、再获得线性效用函数 $\boldsymbol{x} \mapsto \langle \boldsymbol{x}, \boldsymbol{u} \rangle$ 的情形。此外，Farina et al. 还指出线性损失在如下意义下是**万有**的：即使效用是任意凸函数 $\ell^t$，由凸性 $\ell^t(\hat{\boldsymbol{x}}) \geq \ell^t(\boldsymbol{x}^t) + \langle \partial \ell^t(\boldsymbol{x}^t),\, \hat{\boldsymbol{x}} - \boldsymbol{x}^t \rangle$，把 $\ell^t$ 在 $\boldsymbol{x}^t$ 处的任一（次）梯度当作线性损失喂给只处理线性损失的后悔最小化器，其后悔不劣于原凸损失下的后悔。因此下面只为线性效用设计后悔电路即可，一般凸效用的情形也就自动涵盖在内。
 
 ### 笛卡尔积的后悔电路
 

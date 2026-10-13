@@ -1,12 +1,12 @@
 # L8 Optimism and Last-Iterate Convergence
 
-A basic premise of the online learning framework is that the sequence of utilities given as input to the learner is produced by an adversary so as to maximize the learner's regret. This worst-case perspective is overly pessimistic in self-play: when we design the algorithms on both sides, we have considerable control over the underlying sequence of utilities. This chapter answers two questions: can we break the $\Theta(\sqrt{T})$ regret barrier of the adversarial setting (optimistic no-regret learning), and—since regret-based guarantees only yield convergence in a time-average sense—what can be said about the **last iterate** of the dynamics?
+A basic premise of the online learning framework is that an adversary produces the sequence of utilities given to the learner so as to maximize the learner's regret. This worst-case perspective is overly pessimistic in self-play: when we design the algorithms on both sides, we have considerable control over the underlying sequence of utilities. This chapter answers two questions: can we break the $\Theta(\sqrt{T})$ regret barrier of the adversarial setting (optimistic no-regret learning), and—since regret-based guarantees only yield convergence in a time-average sense—what can be said about the **last iterate** of the dynamics?
 
 ## Optimistic no-regret learning
 
 ### The necessity of optimism
 
-Before introducing the framework, it is worth highlighting the intrinsic limitations of non-optimistic algorithms. A priori, one possibility would be that a better analysis could show that existing algorithms such as MWU already enjoy smaller regret in self-play—after all, the adversarial $\Omega(\sqrt{T})$ lower bound is very much not compatible with "the adversary is also running MWU." Yet this turns out to be impossible:
+Before introducing the framework, we first highlight the intrinsic limitations of non-optimistic algorithms. A priori, one might hope that a better analysis could show that existing algorithms such as MWU already enjoy smaller regret in self-play—after all, the adversarial $\Omega(\sqrt{T})$ lower bound is hardly compatible with "the adversary is also running MWU." Yet this turns out to be impossible:
 
 > **Theorem 8.1 (Chen and Peng, 2020).** For any learning rate, when both players in a two-player game employ MWU, at least one of the players will have $\Omega(\sqrt{T})$ regret. Similar lower bounds are known for other common algorithms, such as RM and RM⁺.
 
@@ -29,7 +29,7 @@ $$
 
 where $\mathcal{B}_{\mathcal{R}}(\boldsymbol{x}, \boldsymbol{x}') := \mathcal{R}(\boldsymbol{x}) - \mathcal{R}(\boldsymbol{x}') - \langle \nabla \mathcal{R}(\boldsymbol{x}'), \boldsymbol{x} - \boldsymbol{x}' \rangle$ is the Bregman divergence induced by $\mathcal{R}$. Unlike OFTRL, OMD relies on a secondary, auxiliary sequence of strategies $(\hat{\boldsymbol{x}}^{(t)})$.
 
-There are many ways to set the prediction vector (uniform averaging over a fixed window $H$, geometric discounting, and so on—all convex combinations of past utilities), but by far the most common mechanism is the simple one-step recency bias $\boldsymbol{m}^{(t)} := \boldsymbol{u}^{(t-1)}$. Unless explicitly stated otherwise, we always use this prediction in what follows. It is worth noting that the main guarantees of this chapter do not hinge on that specific choice: both the uniform average over a fixed window $H$ and the geometrically discounted recency bias ($\boldsymbol{m}^{(t)} := \sum_{\tau=0}^{t-1} \delta^{-\tau} \boldsymbol{u}^{(\tau)} \big/ \sum_{\tau=0}^{t-1} \delta^{-\tau}$, $\delta \in (0,1)$) satisfy RVU bounds of the same form, so the boundedness and convergence results below hold under those prediction mechanisms as well; one can even allow different players to employ **different** algorithms and different prediction mechanisms (Anagnostides et al., 2022a).
+There are many ways to set the prediction vector (uniform averaging over a fixed window $H$, geometric discounting, and so on—all convex combinations of past utilities), but by far the most common mechanism is the simple one-step recency bias $\boldsymbol{m}^{(t)} := \boldsymbol{u}^{(t-1)}$. Unless explicitly stated otherwise, we always use this prediction in what follows. The main guarantees of this chapter do not hinge on that specific choice: both the uniform average over a fixed window $H$ and the geometrically discounted recency bias ($\boldsymbol{m}^{(t)} := \sum_{\tau=0}^{t-1} \delta^{-\tau} \boldsymbol{u}^{(\tau)} \big/ \sum_{\tau=0}^{t-1} \delta^{-\tau}$, $\delta \in (0,1)$) satisfy RVU bounds of the same form, so the boundedness and convergence results below hold under those prediction mechanisms as well. One can even allow different players to employ **different** algorithms and different prediction mechanisms (Anagnostides et al., 2022a).
 
 ### The RVU property
 
@@ -65,7 +65,7 @@ Algorithm 1: Predictive RM (PRM)               Algorithm 2: Predictive RM⁺ (PR
               − ⟨x⁽ᵗ⁾, u⁽ᵗ⁾⟩1;                         − ⟨x⁽ᵗ⁾, u⁽ᵗ⁾⟩1]⁺;
 ```
 
-The figure below (taken from Farina et al.) shows the dramatic speedup of predictive regret matching (in the form of PCFR⁺) over CFR⁺, LCFR, and DCFR on three standard benchmark games—Goofspiel, Liar's dice, and Battleship—direct practical evidence for the intuition that utility sequences in self-play are predictable.
+The figure below (taken from Farina et al.) shows the dramatic speedup of predictive regret matching (in the form of PCFR⁺) over CFR⁺, LCFR, and DCFR on three standard benchmark games (Goofspiel, Liar's dice, and Battleship): direct practical evidence for the intuition that utility sequences in self-play are predictable.
 
 ![Convergence of predictive regret matching on three games (from Farina et al.): PCFR⁺ (red dash-dotted line) consistently outperforms CFR⁺, LCFR, and DCFR](assets/ch08-optimism-4-08.png)
 
@@ -103,7 +103,7 @@ $$
 
 Optimizing over $\eta$ gives the claim. $\square$
 
-This should be compared with the bound $O(1/\eta) + O(\eta T)$ in the adversarial setting: stability compresses the $\eta T$ term down to $\eta^3 T$.
+This should be compared with the bound $O(1/\eta) + O(\eta T)$ in the adversarial setting: stability compresses the $\eta T$ term to $\eta^3 T$.
 
 Stability alone already yields the considerable improvement of $T^{1/4}$, but we are still far from the goal of constant regret. To get there we must exploit the negative term in the RVU bound. Suppose all players employ an algorithm satisfying the RVU property with parameters $(\alpha, \beta, \gamma)$. By Lemma 8.5, summing the regrets of all players and relaxing (using the fact that $\|\boldsymbol{u}_i^{(t)} - \boldsymbol{u}_i^{(t-1)}\|_*^2$ is controlled by $(n-1)\sum_{i' \ne i} \|\boldsymbol{x}_{i'}^{(t)} - \boldsymbol{x}_{i'}^{(t-1)}\|_1^2$):
 
@@ -121,7 +121,7 @@ $$
 \mathrm{Reg}_1^{(T)} + \mathrm{Reg}_2^{(T)} = \max_{\boldsymbol{x}' \in \mathcal{X}} \sum_{t=1}^{T} \langle \boldsymbol{x}' - \boldsymbol{x}^{(t)}, -\boldsymbol{A}\boldsymbol{y}^{(t)} \rangle + \max_{\boldsymbol{y}' \in \mathcal{Y}} \sum_{t=1}^{T} \langle \boldsymbol{y}' - \boldsymbol{y}^{(t)}, \boldsymbol{A}^\top \boldsymbol{x}^{(t)} \rangle = T \Big( \max_{\boldsymbol{y}' \in \mathcal{Y}} \langle \boldsymbol{y}', \boldsymbol{A}^\top \bar{\boldsymbol{x}}^{(T)} \rangle - \min_{\boldsymbol{x}' \in \mathcal{X}} \langle \boldsymbol{x}', \boldsymbol{A} \bar{\boldsymbol{y}}^{(T)} \rangle \Big) \ge 0.
 $$
 
-There are also important classes of multi-player games with this property, such as **polymatrix zero-sum games** (Cai et al., 2016): a generalization of two-player zero-sum games—there is an underlying graph, and every player is uniquely associated with a node; every edge represents a (two-player) zero-sum game played between the two incident players; a player's utility is the sum of the utilities from all the edge games it participates in. The property further covers **constant-sum polymatrix games** and **strategically zero-sum games** (Moulin and Vial, 1978)—the latter being bimatrix games that are strategically equivalent to some zero-sum game. It is worth noting that the reason this class of games enjoys such favorable learning dynamics appears to be deeply connected to their **admission of a minimax theorem** (Daskalakis and Papadimitriou, 2009; Cai and Daskalakis, 2011; Cai et al., 2016).
+There are also important classes of multi-player games with this property, such as **polymatrix zero-sum games** (Cai et al., 2016): a generalization of two-player zero-sum games—there is an underlying graph, and every player is uniquely associated with a node; every edge represents a (two-player) zero-sum game played between the two incident players; a player's utility is the sum of the utilities from all the edge games it participates in. The property further covers **constant-sum polymatrix games** and **strategically zero-sum games** (Moulin and Vial, 1978)—the latter being bimatrix games that are strategically equivalent to some zero-sum game. The reason this class of games enjoys such favorable learning dynamics appears to be deeply connected to their **admission of a minimax theorem** (Daskalakis and Papadimitriou, 2009; Cai and Daskalakis, 2011; Cai et al., 2016).
 
 ![Example of a polymatrix zero-sum game (from Deng et al.): three players form a triangle graph, each edge is a two-player zero-sum matrix game, and a player's utility is the sum of its edge utilities](assets/ch08-optimism-1-13.png)
 
@@ -137,7 +137,7 @@ Under the nonnegative-sum-of-regrets assumption, rearranging the summed inequali
 
 > **Corollary 8.8.** If all players employ OFTRL or OMD with a sufficiently small learning rate in a game with nonnegative sum of regrets, each player has bounded regret ($O(1)$).
 
-Precisely, the individual regret satisfies $\mathrm{Reg}_i^{(T)} \le \alpha + 2n(n-1)\alpha\beta/\gamma$; in particular, when all players use OMD with the negative-entropy regularizer and $\eta = 1/(4(n-1))$, each player's regret is at most $8n \log |\mathcal{A}_i|$ (Anagnostides et al., 2022a)—the regret is not only constant, but grows only slowly, with the number of players and the logarithm of the number of actions.
+Precisely, the individual regret satisfies $\mathrm{Reg}_i^{(T)} \le \alpha + 2n(n-1)\alpha\beta/\gamma$; in particular, when all players use OMD with the negative-entropy regularizer and $\eta = 1/(4(n-1))$, each player's regret is at most $8n \log |\mathcal{A}_i|$ (Anagnostides et al., 2022a)—the regret is not only constant, but grows slowly: linearly in the number of players and logarithmically in the number of actions.
 
 ## Near-optimal regret in general-sum games
 
@@ -167,7 +167,7 @@ Algorithm 3: Blum–Mansour algorithm for minimizing swap regret
 10          ℜ_a.ObserveUtility(u_a⁽ᵗ⁾);
 ```
 
-From this reduction we know that $\mathrm{SwapReg}^{(T)} = \sum_{a \in \mathcal{A}} \mathrm{Reg}_a^{(T)}$, where $\mathrm{Reg}_a^{(T)}$ is the external regret of the local minimizer $\Re_a$ operating over the $a$-th column of the stochastic matrix. Instantiating each $\Re_a$ with OFTRL or OMD, Proposition 8.3 gives
+From this reduction we know that $\mathrm{SwapReg}^{(T)} = \sum_{a \in \mathcal{A}} \mathrm{Reg}_a^{(T)}$, where $\mathrm{Reg}_a^{(T)}$ is the external regret of the local minimizer $\Re_a$ operating over the $a$-th column of the stochastic matrix. If each $\Re_a$ is instantiated with OFTRL or OMD, Proposition 8.3 gives
 
 $$
 \mathrm{SwapReg}^{(T)} \le O\Big(\frac{1}{\eta}\Big) + \sum_{a \in \mathcal{A}} \eta \sum_{t=1}^{T} \big\| \boldsymbol{u}_a^{(t)} - \boldsymbol{u}_a^{(t-1)} \big\|_*^2 - \Omega\Big(\frac{1}{\eta}\Big) \sum_{a \in \mathcal{A}} \sum_{t=1}^{T} \big\| \boldsymbol{x}_a^{(t)} - \boldsymbol{x}_a^{(t-1)} \big\|^2.
@@ -189,7 +189,7 @@ thinking of $\boldsymbol{M}'$ as obtained from $\boldsymbol{M}$ after an update.
 
 ### Multiplicative stability and the logarithmic regularizer
 
-Two key ideas are needed to sidestep this obstacle. The first is that stability of the fixed points is guaranteed when the stochastic matrix satisfies a stronger notion of stability, namely **multiplicative stability**. Multiplicative stability for a vector $\boldsymbol{x}_a^{(t)}$ means that
+Two key ideas sidestep this obstacle. The first is that the fixed points are stable whenever the stochastic matrix satisfies a stronger notion of stability, namely **multiplicative stability**. Multiplicative stability for a vector $\boldsymbol{x}_a^{(t)}$ means that
 
 $$
 \max_{a' \in \mathcal{A}} \max \Big\{ 1 - \frac{\boldsymbol{x}_a^{(t)}[a']}{\boldsymbol{x}_a^{(t-1)}[a']},\; 1 - \frac{\boldsymbol{x}_a^{(t-1)}[a']}{\boldsymbol{x}_a^{(t)}[a']} \Big\} \le O(\eta),
@@ -233,7 +233,7 @@ $$
 > \mathrm{SwapReg}^{(T)} \le \frac{2m^2 \log T}{\eta} + 4\eta \sum_{t=1}^{T} \big\| \boldsymbol{u}^{(t)} - \boldsymbol{u}^{(t-1)} \big\|_\infty^2 - \frac{1}{2048\, m\, \eta} \sum_{t=1}^{T} \big\| \boldsymbol{x}^{(t)} - \boldsymbol{x}^{(t-1)} \big\|_1^2.
 > $$
 
-The $\log T$ factor in the bound appears because the logarithmic regularizer has an unbounded range; the issue is handled by considering, in the definition of regret, only comparators away from the relative boundary of the simplex—under which the log-barrier has an "effective diameter" of $O(m^2 \log T)$, which is exactly the source of the first term above and appears to be unavoidable with current techniques.
+The $\log T$ factor in the bound appears because the logarithmic regularizer has an unbounded range; one handles this by considering, in the definition of regret, only comparators away from the relative boundary of the simplex, under which the log-barrier has an "effective diameter" of $O(m^2 \log T)$. This is exactly the source of the first term above, and it appears to be unavoidable with current techniques.
 
 > **Corollary 8.12.** There is an algorithm such that, when employed by all players, it guarantees in any general-sum multi-player game that
 >
@@ -249,9 +249,9 @@ $$
 \mathrm{SwapReg}_i^{(T)} \le 256 \sqrt{m}\, \Big( (n-1)m_i^2 + \sum_{j=1}^{n} m_j^2 \Big) \log T = O\big(n\, m^{5/2} \log T\big).
 $$
 
-The protocol only requires each player to know an upper bound on the number of players and the maximum number of actions in order to tune its learning rate, so it is still strongly uncoupled; it is also the first construction to achieve this guarantee under a **time-invariant learning rate**. Since swap regret dominates external regret, combined with the standard connection between swap regret and correlated equilibria this also yields convergence of the average correlated distribution of play to the set of correlated equilibria at a rate of $O(\log T / T)$ in general games—the fastest rate known. Numerical experiments on randomly generated $3 \times 3$ bimatrix games show that each player's swap regret indeed grows logarithmically in $T$, indicating that the $O(\log T)$ analysis is essentially tight (Anagnostides et al., 2022b).
+The protocol only requires each player to know an upper bound on the number of players and the maximum number of actions in order to tune its learning rate, so it is still strongly uncoupled; it is also the first construction to achieve this guarantee under a **time-invariant learning rate**. Since swap regret dominates external regret, the standard connection between swap regret and correlated equilibria also yields convergence of the average correlated distribution of play to the set of correlated equilibria at a rate of $O(\log T / T)$ in general games—the fastest rate known. Numerical experiments on randomly generated $3 \times 3$ bimatrix games show that each player's swap regret indeed grows logarithmically in $T$, indicating that the $O(\log T)$ analysis is essentially tight (Anagnostides et al., 2022b).
 
-It is worth noting that the first near-optimal bound on the external regret was obtained by Daskalakis et al. (2021) by analyzing the optimistic version of MWU; their analysis is quite involved and will not be covered here. The bound they obtained (also Anagnostides et al., 2022c, via the Stoltz–Lugosi internal-regret reduction) was $O(\log^4 T)$, whereas the construction of Theorem 8.11 improves swap regret—and hence external regret—directly to $O(\log T)$, bypassing the higher-order smoothness framework introduced in that work.
+Daskalakis et al. (2021) obtained the first near-optimal bound on external regret by analyzing the optimistic version of MWU; their analysis is quite involved and we do not cover it here. Their bound (also Anagnostides et al., 2022c, via the Stoltz–Lugosi internal-regret reduction) was $O(\log^4 T)$, whereas the construction of Theorem 8.11 improves swap regret—and hence external regret—directly to $O(\log T)$, bypassing the higher-order smoothness framework introduced in that work.
 
 ### Adversarial robustness
 
@@ -261,7 +261,7 @@ What if one or more players deviate from the prescribed protocol? Can we still r
 
 All the guarantees based on regret minimization we have seen so far apply only after some form of **averaging**: in zero-sum games the average strategies converge to the set of minimax equilibria, and more generally the average correlated distribution of play converges to the set of (coarse) correlated equilibria. What can be said about the **last iterate** of the algorithms themselves?
 
-Traditional no-regret algorithms, such as MWU or online gradient descent, fail to converge in iterates to the set of equilibria—even in zero-sum games, game dynamics are known to exhibit remarkably complex behavior (see, for example, Andrade et al., 2021). The figure below illustrates this failure: the dynamics perpetually cycle around the equilibrium (marked ×), or even spiral outward, and the iterates never settle on the equilibrium.
+Traditional no-regret algorithms, such as MWU or online gradient descent, fail to converge in iterates to the set of equilibria: even in zero-sum games, game dynamics are known to exhibit remarkably complex behavior (see, for example, Andrade et al., 2021). The figure below illustrates this failure: the dynamics perpetually cycle around the equilibrium (marked ×), or even spiral outward, and the iterates never settle on the equilibrium.
 
 ![The trajectories of common algorithms such as MWU and gradient descent cycle around the Nash equilibrium without converging—a miserable failure in the last-iterate sense](assets/ch08-optimism-2-25.png)
 
@@ -277,7 +277,7 @@ We caution that this lemma does not hold for all regularizers: MWU (entropic reg
 
 > **Corollary 8.14.** Suppose that each player employs OMD with a smooth regularizer in a game with nonnegative sum of regrets. Then for any $\epsilon > 0$, after $T = O(1/\epsilon^2)$ rounds, most strategies are $\epsilon$-Nash equilibria.
 
-This rate is known to be tight (proving last-iterate convergence of *all* iterates, not just "most" of them, is considerably harder; see Cai et al., 2022; Gorbunov et al., 2022). The framework has direct implications for **extensive-form games**: Nash equilibria of zero-sum extensive-form games can be cast as the bilinear saddle-point problem $\min_{\boldsymbol{x} \in \mathcal{X}} \max_{\boldsymbol{y} \in \mathcal{Y}} \boldsymbol{x}^\top \boldsymbol{A} \boldsymbol{y}$ over sequence-form polytopes; when both players employ OMD (with Euclidean regularization) and $\eta \le 1/(4\|\boldsymbol{A}\|_2)$ (spectral norm), after $O(1/\epsilon^2)$ rounds there is an iterate that is an $O(\epsilon)$-approximate Nash equilibrium—the first polynomial-time last-iterate guarantee for no-regret dynamics in extensive-form games (Anagnostides et al., 2022a). Experiments on two standard benchmarks, Kuhn poker and Leduc poker, show that the saddle-point gaps of both the last iterate and the average iterate converge, with larger learning rates leading to substantially faster convergence, illustrating the importance of sharp theoretical bounds. Convergence is the ultimate form of predictability: it trivializes the problem of online learning. In light of Corollary 8.14, it is perhaps not surprising that OMD has bounded regret in zero-sum games. More surprising is the behavior of the learning dynamics in general-sum games (corresponding to Corollary 8.12): even though players do **not** converge to approximate Nash equilibria, their strategies move at an arbitrarily slow pace—the algorithm's regularizer is not smooth, so Lemma 8.13 does not apply, yet it still guarantees $O(\log T)$ regret for each player; the misprediction error is small even though the players never actually converge.
+This rate is known to be tight (proving last-iterate convergence of *all* iterates, not just "most" of them, is considerably harder; see Cai et al., 2022; Gorbunov et al., 2022). The framework has direct implications for **extensive-form games**: Nash equilibria of zero-sum extensive-form games can be cast as the bilinear saddle-point problem $\min_{\boldsymbol{x} \in \mathcal{X}} \max_{\boldsymbol{y} \in \mathcal{Y}} \boldsymbol{x}^\top \boldsymbol{A} \boldsymbol{y}$ over sequence-form polytopes; when both players employ OMD (with Euclidean regularization) and $\eta \le 1/(4\|\boldsymbol{A}\|_2)$ (spectral norm), after $O(1/\epsilon^2)$ rounds there is an iterate that is an $O(\epsilon)$-approximate Nash equilibrium. This is the first polynomial-time last-iterate guarantee for no-regret dynamics in extensive-form games (Anagnostides et al., 2022a). Experiments on two standard benchmarks, Kuhn poker and Leduc poker, show that the saddle-point gaps of both the last iterate and the average iterate converge, with larger learning rates leading to substantially faster convergence, illustrating the importance of sharp theoretical bounds. Convergence is the ultimate form of predictability: it trivializes the problem of online learning. In light of Corollary 8.14, it is perhaps not surprising that OMD has bounded regret in zero-sum games. More surprising is the behavior of the learning dynamics in general-sum games (corresponding to Corollary 8.12): even though players do **not** converge to approximate Nash equilibria, their strategies move at an arbitrarily slow pace. The algorithm's regularizer is not smooth, so Lemma 8.13 does not apply; yet the algorithm still guarantees $O(\log T)$ regret for each player, because the misprediction error stays small even though the players never actually converge.
 
 ![Small variation without Nash convergence (from Anagnostides et al., 2022b): the left panel shows the two players' strategy probabilities, the right panel the best-response gap—the strategies move extremely slowly yet periodically drift away from equilibrium](assets/ch08-optimism-3-28.png)
 
@@ -310,7 +310,7 @@ Now consider the two possibilities when players employ OMD with a smooth regular
 >
 > Interestingly, the farther away from Nash equilibria, the larger the improvement in terms of social welfare. (Each of the two problems in isolation is hard!)
 
-The figure below illustrates this dichotomy: in the left panel, the two players' regrets keep becoming increasingly negative (the dynamics do not converge to a Nash equilibrium); the right panel plots the trajectory of the dynamics in the utility plane (color encodes time)—it does not stop at the Nash equilibrium (marked ★), but spirals outward, continually improving the social welfare beyond the level guaranteed by the robust price of anarchy.
+The figure below illustrates this dichotomy: in the left panel, the two players' regrets grow increasingly negative (the dynamics do not converge to a Nash equilibrium); the right panel plots the trajectory of the dynamics in the utility plane (color encodes time). The trajectory does not stop at the Nash equilibrium (marked ★); it spirals outward, continually improving the social welfare beyond the level guaranteed by the robust price of anarchy.
 
 ![OMD in a two-player game (from Anagnostides et al., 2022a): the left panel shows the two players' regrets becoming negative; the right panel shows the trajectory in the utility plane spiraling outward past the Nash equilibrium (★), with social welfare continually improving](assets/ch08-optimism-5-34.png)
 

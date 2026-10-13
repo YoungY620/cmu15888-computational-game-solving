@@ -16,7 +16,7 @@ An action $a_i \in \mathcal{A}_i$ **strictly dominates** another action $a_i' \i
 
 **Problem 1.2 (5 points).** Prove that if an action $\hat a_i \in \mathcal{A}_i$ is **strictly dominated**, then Player $i$ plays $\hat a_i$ with probability $0$ in every correlated equilibrium (CE).
 
-**Problem 1.3 (10 points).** Show that there is a normal-form game and a CCE in that game in which Player 1 plays a strictly dominated action with strictly positive probability.
+**Problem 1.3 (10 points).** Show that there is a normal-form game with a CCE in which Player 1 plays a strictly dominated action with strictly positive probability.
 
 > Hint: consider the normal-form game
 >
@@ -44,9 +44,9 @@ Consider a two-player zero-sum extensive-form game $\Gamma$ that proceeds as fol
 - Each player $i \in \{1, 2\}$ privately rolls another fair $n$-sided die, and observes its outcome $\theta_i' \in \{1, \dots, n\}$.
 - Both players again simultaneously pick actions $a_1, a_2 \in \mathcal{A}$.
 
-The utility of Player 1 (this is a zero-sum game: Player 2's utility is the negative of Player 1's) depends only on the sums $\theta_1 + \theta_1'$ and $\theta_2 + \theta_2'$ and the actions $a_1, a_2, a_1', a_2'$. That is, each player only cares about the **sum** of their two dice, not on their individual values.
+The utility of Player 1 (this is a zero-sum game: Player 2's utility is the negative of Player 1's) depends only on the sums $\theta_1 + \theta_1'$ and $\theta_2 + \theta_2'$ and the actions $a_1, a_2, a_1', a_2'$. That is, each player only cares about the **sum** of their two dice, not their individual values.
 
-Note that we can identify a decision point (information set) of a player $i$ by specifying either $\theta_i$ (for Step 1), or a tuple $(\theta_i, \vec a, \theta'_i)$ (for Step 2), where $\vec a = (a_1, a_2)$.
+Note that we can identify a decision point (information set) of player $i$ by specifying either $\theta_i$ (for Step 1), or a tuple $(\theta_i, \vec a, \theta'_i)$ (for Step 2), where $\vec a = (a_1, a_2)$.
 
 #### 2.1 Warm-Up
 
@@ -58,7 +58,7 @@ Let $j_i = (\theta_i, a_i, a_{-i}, \theta_i')$ and $\tilde j_i = (\tilde \theta_
 
 Call a behavioral strategy $\vec{b}_i : \mathcal{J}_i \to \Delta(\mathcal{A})$, where $\mathcal{J}_i$ is player $i$'s information partition, **symmetric** if equivalent infosets have identical action distributions, that is, $\vec{b}_i(\cdot|j_i) = \vec{b}_i(\cdot|j_i')$ whenever $j_i, j_i'$ are equivalent.
 
-Suppose both players run CFR with simultaneous (as opposed to alternating) updates. Let $\vec{b}_i^{(t)}$ be the behavioral strategy played by player $i$ at time $t$. In CFR, the counterfactual utility given to the regret minimizer at infoset $j_i \in \mathcal{J}_i$ at time $t$ is given by
+Suppose both players run CFR with simultaneous (as opposed to alternating) updates. Let $\vec{b}_i^{(t)}$ be the behavioral strategy played by player $i$ at time $t$. In CFR, the counterfactual utility that the regret minimizer at infoset $j_i \in \mathcal{J}_i$ receives at time $t$ is given by
 
 $$
 u_i^{(t)}(a_i|j_i) = \sum_{\substack{h \in j_i\\z \succeq ha}} \vec{b}_i^{(t)}(z|(h,a_i)) \cdot  \vec{b}_{-i}^{(t)}(z)\cdot c(z) \cdot u_i(z), \tag{1}
@@ -80,11 +80,11 @@ It follows by induction that both players will play symmetric strategies at all 
 
 **Problem 2.3 (8 points).** Show that, in this game, CFR can be implemented in $O(n^2m^4)$ time per iteration. Briefly discuss: how does this time complexity compare to that of the naive implementation of CFR, whose runtime would be linear in the number of nodes in the tree?
 
-> Hint: because of the symmetry condition that you have just proven, many infosets are "copies" of each other, and you don't need to do the work of storing multiple copies of the same infoset. The naive computation will not work—you have to be a bit clever about saving reusable work across infosets.
+> Hint: because of the symmetry condition that you have just proven, many infosets are "copies" of each other, and you don't need to do the work of storing multiple copies of the same infoset. The naive computation will not work; you have to be a bit clever about saving reusable work across infosets.
 
 #### 2.3 Imperfect-Recall Abstraction
 
-Now consider the imperfect-recall abstraction of $\Gamma$ in which equivalent information sets have been merged into larger infosets. That is, infosets in Step 2 are now identified by tuples $(\theta_i^*, \vec a)$ where $\theta_i^* = \theta_i + \theta_i'$. Call this game $\hat\Gamma$. We define CFR in imperfect-recall games using the formula (1).
+Now consider the imperfect-recall abstraction of $\Gamma$ in which equivalent information sets have been merged into larger infosets. That is, infosets in Step 2 are now identified by tuples $(\theta_i^*, \vec a)$ where $\theta_i^* = \theta_i + \theta_i'$. Call this game $\hat\Gamma$. We define CFR in imperfect-recall games using formula (1).
 
 CFR on imperfect-recall zero-sum games is **not** generally guaranteed to converge to Nash equilibrium, even in averages, but you will show that **in this particular class of games** CFR works.
 
@@ -92,13 +92,13 @@ CFR on imperfect-recall zero-sum games is **not** generally guaranteed to conver
 
 > Hint: read the next problem before solving this one.
 
-**Problem 2.5 (3 points).** Your proof in the previous problem should have used a property specific to (variants of) regret matching. What is that property? Suppose that we were to instead run CFR in $\Gamma$ with FTRL at each infoset and regularization parameter $\eta$. What would we need to do to $\eta$ in $\hat\Gamma$ to recover the same iterates? (No proof required—just state the change.)
+**Problem 2.5 (3 points).** Your proof in the previous problem should have used a property specific to (variants of) regret matching. What is that property? Suppose we instead ran CFR on $\Gamma$ with FTRL at each infoset and regularization parameter $\eta$. What would we need to do to $\eta$ in $\hat\Gamma$ to recover the same iterates? (No proof required: just state the change.)
 
 ### Problem 3: Counterfactual Regret Minimization (50 points)
 
 In this problem, you will implement the CFR regret minimizer for sequence-form decision problems.
 
-You will run your CFR implementation on three games: rock-paper-superscissors (a simple variant of rock-paper-scissors, where beating paper with scissors gives a payoff of $2$ instead of $1$) and two well-known poker variants: Kuhn poker and Leduc poker. A description of each game is given in the zip of this homework, according to the format described in the "Programming Assignment" section below. The zip also contains a stub Python file to help you set up your implementation.
+You will run your CFR implementation on three games: rock-paper-superscissors (a simple variant of rock-paper-scissors, in which beating paper with scissors gives a payoff of $2$ instead of $1$) and two well-known poker variants: Kuhn poker and Leduc poker. A description of each game is given in the zip of this homework, according to the format described in the "Programming Assignment" section below. The zip also contains a stub Python file to help you set up your implementation.
 
 #### 3.1 Learning to Best Respond
 
@@ -124,20 +124,20 @@ If the above doesn't happen empirically, something is wrong with your implementa
 
 **Problem 3.1.1 (15 points).** In each of the three games, apply your CFR implementation to the tree-form sequential decision problem of Player 1, using as local regret minimizer at each decision point the regret matching algorithm (Lecture 4). At each time $t$, give as feedback to the algorithm the same utility vector $\vec{u} = \mathbf{A} \vec{y}_{\text{uni}}$, where $\vec{y}_{\text{uni}} \in \mathcal{Y}$ is the uniform strategy for Player 2. Run the algorithm for $1000$ iterations. After each iteration $T = 1,\dots,1000$, compute the value $v^{(T)} \coloneqq \langle \bar{\vec{x}}^{(T)}, \mathbf{A} \vec{y}_{\text{uni}} \rangle$ where $\bar{\vec{x}}^{(T)} \in \mathcal{X}$ is the average strategy output so far by CFR, as defined in (2).
 
-Plot $v^{(T)}$ as a function of $T$. Empirically, what is the limit you observe $v^{(T)}$ is converging to?
+Plot $v^{(T)}$ as a function of $T$. Empirically, what limit do you observe $v^{(T)}$ converging to?
 
 > Hints:
 >
 > - Represent vectors on $\mathbb{R}^{|\Sigma|}$ (including the sequence-form strategies output by CFR and utility vectors given to CFR) in memory as dictionaries from sequences (tuples `(decision_point_id, action)`) to floats.
 > - In rock-paper-superscissors, $v^{(T)}$ should approach the value $\frac{1}{3}$. In Kuhn poker, the value $\frac{1}{2}$. In Leduc poker, the value $2.0875$.
 
-Your solution should include three plots (one for each game), and three values. Don't forget to turn in your implementation.
+Your solution should include three plots (one for each game) and three values. Don't forget to turn in your implementation.
 
 #### 3.2 Learning a Nash Equilibrium
 
-Now that you are confident that your implementation of CFR is correct, you will use CFR to converge to Nash equilibrium using the self-play idea described in Lecture 3.
+Now that you are confident that your implementation of CFR is correct, you will use CFR to converge to Nash equilibrium via the self-play idea described in Lecture 3.
 
-The idea behind using regret minimization to converge to Nash equilibrium in a two-player zero-sum game is to use **self play**. We instantiate two regret minimization algorithms, $\mathfrak{R}_\mathcal{X}$ and $\mathfrak{R}_\mathcal{Y}$, for the domains of the maximization and minimization problem, respectively. At each time $t$ the two regret minimizers output strategies $\vec{x}^{(t)}$ and $\vec{y}^{(t)}$, respectively. Then they receive as feedback the vectors $\vec{u}_\mathcal{X}^{(t)}, \vec{u}_\mathcal{Y}^{(t)}$ defined as
+The idea behind using regret minimization to converge to Nash equilibrium in a two-player zero-sum game is **self play**. We instantiate two regret minimization algorithms, $\mathfrak{R}_\mathcal{X}$ and $\mathfrak{R}_\mathcal{Y}$, for the domains of the maximization and minimization problem, respectively. At each time $t$ the two regret minimizers output strategies $\vec{x}^{(t)}$ and $\vec{y}^{(t)}$, respectively. Then they receive as feedback the vectors $\vec{u}_\mathcal{X}^{(t)}, \vec{u}_\mathcal{Y}^{(t)}$ defined as
 
 $$
 \vec{u}_\mathcal{X}^{(t)} \coloneqq \mathbf{A} \vec{y}^{(t)},\qquad\quad
@@ -164,14 +164,14 @@ Plot the saddle point gap and the expected utility (for Player 1) of the average
 > - To compute the saddle point gap, feel free to use the function `gap(game, strategy_pl1, strategy_pl2)` provided in the Python stub file.
 > - The saddle point gap should be going to zero. The expected utility of the average strategies in rock-paper-superscissors should approach the value $0$. In Kuhn poker it should approach $-0.055$. In Leduc poker it should approach $-0.085$.
 
-Your solution should include six plots (two for each game—one for the saddle point gap and one for the utility). Don't forget to turn in your implementation.
+Your solution should include six plots (two for each game: one for the saddle point gap and one for the utility). Don't forget to turn in your implementation.
 
 #### 3.3 CFR+, Alternating Iterates, and Linear Averaging
 
 To achieve better performance in practice when learning Nash equilibria in two-player zero-sum games, we consider the following modifications to the setup of the previous subsection.
 
 - Instead of regret matching, CFR is set up to use the regret matching plus (RM$^+$) algorithm (see Lecture 4) at each decision point.
-- Instead of using the classical self-play scheme described above, players **alternate** the iterates and feedback: the utility vector $\vec{u}_\mathcal{X}^{(t)}$ is as defined in (3), whereas
+- Instead of the classical self-play scheme described above, players **alternate** the iterates and feedback: the utility vector $\vec{u}_\mathcal{X}^{(t)}$ is as defined in (3), whereas
 $$
 \tilde{\vec{u}}_\mathcal{Y}^{(t)} \coloneqq -\mathbf{A}^\top \vec{x}^{(t+1)}.
 $$
@@ -182,7 +182,7 @@ $$
 $$
 which is considered instead of the regular averages when computing the saddle point gap.
 
-Collectively, the modified setup we just described is referred to as "running CFR+".
+Collectively, we refer to the modified setup just described as "running CFR+".
 
 **Problem 3.3.1 (20 points).** Modify your implementation of CFR so that it also supports each of the following variants.
 
@@ -238,7 +238,7 @@ $$
 \end{pmatrix},
 $$
 
-(rows and columns are both in r, p, s order. A Nash equilibrium of the game is reached when all players play rock with probability $\frac{1}{2}$, paper with probability $\frac{1}{4}$, and superscissors with probability $\frac{1}{4}$; correspondingly, the game value is $0$.)
+(Rows and columns are both in r, p, s order. A Nash equilibrium of the game is reached when all players play rock with probability $\frac{1}{2}$, paper with probability $\frac{1}{4}$, and superscissors with probability $\frac{1}{4}$; correspondingly, the game value is $0$.)
 
 ### Provided Helper Functions
 
@@ -277,7 +277,7 @@ The program reads the game file, converts all sequences from lists to tuples (in
 
 ### Grading
 
-There is no autograder script for this homework. As required by the problems, put the plots and values into the submitted pdf, and attach the complete code at the end of the pdf. Values you can use for self-checking:
+There is no autograder script for this homework. As required by the problems, put the plots and values into the submitted pdf and attach the complete code at the end of the pdf. Values you can use for self-checking:
 
 - Problem 3.1.1: $v^{(T)}$ should approach $\frac{1}{3}$ in rock-paper-superscissors, $\frac{1}{2}$ in Kuhn poker, and $2.0875$ in Leduc poker;
 - Problem 3.2.1: the saddle point gap should go to zero; the expected utility for Player 1 of the average strategies should approach $0$, $-0.055$, and $-0.085$ in the three games, respectively;

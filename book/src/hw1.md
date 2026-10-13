@@ -26,7 +26,7 @@ $$
 \min_{\vec{x}\in\mathcal{X}} \max_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle \geq \max_{\vec{y}\in\mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle. \tag{1}
 $$
 
-To show the reverse inequality, we will employ regret minimization to solve the bilinear saddle point problem $\max_{\vec{y}\in\mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle$. At each time $t$, we will let a regret minimizer $\mathfrak{R}_\mathcal{Y}$ pick strategies $\vec{y}^{(t)} \in\mathcal{Y}$, whereas we will always assume that $\vec{x}^{(t)} \in\mathcal{X}$ is chosen by the environment to best respond to $\vec{y}^{(t)}$, that is,
+To show the reverse inequality, we will employ regret minimization to solve the bilinear saddle point problem $\max_{\vec{y}\in\mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle$. At each time $t$, we let a regret minimizer $\mathfrak{R}_\mathcal{Y}$ pick strategies $\vec{y}^{(t)} \in\mathcal{Y}$, while the environment always chooses $\vec{x}^{(t)} \in\mathcal{X}$ to best respond to $\vec{y}^{(t)}$, that is,
 
 $$
 \vec{x}^{(t)} \in \arg\min_{\vec{x} \in \mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y}^{(t)} \rangle .
@@ -141,13 +141,13 @@ You will prove soundness of CFR by induction, proceeding in a bottom-up fashion.
 
 ### Problem 3: Linear Programming for Solving Extensive-Form Zero-Sum Games, and Application to Low Randomization in Poker (50 points)
 
-In many games, the optimal Nash equilibrium requires that all players randomize their moves. As an example, consider rock-paper-scissors: any deterministic strategy (for example, always playing rock) is heavily suboptimal. In this problem, you will quantify how much value is lost by insisting on playing deterministic strategies in three games: rock-paper-superscissors and two well-known poker variants—Kuhn poker and Leduc poker. A description of each game is given in the zip of this homework, in the format described in the "Programming Assignment" section below. The zip also contains a stub Python file to help you set up your implementation.
+In many games, the optimal Nash equilibrium requires that all players randomize their moves. As an example, consider rock-paper-scissors: any deterministic strategy (for example, always playing rock) is heavily suboptimal. In this problem, you will quantify how much value is lost by insisting on playing deterministic strategies in three games: rock-paper-superscissors and two well-known poker variants (Kuhn poker and Leduc poker). A description of each game is given in the zip of this homework, in the format described in the "Programming Assignment" section below. The zip also contains a stub Python file to help you set up your implementation.
 
 #### 3.1 Computing the Value of the Game (15 points)
 
-As a warm up, you will implement the linear program formulation of Nash equilibrium strategies seen in Lecture 5 using the commercial solver Gurobi (<https://www.gurobi.com/>). Gurobi is a powerful commercial solver for linear and non-linear optimization problems. You can download the solver and request a free license for academic use from their website; installation instructions for the Python bindings `gurobipy` are available in the Gurobi documentation.
+As a warm-up, you will implement the linear program formulation of Nash equilibrium strategies seen in Lecture 5 using the solver Gurobi (<https://www.gurobi.com/>). Gurobi is a powerful commercial solver for linear and non-linear optimization problems. You can download the solver and request a free license for academic use from their website; installation instructions for the Python bindings `gurobipy` are available in the Gurobi documentation.
 
-**Linear programming formulation of Nash equilibrium strategies.** For your convenience, here are again the linear programs—for Player 1 and Player 2, respectively—that you need to implement:
+**Linear programming formulation of Nash equilibrium strategies.** For your convenience, here are again the linear programs, for Player 1 and Player 2 respectively, that you need to implement:
 
 $$
 \mathcal{P}_1 : \begin{cases}
@@ -167,7 +167,7 @@ $$
 \end{cases} \tag{6}
 $$
 
-where $\{\vec{x}\in\mathbb{R}^{|\Sigma_1|}: \mathbf{F}_1 \vec{x} = \vec{f}_1,\ \vec{x}\ge\vec{0}\}$ and $\{\vec{y}\in\mathbb{R}^{|\Sigma_2|}: \mathbf{F}_2 \vec{y} = \vec{f}_2,\ \vec{y}\ge\vec{0}\}$ are the sequence-form polytopes of the two players, and $\mathbf{A}$ is the payoff matrix for Player 1. Conveniently, the objective values of $\mathcal{P}_1$ and $\mathcal{P}_2$ will be the exact expected utility that each player can secure by playing against a perfectly rational opponent. Since all games are zero sum, the objective values of $\mathcal{P}_1$ and $\mathcal{P}_2$ will sum to $0$ (if they don't, you must have a bug somewhere).
+where $\{\vec{x}\in\mathbb{R}^{|\Sigma_1|}: \mathbf{F}_1 \vec{x} = \vec{f}_1,\ \vec{x}\ge\vec{0}\}$ and $\{\vec{y}\in\mathbb{R}^{|\Sigma_2|}: \mathbf{F}_2 \vec{y} = \vec{f}_2,\ \vec{y}\ge\vec{0}\}$ are the sequence-form polytopes of the two players, and $\mathbf{A}$ is the payoff matrix for Player 1. Conveniently, the objective values of $\mathcal{P}_1$ and $\mathcal{P}_2$ will be the exact expected utility that each player can secure by playing against a perfectly rational opponent. Since all games are zero sum, the objective values of $\mathcal{P}_1$ and $\mathcal{P}_2$ will sum to $0$ (if they do not, you must have a bug somewhere).
 
 **Problem 3.1.1 (15 points).** Implement the linear program for computing Nash equilibrium strategies for both Player 1 and Player 2.
 
@@ -180,7 +180,7 @@ For each of the three games (rock-paper-superscissors, Kuhn poker, and Leduc pok
 > - Since all games are zero-sum, the objective values of $\mathcal{P}_1$ and $\mathcal{P}_2$ must sum to $0$.
 > - The objective value for $\mathcal{P}_1$ should be $0$ for rock-paper-superscissors, $-0.0555$ for Kuhn poker, and $-0.0856$ for Leduc poker.
 
-Your solution should include six Gurobi outputs (3 games, 2 players per game). Feel free to use a `verbatim`-style dump of the output, but make sure to specify what game and what player each Gurobi output refers to. Don't forget to include your code at the end of your homework. For example, your output in the case of rock-paper-superscissors for Player 1 should look roughly like this:
+Your solution should include six Gurobi outputs (3 games, 2 players per game). Feel free to use a `verbatim`-style dump of the output, but make sure to specify what game and what player each Gurobi output refers to. Do not forget to include your code at the end of your homework. For example, your output in the case of rock-paper-superscissors for Player 1 should look roughly like this:
 
 ```text
 Gurobi Optimizer version 9.1.1 build v9.1.1rc0 (linux64)
@@ -206,7 +206,7 @@ Optimal objective -0.000000000e+00
 
 #### 3.2 Computing Optimal Deterministic Strategies (15 points)
 
-In this subsection we study how much worse each player is if they (but not the opponent) are restricted to playing deterministic strategies only. To model this, we will add a constraint saying that all entries of the sequence-form strategy vectors $\vec{x}$ and $\vec{y}$ in (6) can only take values in $\{0, 1\}$. The resulting **integer** programs—which we call $\tilde{\mathcal{P}}_1$ and $\tilde{\mathcal{P}}_2$—are given next.
+In this subsection we study how much worse each player is if they (but not the opponent) are restricted to playing deterministic strategies only. To model this, we will add a constraint saying that all entries of the sequence-form strategy vectors $\vec{x}$ and $\vec{y}$ in (6) can only take values in $\{0, 1\}$. The resulting **integer** programs, which we call $\tilde{\mathcal{P}}_1$ and $\tilde{\mathcal{P}}_2$, are given next.
 
 $$
 \tilde{\mathcal{P}}_1 : \begin{cases}
@@ -279,7 +279,7 @@ Best objective -1.666666666667e-01, best bound -1.666666666667e-01, gap 0.0000%
 
 In Problem 3.1.1 no determinism constraint was present. At the other extreme, in Problem 3.2.1 we insisted that at all decision points a deterministic strategy be followed. In this last subsection we will explore intermediate cases: for each value of $k$, we will study how much value each player can secure if they are constrained to play deterministically in at least $k$ decision points. When $k=0$, we will recover the objective values seen in Problem 3.1.1. When $k$ is equal to the number of decision points of the player in the game, we will recover the objective values seen in Problem 3.2.1.
 
-**Integer programming model.** An optimal strategy for Player 1 subject to the constraint that at least $k$ decision points must prescribe a deterministic strategy can be obtained as the solution to the integer linear program $\mathcal{P}_1(k)$ given in (8). Understanding the details is not important for this problem, though we included a description of the meaning of each constraint just in case you are curious.
+**Integer programming model.** The solution to the integer linear program $\mathcal{P}_1(k)$ given in (8) is an optimal strategy for Player 1 subject to the constraint that at least $k$ decision points must prescribe a deterministic strategy. Understanding the details is not important for this problem, though we included a description of the meaning of each constraint just in case you are curious.
 
 $$
 \mathcal{P}_1(k) : \begin{cases}
@@ -309,9 +309,9 @@ For each of the three games (rock-paper-superscissors, Kuhn poker, and Leduc pok
 >
 > - Make sure to take a look at the "Gurobi tips and tricks".
 > - Gurobi can be pretty verbose by default. For this problem, if you would like to silence Gurobi you can use `m.setParam("OutputFlag", 0)`.
-> - For Leduc poker, if Gurobi is taking too long to optimize when $k$ is large, you can lower the solution precision by calling `m.setParam("MIPGap", 0.01)` before `m.optimize()`. Expect a runtime of up to one to five hours for Leduc poker, depending on how powerful the machine you are using is.
+> - For Leduc poker, if Gurobi is taking too long to optimize when $k$ is large, you can lower the solution precision by calling `m.setParam("MIPGap", 0.01)` before `m.optimize()`. Expect a runtime of up to one to five hours for Leduc poker, depending on how powerful your machine is.
 
-Your solution should include six plots (3 games, 2 players per game). Make sure to specify what game and what player each plot refers to. Don't forget to include your code at the end of your homework.
+Your solution should include six plots (3 games, 2 players per game). Make sure to specify what game and what player each plot refers to. Do not forget to include your code at the end of your homework.
 
 **Problem 3.3.2 (5 points).** Comment on the results you obtained in this problem: do highly-deterministic strategies for the three small games exist? Are the results what you expected? If yes, what did the results confirm? If not, how do you think you can reconcile your previous intuition with the experimental findings?
 
@@ -422,13 +422,13 @@ If you want to inspect the solution, given a variable object `v` (the object ret
 v.getAttr(GRB.Attr.X)
 ```
 
-**Troubleshooting.** First of all, if you are having a problem with Gurobi, the first thing you should try to do is to ask Gurobi to dump the model that it thinks you are asking to solve to a file in a human readable format. *Reading the model file will be so much easier if you gave names to the variables in your model, using the `name` optional argument of `addVar`.* To have Gurobi dump the model, you can use something like this:
+**Troubleshooting.** If you run into a problem with Gurobi, the first thing to try is asking Gurobi to dump the model it thinks you are asking it to solve to a file in a human-readable format. *Reading the model file will be so much easier if you gave names to the variables in your model, using the `name` optional argument of `addVar`.* To have Gurobi dump the model, you can use something like this:
 
 ```python
 m.write("/tmp/model.lp")
 ```
 
-Of course, you can specify a different path. However, it is important that you keep the `.lp` extension: there are multiple formats that Gurobi can output, and it uses the file extension to guess which format you want.
+You can specify a different path, but keep the `.lp` extension: Gurobi can output multiple formats, and it uses the file extension to guess which one you want.
 
 Beyond the general rule of thumb above, make sure of the following:
 

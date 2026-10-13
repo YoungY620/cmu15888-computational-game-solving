@@ -8,7 +8,7 @@
 
 ## 题目
 
-### 第一题：基于遗憾（regret）的最小最大定理证明（20 分）
+### 第一题：基于后悔（regret）的最小最大定理证明（20 分）
 
 设 $\mathcal{X} \subseteq \mathbb{R}^{m_1}$ 与 $\mathcal{Y} \subseteq \mathbb{R}^{m_2}$ 为凸紧集，$\mathbf{A} \in \mathbb{R}^{m_1 \times m_2}$。最小最大定理（minimax theorem）断言
 
@@ -16,7 +16,7 @@ $$
 \min_{\vec{x}\in\mathcal{X}} \max_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle = \max_{\vec{y}\in\mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle.
 $$
 
-本题中，你将证明：仅仅是（外部）遗憾最小化（regret minimization）算法的**存在性**，就足以推出最小最大定理。
+本题中，你将证明：仅仅是（外部）后悔最小化（regret minimization）算法的**存在性**，就足以推出最小最大定理。
 
 证明的一个方向（称为**弱对偶**（weak duality））很容易且非常一般。
 
@@ -26,7 +26,7 @@ $$
 \min_{\vec{x}\in\mathcal{X}} \max_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle \geq \max_{\vec{y}\in\mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle. \tag{1}
 $$
 
-为了证明反向不等式，我们将用遗憾最小化来求解双线性鞍点问题 $\max_{\vec{y}\in\mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle$。在每一时刻 $t$，让一个遗憾最小化器 $\mathfrak{R}_\mathcal{Y}$ 选择策略 $\vec{y}^{(t)} \in\mathcal{Y}$，而我们总是假设 $\vec{x}^{(t)} \in\mathcal{X}$ 由环境选取为对 $\vec{y}^{(t)}$ 的最优反应（best response），即
+为了证明反向不等式，我们将用后悔最小化来求解双线性鞍点问题 $\max_{\vec{y}\in\mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle$。在每一时刻 $t$，让一个后悔最小化器 $\mathfrak{R}_\mathcal{Y}$ 选择策略 $\vec{y}^{(t)} \in\mathcal{Y}$，而我们总是假设 $\vec{x}^{(t)} \in\mathcal{X}$ 由环境选为对 $\vec{y}^{(t)}$ 的最优反应（best response），即
 
 $$
 \vec{x}^{(t)} \in \arg\min_{\vec{x} \in \mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y}^{(t)} \rangle .
@@ -38,7 +38,7 @@ $$
 u^t_\mathcal{Y} : \vec{y} \mapsto \langle \vec{x}^{(t)}, \mathbf{A} \vec{y} \rangle = \langle \vec{y}, \mathbf{A}^\top \vec{x}^{(t)} \rangle .
 $$
 
-我们假设 $\mathfrak{R}_\mathcal{Y}$ 在任意效用序列下都保证**次线性遗憾**（sublinear regret）；我们已经见过许多具有此性质的算法，例如 FTRL（跟随正则化领导者）和 RM（遗憾匹配，regret matching）。
+我们假设 $\mathfrak{R}_\mathcal{Y}$ 在任意效用序列下都保证**次线性后悔**（sublinear regret）；我们已经见过许多具有此性质的算法，例如 FTRL（跟随正则化领导者）和 RM（后悔匹配，regret matching）。
 
 设 $\bar{\vec{x}}^{(T)} \in \mathcal{X}$ 与 $\bar{\vec{y}}^{(T)} \in \mathcal{Y}$ 为到时刻 $T$ 为止输出的平均策略，即
 
@@ -52,15 +52,15 @@ $$
 \max_{\vec{y} \in \mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle \ge \frac{1}{T} \min_{\vec{x}\in\mathcal{X}} \sum_{t=1}^T \langle \vec{x}, \mathbf{A} \vec{y}^{(t)} \rangle  \ge \frac{1}{T}\sum_{t=1}^T \langle \vec{x}^{(t)}, \mathbf{A} \vec{y}^{(t)} \rangle . \tag{2}
 $$
 
-> 提示：使用 $\bar{\vec{y}}^{(T)}$ 的定义。然后，利用你对 $\vec{x}^{(t)}$ 所掌握的信息。
+> 提示：使用 $\bar{\vec{y}}^{(T)}$ 的定义。然后，利用你关于 $\vec{x}^{(t)}$ 的已知信息。
 
-**问题 1.3（5 分）** 设 $R_\mathcal{Y}^{(T)}$ 为 $\mathfrak{R}_\mathcal{Y}$ 到时刻 $T$ 累积的遗憾。利用式 (2)，论证在任意时刻 $T$，
+**问题 1.3（5 分）** 设 $R_\mathcal{Y}^{(T)}$ 为 $\mathfrak{R}_\mathcal{Y}$ 到时刻 $T$ 累积的后悔。利用式 (2)，论证在任意时刻 $T$，
 
 $$
 \max_{\vec{y}\in\mathcal{Y}}\min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle \ge \min_{\vec{x}\in\mathcal{X}} \max_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle - \frac{R^{(T)}_\mathcal{Y}}{T}. \tag{3}
 $$
 
-> 提示：使用遗憾 $R_\mathcal{Y}^{(T)}$ 的定义。
+> 提示：使用后悔 $R_\mathcal{Y}^{(T)}$ 的定义。
 
 **问题 1.4（5 分）** 利用式 (3) 和式 (1)，得出结论
 
@@ -68,9 +68,9 @@ $$
 \max_{\vec{y} \in \mathcal{Y}}\min_{\vec{x} \in \mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle = \min_{\vec{x}\in\mathcal{X}}\max_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle.
 $$
 
-### 第二题：从遗憾电路推导 CFR（30 分）
+### 第二题：从后悔电路推导 CFR（30 分）
 
-本题中，你将用遗憾电路（regret circuits）推导 CFR（反事实遗憾最小化，counterfactual regret minimization）。为方便起见，下面附上第 5 讲中计算反事实效用（counterfactual utilities）的子程序伪代码（算法 1）。本题的目标是证明：在树形决策问题（tree-form decision problem）上以自底向上的方式应用遗憾电路，恰好产生 CFR。
+本题中，你将用后悔电路（regret circuits）推导 CFR（反事实后悔最小化，counterfactual regret minimization）。为方便起见，下面附上第 5 讲中计算反事实效用（counterfactual utilities）的子程序伪代码（算法 1）。本题的目标是证明：在树形决策问题（tree-form decision problem）上以自底向上的方式应用后悔电路，恰好产生 CFR。
 
 回顾序列形式（sequence-form）策略集可以如下分解。第一，在任意观察点（observation point）$k \in \mathcal{K}$，设其子节点集合为 $\{p_1, \dots, p_\nu \} = \{ \rho(k, s) : s \in \mathcal{S}_k \}$，则
 
@@ -109,9 +109,9 @@ $$
 
 其中 $\vec{e}_i \in \mathbb{R}^{\mathcal{A}_j}$ 是第 $i$ 个单位向量，$\mathrm{co}$ 表示凸包（convex hull）。
 
-**算法 1：反事实遗憾最小化（CFR）**
+**算法 1：反事实后悔最小化（CFR）**
 
-- **输入**：对树形决策过程的每个决策点 $j \in \mathcal{J}$，一个遗憾最小化器 $\mathfrak{R}_j$。
+- **输入**：对树形决策过程的每个决策点 $j \in \mathcal{J}$，一个后悔最小化器 $\mathfrak{R}_j$。
 - $\textsc{ObserveUtility}(\vec{u}^{(t)} \in \mathbb{R}^{\Sigma})$：
   1. $V^{(t)}[\bot] \coloneqq 0$；
   2. 对树中每个节点 $p \in \mathcal{J} \cup \mathcal{K}$（按自底向上顺序）：
@@ -125,23 +125,23 @@ $$
 
 **问题 2.1（5 分）** 论证在每个**终端**决策点（terminal decision point）$j \in \mathcal{J}$ 处，效用由 $\vec{u}^{(t)}_j[a] = \vec{u}^{(t)}[(j, a)]$（对所有 $a \in \mathcal{A}_j$）给出。
 
-> 提示：这是归纳的基础。利用每个终端决策点处的策略集是概率单纯形（probability simplex）这一事实。观察它与 CFR 在终端决策节点处的效用相吻合。
+> 提示：这是归纳的基础。利用每个终端决策点处的策略集是概率单纯形（probability simplex）这一事实。注意到它与 CFR 在终端决策点处的效用相吻合。
 
-**问题 2.2（5 分）** 在每个观察节点 $p \in \mathcal{K}$ 应用笛卡尔积（Cartesian product）的遗憾电路。推导作为输入传给 $p$ 的子节点的效用向量。
+**问题 2.2（5 分）** 在每个观察点 $p \in \mathcal{K}$ 应用笛卡尔积（Cartesian product）的后悔电路。推导作为输入传给 $p$ 的子节点的效用向量。
 
 > 提示：使用式 (4) 给出的分解。
 
-**问题 2.3（10 分）** 在每个决策节点 $p \in \mathcal{J}$ 应用凸包的遗憾电路。推导作为输入传给负责在 $\mathcal{A}_j$ 上混合的遗憾最小化器 $\mathfrak{R}_j$ 的效用向量，并证明它与算法 1 中指定的效用一致。
+**问题 2.3（10 分）** 在每个决策点 $p \in \mathcal{J}$ 应用凸包的后悔电路。推导作为输入传给负责在 $\mathcal{A}_j$ 上混合的后悔最小化器 $\mathfrak{R}_j$ 的效用向量，并证明它与算法 1 中指定的效用一致。
 
 > 提示：使用式 (5) 给出的分解。
 
-**问题 2.4（10 分）** 证明 CFR 的遗憾以 $\sum_{j \in \mathcal{J}} \max\{0, R_j^{(T)} \}$ 为上界，其中 $R_j^{(T)}$ 是 $\mathfrak{R}_j$ 的遗憾。当每个 $\mathfrak{R}_j$ 用 MWU（乘性权重更新，multiplicative weights update）实例化时，CFR 的遗憾是多少？当每个 $\mathfrak{R}_j$ 用 RM 实例化时呢？
+**问题 2.4（10 分）** 证明 CFR 的后悔以 $\sum_{j \in \mathcal{J}} \max\{0, R_j^{(T)} \}$ 为上界，其中 $R_j^{(T)}$ 是 $\mathfrak{R}_j$ 的后悔。当每个 $\mathfrak{R}_j$ 用 MWU（乘性权重更新，multiplicative weights update）实例化时，CFR 的后悔是多少？当每个 $\mathfrak{R}_j$ 用 RM 实例化时呢？
 
-> 提示：回顾遗憾界依赖于效用的范数；论证该范数可以有多大。
+> 提示：回顾后悔界依赖于效用的范数；论证该范数可以有多大。
 
 ### 第三题：用线性规划求解扩展式零和博弈，及其在扑克低随机化中的应用（50 分）
 
-在许多博弈中，最优的纳什均衡（Nash equilibrium）要求所有玩家随机化其行动。以石头-剪刀-布为例：任何确定性策略（例如总是出石头）都严重次优。本题中，你将在三个博弈中量化"坚持只玩确定性策略"所损失的价值：石头-剪刀-超级剪刀（rock-paper-superscissors），以及两个著名的扑克变体——Kuhn 扑克（Kuhn poker）和 Leduc 扑克（Leduc poker）。每个博弈的描述在作业的 zip 文件中给出，格式见下文"编程任务"一节；zip 中还包含一个帮助搭建实现的 Python stub 文件。
+在许多博弈中，最优的纳什均衡（Nash equilibrium）要求所有玩家随机化其行动。以石头-剪刀-布为例：任何确定性策略（例如总是出石头）都严重次优。本题中，你将在三个博弈中量化“坚持只玩确定性策略”所损失的价值：石头-剪刀-超级剪刀（rock-paper-superscissors），以及两个著名的扑克变体——Kuhn 扑克（Kuhn poker）和 Leduc 扑克（Leduc poker）。每个博弈的描述在作业的 zip 文件中给出，格式见下文“编程任务”一节；zip 中还包含一个帮助搭建实现的 Python stub 文件。
 
 #### 3.1 计算博弈的值（15 分）
 
@@ -175,9 +175,9 @@ $$
 
 > 提示：
 >
-> - 务必查看本文末尾的"Gurobi 提示与技巧"（见"编程任务"一节），其中包含调试常见问题的技巧。
+> - 务必查看本文末尾的“Gurobi 提示与技巧”（见“编程任务”一节），其中包含调试常见问题的技巧。
 > - 从石头-剪刀-超级剪刀开始，然后再转向更复杂的博弈。
-> - 由于所有博弈都是零和的，$\mathcal{P}_1$ 与 $\mathcal{P}_2$ 的目标值必须之和为 $0$。
+> - 由于所有博弈都是零和的，$\mathcal{P}_1$ 与 $\mathcal{P}_2$ 的目标值之和必须为 $0$。
 > - $\mathcal{P}_1$ 的目标值应当为：石头-剪刀-超级剪刀 $0$，Kuhn 扑克 $-0.0555$，Leduc 扑克 $-0.0856$。
 
 答案中应包含六份 Gurobi 输出（3 个游戏 × 每游戏 2 位玩家）。可以直接用 `verbatim` 环境原样转储输出，务必注明每份输出对应哪个游戏、哪位玩家。不要忘记在作业末尾附上代码。例如，石头-剪刀-超级剪刀中玩家 1 的输出大致如下：
@@ -232,7 +232,7 @@ $$
 
 > 提示：
 >
-> - 务必查看"Gurobi 提示与技巧"。
+> - 务必查看“Gurobi 提示与技巧”。
 > - 从石头-剪刀-超级剪刀开始，然后再转向更复杂的博弈。
 > - 这里**不再保证** $\tilde{\mathcal{P}}_1$ 的值与 $\tilde{\mathcal{P}}_2$ 的值之和为 $0$！事实上，在所有博弈中这都不成立。
 
@@ -277,9 +277,9 @@ Best objective -1.666666666667e-01, best bound -1.666666666667e-01, gap 0.0000%
 
 #### 3.3 控制确定性的程度（20 分）
 
-在问题 3.1.1 中没有确定性约束；在另一个极端，问题 3.2.1 坚持在所有决策点都遵循确定性策略。本小节将探索中间情形：对每个 $k$ 值，研究每位玩家在"至少在 $k$ 个决策点上必须确定性地行动"的约束下能够保证多少价值。当 $k=0$ 时，将恢复到问题 3.1.1 中的目标值；当 $k$ 等于该玩家在游戏中的决策点数量时，将恢复到问题 3.2.1 中的目标值。
+在问题 3.1.1 中没有确定性约束；在另一个极端，问题 3.2.1 要求在所有决策点都遵循确定性策略。本小节将探索中间情形：对每个 $k$ 值，研究每位玩家在“至少在 $k$ 个决策点上必须确定性地行动”的约束下能够保证多少价值。当 $k=0$ 时，将恢复到问题 3.1.1 中的目标值；当 $k$ 等于该玩家在游戏中的决策点数量时，将恢复到问题 3.2.1 中的目标值。
 
-**整数规划模型。** 玩家 1 在"至少 $k$ 个决策点必须规定确定性策略"约束下的最优策略，可以通过式 (8) 中的整数线性规划 $\mathcal{P}_1(k)$ 的解得到。理解细节对本题并不重要，不过我们还是附上了每条约束含义的说明，供好奇者参考。
+**整数规划模型。** 玩家 1 在“至少 $k$ 个决策点必须规定确定性策略”约束下的最优策略，可以通过式 (8) 中的整数线性规划 $\mathcal{P}_1(k)$ 的解得到。理解细节对本题并不重要，不过我们还是附上了每条约束含义的说明，供好奇者参考。
 
 $$
 \mathcal{P}_1(k) : \begin{cases}
@@ -295,7 +295,7 @@ $$
 \end{cases} \tag{8}
 $$
 
-- $\vec{z} \in \{0,1\}^{|\Sigma_1|}$ 是一个二元向量，对玩家 1 的每个策略（序列）$(j,a) \in \Sigma_1$，决定是否在 $j$ 处以概率 $1$ 选取动作 $a$。由于策略向量 $\vec{x}$ 以序列形式表示，"在 $j$ 处以概率 $1$ 选取动作 $a$"通过约束 ③ 和 ④ 表达。
+- $\vec{z} \in \{0,1\}^{|\Sigma_1|}$ 是一个二元向量，对玩家 1 的每个策略（序列）$(j,a) \in \Sigma_1$，决定是否在 $j$ 处以概率 $1$ 选取动作 $a$。由于策略向量 $\vec{x}$ 以序列形式表示，“在 $j$ 处以概率 $1$ 选取动作 $a$”通过约束 ③ 和 ④ 表达。
 - 约束 ⑤ 断言：每个决策点至多有一个动作被强制以概率 $1$ 行动。
 - 约束 ⑥ 断言：在至少 $k$ 个决策点中，恰好有一个动作被强制以概率 $1$ 行动。
 
@@ -307,7 +307,7 @@ $$
 
 > 提示：
 >
-> - 务必查看"Gurobi 提示与技巧"。
+> - 务必查看“Gurobi 提示与技巧”。
 > - Gurobi 默认输出很冗长。本题中如果你想让 Gurobi 静默，可以使用 `m.setParam("OutputFlag", 0)`。
 > - 对于 Leduc 扑克，如果 $k$ 较大时 Gurobi 优化耗时过长，可以在 `m.optimize()` 之前调用 `m.setParam("MIPGap", 0.01)` 降低求解精度。Leduc 扑克的运行时间预计可达一到五个小时，取决于你使用的机器性能。
 
@@ -335,8 +335,8 @@ $$
 |---|---|
 | `id` | 节点标识符字符串；在同一玩家的节点中唯一 |
 | `type` | 字符串，`decision`（决策点）或 `observation`（观察点） |
-| `actions` | （仅决策点）字符串集合，该决策节点可用的动作 |
-| `signals` | （仅观察点）字符串集合，该观察节点可观察到的信号 |
+| `actions` | （仅决策点）字符串集合，该决策点可用的动作 |
+| `signals` | （仅观察点）字符串集合，该观察点可观察到的信号 |
 | `parent_edge` | 节点的父边。若节点是树根则为 `null`；否则为二元组 `(parent_node_id, action_or_signal)`，前者是父节点的 `id`，后者是连接该节点与其父节点的动作或信号 |
 | `parent_sequence` | （仅决策点）决策点的父序列 $p_j$，即从决策过程的根到 $j$ 的路径上遇到的最后一个序列（决策点-动作对） |
 
@@ -356,7 +356,7 @@ $$
 | `sequence_pl2` | 二元组 `(decision_pt_id_pl2, action_pl2)`，表示玩家 2 的序列（矩阵项的列） |
 | `value` | 该矩阵项的非零浮点值 |
 
-**示例：石头-剪刀-超级剪刀。** 在该游戏中，每位玩家面对的决策问题只有一个决策点、三个动作：出石头（r）、布（p）或超级剪刀（s）。因此每个 TFSDP 只有一个节点，且是决策节点。博弈的收益矩阵为
+**示例：石头-剪刀-超级剪刀。** 在该游戏中，每位玩家面对的决策问题只有一个决策点、三个动作：出石头（r）、布（p）或超级剪刀（s）。因此每个 TFSDP 只有一个节点，且是决策点。博弈的收益矩阵为
 
 $$
 \begin{pmatrix}
@@ -422,7 +422,7 @@ v.getAttr(GRB.Attr.X)
 
 读取 `v` 在当前解中的取值。
 
-**排错。** 首先，如果 Gurobi 出了问题，第一件事是让 Gurobi 把它"认为你在要求求解的模型"以人类可读格式转储到文件。*如果你在 `addVar` 时用 `name` 可选参数给变量起了名字，读模型文件会容易得多。* 转储模型可以这样写：
+**排错。** 首先，如果 Gurobi 出了问题，第一件事是让 Gurobi 把它“认为你在要求求解的模型”以人类可读格式转储到文件。*如果你在 `addVar` 时用 `name` 可选参数给变量起了名字，读模型文件会容易得多。* 转储模型可以这样写：
 
 ```python
 m.write("/tmp/model.lp")

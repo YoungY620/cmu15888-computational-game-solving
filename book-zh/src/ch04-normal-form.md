@@ -1,6 +1,6 @@
 # 标准式博弈：LP、FTRL 与后悔匹配
 
-本讲深入标准式博弈（normal-form game，又称策略式博弈）中的均衡计算：先用线性规划在多项式时间内求解二人零和博弈的极小极大均衡，再转向更适合大规模博弈的简单迭代算法，最终引出在线学习与后悔最小化框架——后续课程中求解大规模博弈的许多突破性结果都建立在后一类算法之上。
+本讲讨论标准式博弈（normal-form game，又称策略式博弈）中的均衡计算：先用线性规划在多项式时间内求解二人零和博弈的极小极大均衡，再转向更适合大规模博弈的简单迭代算法，最终引出在线学习与后悔最小化框架——后续课程中求解大规模博弈的许多突破性结果都建立在后一类算法之上。
 
 ## 1 通过线性规划求极小极大均衡
 
@@ -18,7 +18,7 @@ $$
 
 ### 零和博弈与极小极大定理
 
-（二人）零和博弈（zero-sum game）是只有两个利益完全对立玩家的特例：对所有 $(a_1, a_2) \in \mathcal{A}_1 \times \mathcal{A}_2$ 有 $u_1(a_1, a_2) = -u_2(a_1, a_2)$——一方所赢即另一方所输。
+（二人）零和博弈（zero-sum game）是只有两个利益完全对立的玩家的特例：对所有 $(a_1, a_2) \in \mathcal{A}_1 \times \mathcal{A}_2$ 有 $u_1(a_1, a_2) = -u_2(a_1, a_2)$——一方所赢即另一方所输。
 
 设 $\boldsymbol{A} \in \mathbb{R}^{m_1 \times m_2}$ 为博弈的收益矩阵。站在行玩家（row player）的角度，考虑如下优化问题：
 
@@ -164,7 +164,7 @@ $$
 \boldsymbol{x}^{(t)} = \arg\max_{\boldsymbol{x} \in \Delta(\mathcal{A})} \left\{ \sum_{\tau=1}^{t-1} \langle \boldsymbol{x}, \boldsymbol{u}^{(\tau)} \rangle - \frac{1}{\eta} \mathcal{R}(\boldsymbol{x}) \right\}, \tag{5}
 $$
 
-其中 $\eta > 0$ 是**学习率**（learning rate），$\mathcal{R}$ 是严格凸的**正则化子**（regularizer）。算法 (5) 称为跟随正则化领导者（follow the regularized leader, FTRL）（Kalai and Vempala, 2005）；由于最大化问题是严格凹的，策略是良定义的。直观上，FTRL 用一个鼓励策略更加混合的正则化子来平衡虚拟博弈——向策略中注入更多随机性，使对手更难利用学习者；学习率 $\eta$ 调节混合的程度。当 $\eta = +\infty$ 时 (5) 退化为虚拟博弈。
+其中 $\eta > 0$ 是**学习率**（learning rate），$\mathcal{R}$ 是严格凸的**正则化子**（regularizer）。算法 (5) 称为跟随正则化领导者（follow the regularized leader, FTRL）（Kalai and Vempala, 2005）；由于最大化问题是严格凹的，策略是良定义的。直观上，FTRL 在虚拟博弈的基础上引入一个鼓励策略更加混合的正则化子——向策略中注入更多随机性，使对手更难利用学习者；学习率 $\eta$ 调节混合的程度。当 $\eta = +\infty$ 时 (5) 退化为虚拟博弈。
 
 > **例 3.3（乘性权重更新）** 取负熵正则化子 $\mathcal{R} : \boldsymbol{x} \mapsto \sum_{a \in \mathcal{A}} \boldsymbol{x}[a] \ln \boldsymbol{x}[a]$，不难证明 (5) 的解为 $\boldsymbol{x}^{(t)}[a] \propto \exp\big(\eta \sum_{\tau=1}^{t-1} \boldsymbol{u}^{(\tau)}[a]\big)$。这就是乘性权重更新（multiplicative weights update, MWU，又称指数权重或随机加权多数），也许是被研究得最透彻的在线算法。
 
@@ -201,7 +201,7 @@ $$
 
 MD 在“针对上一次观察到的效用 $\boldsymbol{u}^{(t-1)}$ 做优化”与“以 Bregman 散度度量、保持接近上一个策略 $\boldsymbol{x}^{(t-1)}$”之间取得平衡；$\eta = +\infty$ 的极端情形就是对上一次效用做最优反应。
 
-在对 $\mathcal{R}$ 的一定假设下——即 $\mathcal{R}$ 是 Legendre 正则化子（Cesa-Bianchi and Lugosi, 2006）——已知 MD 与 FTRL 等价。例如 $\mathcal{R}$ 取负熵时，FTRL 与 MD 都产生 MWU。
+在 $\mathcal{R}$ 为 Legendre 正则化子的假设下（Cesa-Bianchi and Lugosi, 2006），已知 MD 与 FTRL 等价。例如 $\mathcal{R}$ 取负熵时，FTRL 与 MD 都产生 MWU。
 
 > **例 3.6（在线梯度下降）** 取 $\mathcal{R} : \boldsymbol{x} \mapsto \frac{1}{2}\|\boldsymbol{x}\|_2^2$，(7) 变为 $\boldsymbol{x}^{(t)} = \Pi_{\Delta(\mathcal{A})}\big(\boldsymbol{x}^{(t-1)} + \eta \boldsymbol{u}^{(t-1)}\big)$，即在线梯度下降（online gradient descent）。
 
@@ -266,7 +266,7 @@ $$
 
 虽然这个后悔界不如 MWU 的 $2\sqrt{T \ln m}$，但 RM **无参数**且**尺度不变**（scale invariant），实践中表现往往相当出色（后续课程详述）。
 
-值得指出，Hart and Mas-Colell (2000) 的原始结果针对的是比外部后悔更强的**内部后悔**（internal regret）。用修改规则（modification rule）的语言可以更精确地刻画这一层次（Blum and Mansour, 2007, §4.2）：一个（无记忆）修改规则 $F : \mathcal{A} \to \mathcal{A}$ 把学习者选出的行动 $a$ 事后替换为 $F(a)$；算法关于规则族 $\mathcal{F}$ 的后悔定义为 $\max_{F \in \mathcal{F}} \sum_{t=1}^{T} \sum_{a \in \mathcal{A}} \boldsymbol{x}^{(t)}[a]\, \big(\boldsymbol{u}^{(t)}[F(a)] - \boldsymbol{u}^{(t)}[a]\big)$。取 $\mathcal{F}$ 为 $m$ 个常值映射即回到（外部）后悔 (3)；取 $\mathcal{F}$ 为全部 $m(m-1)$ 个“单点交换”映射 $F_{a \to a'}$（只把 $a$ 换成 $a'$、其余不动）即得内部后悔；取全部 $m^m$ 个映射则得交换后悔（swap regret），它同时上界外部与内部后悔。Hart and Mas-Colell (2000) 正是基于逐行动的反事实后悔思想设计出无内部后悔的自适应过程——后悔匹配即源于此——而内部后悔次线性的自对弈会收敛到相关均衡（见第 3.3 节）。
+值得指出，Hart and Mas-Colell (2000) 的原始结果针对的是比外部后悔更强的**内部后悔**（internal regret）。用修改规则（modification rule）的语言可以更精确地刻画这一层次（Blum and Mansour, 2007, §4.2）：一个（无记忆）修改规则 $F : \mathcal{A} \to \mathcal{A}$ 把学习者选出的行动 $a$ 事后替换为 $F(a)$；算法关于规则族 $\mathcal{F}$ 的后悔定义为 $\max_{F \in \mathcal{F}} \sum_{t=1}^{T} \sum_{a \in \mathcal{A}} \boldsymbol{x}^{(t)}[a]\, \big(\boldsymbol{u}^{(t)}[F(a)] - \boldsymbol{u}^{(t)}[a]\big)$。取 $\mathcal{F}$ 为 $m$ 个常值映射即回到（外部）后悔 (3)；取 $\mathcal{F}$ 为全部 $m(m-1)$ 个“单点交换”映射 $F_{a \to a'}$（只把 $a$ 换成 $a'$、其余不动）即得内部后悔；取全部 $m^m$ 个映射则得交换后悔（swap regret），它同时上界外部与内部后悔。Hart and Mas-Colell (2000) 正是基于逐行动的反事实后悔思想设计出无内部后悔的自适应过程（后悔匹配即源于此），而内部后悔次线性的自对弈会收敛到相关均衡（见第 3.3 节）。
 
 对 RM 做一个小改动即得 **RM+**（算法 2），由 Tammelin (2014) 提出：唯一区别是每次更新时把负后悔截断为 0（第 10 行）。与定理 3.8 完全相同的证明表明 RM+ 享有类似的后悔保证，但实践中 RM+ 通常远优于 RM。Farina et al. (2021) 最近揭示了一个精巧的联系：在某个提升空间（lifted space）上操作时，RM+ 是 MD 的实例而 RM 是 FTRL 的实例——尽管 RM 与 RM+ 都是无参数的，不同于 FTRL 与 MD。这一联系围绕 Blackwell 可接近性（Blackwell approachability）框架（Blackwell, 1956）展开。RM+ 最初只是为加速 RM 而提出的简单启发式，而 Farina et al. (2021) 的结果表明 RM 与 RM+ 之间的差异是本质的。
 
@@ -330,5 +330,5 @@ $$
 - 最优反应动力学一般不收敛（石头剪刀布中循环），其平均策略也可能不收敛（命题 2.1）。虚拟博弈（对对手历史平均策略做最优反应）的时间平均在零和博弈中总收敛（定理 2.2），但速率可慢至 $\Omega(t^{-1/m})$（Daskalakis–Pan，对抗性决胜规则下），且作为策略本身可被对手利用。
 - 在线学习中，后悔衡量与事后最优固定策略的差距；虚拟博弈（跟随领导者）不是无后悔的（命题 3.2，线性后悔），且任何确定性算法都必然蒙受线性后悔，与事后最优行动序列竞争亦不可行——故“最优固定策略 + 随机化”是恰当的基准。
 - FTRL 在累积效用目标上加入严格凸正则化子：取负熵得 MWU，取欧几里得正则化子得投影更新；其后悔界为 $R/\eta + \eta \sum_t \|\boldsymbol{u}^{(t)}\|_*^2$，最优调节学习率后为 $2B\sqrt{RT}$，MWU 特化为 $2\sqrt{T \ln m}$。MWU 另有以总权重为势函数的直接证明（权重每轮按期望损失比例衰减），且该界是紧的：$T < \log_2 m$ 时无次线性保证，$m = 2$ 时期望后悔 $\Omega(\sqrt{T})$。镜像下降用 Bregman 散度贴近上一策略，Legendre 正则化子下与 FTRL 等价，后悔界相同。
-- 后悔匹配按 $[\boldsymbol{r}^{(t-1)}]^+$ 正比选策略，利用“瞬时后悔与累计后悔正交”的勾股引理证明 $\sqrt{mT}$ 的后悔界；RM+ 每步截断负后悔，实践中显著更好，且在提升空间上可视为 MD 的实例。后悔的层次可借修改规则刻画：外部后悔 ⊂ 内部后悔 ⊂ 交换后悔，Hart–Mas-Colell 的原始过程保证内部后悔次线性。
+- 后悔匹配按正比于 $[\boldsymbol{r}^{(t-1)}]^+$ 的方式选取策略，利用“瞬时后悔与累计后悔正交”的勾股引理证明 $\sqrt{mT}$ 的后悔界；RM+ 每步截断负后悔，实践中显著更好，且在提升空间上可视为 MD 的实例。后悔的层次可借修改规则刻画：外部后悔 ⊂ 内部后悔 ⊂ 交换后悔，Hart–Mas-Colell 的原始过程保证内部后悔次线性。
 - 自对弈联系：零和博弈中双方均无后悔则平均策略收敛到 $\epsilon$-均衡，$\epsilon = (\mathrm{Reg}_1^{(T)} + \mathrm{Reg}_2^{(T)})/T$（定理 3.9）；一般和博弈中全体无（外部）后悔则平均相关分布收敛到粗相关均衡（定理 3.11），内部后悔则收敛到相关均衡。相关均衡还可用线性规划在多项式时间内求得（激励约束线性），与纳什均衡的双线性可行性约束形成对照。

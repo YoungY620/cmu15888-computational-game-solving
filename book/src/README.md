@@ -1,12 +1,12 @@
 # CMU 15-888 Computational Game Solving
 
-> This book is a faithful condensed rendition of the Carnegie Mellon University course **15-888 Computational Game Solving** (Fall 2025, Prof. Tuomas Sandholm). All content comes exclusively from the course's publicly posted materials — lecture slides, course lecture notes, the per-lecture assigned readings (open-access versions of textbook chapters and papers), and the homework handouts — reorganized to mirror the original course structure, with every knowledge point (definitions, theorems, proof ideas, algorithms, complexity bounds) preserved and filler removed. Copyright of the original materials belongs to CMU and the respective authors; this book is for personal study only.
+> This book is a faithful condensed rendition of the Carnegie Mellon University course **15-888 Computational Game Solving** (Fall 2025, Prof. Tuomas Sandholm). All content comes exclusively from the course's publicly posted materials: lecture slides, course lecture notes, the per-lecture assigned readings (open-access versions of textbook chapters and papers), and the homework handouts. These are reorganized to mirror the original course structure, with every knowledge point (definitions, theorems, proof ideas, algorithms, complexity bounds) preserved and filler removed. Copyright of the original materials belongs to CMU and the respective authors; this book is for personal study only.
 >
 > 中文版：点击页面顶部的「中文」按钮。
 
 ## About the course
 
-Most real-world strategic settings are multi-step imperfect-information games: negotiation, auctions, poker, security. Such games raise issues beyond perfect-information games like chess and Go — signaling, deception, and understanding deception by others. This course covers the fundamentals and the state of the art of solving them: from linear programming and regret minimization, through CFR and its speedups and game abstraction, to the full technology stack of superhuman poker AI (Libratus, Pluribus), plus frontiers such as deep learning in game solving, team games, and automated mechanism design.
+Most real-world strategic settings are multi-step imperfect-information games: negotiation, auctions, poker, security. Such games raise issues beyond perfect-information games like chess and Go: signaling, deception, and understanding deception by others. This course covers the fundamentals and the state of the art of solving them. The progression runs from linear programming and regret minimization, through CFR and its speedups and game abstraction, to the full technology stack of superhuman poker AI (Libratus, Pluribus). Later topics cover frontiers such as deep learning in game solving, team games, and automated mechanism design.
 
 Beyond the slides, each lecture comes with course notes and assigned readings (MAS/AGT textbook chapters and original papers); this book merges the readings' content into the corresponding chapters.
 
