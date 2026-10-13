@@ -43,7 +43,7 @@ AlphaGo 的成功表明，基于搜索与机器学习的技术可以在围棋这
 
 在 Libratus 之前，双人无限注德州扑克（heads-up no-limit Texas hold'em, HUNL）一直是不完美信息博弈 AI 的**主要基准与挑战问题**：
 
-- 局面数高达 $10^{161}$，比已求解的有限注版本大几十个数量级（该数字按标准赛制计算：两位玩家各持 $\$20{,}000$、即 200 个大盲注的深筹码，且下注以 1 美元为最小单位）[Brown & Sandholm, IJCAI-17]；
+- 局面数高达 $10^{161}$，比已求解的有限注版本大几十个数量级（该数字按标准赛制计算：两位玩家各持 \$20{,}000、即 200 个大盲注的深筹码，且下注以 1 美元为最小单位）[Brown & Sandholm, IJCAI-17]；
 - 主要流行于网络对战，也出现在 World Series of Poker、NBC Heads-Up Championship 等赛事，并出现在《Casino Royale》《Rounders》等电影中；
 - 被称为"最纯粹的扑克形式"（purest form of poker）；
 - 此前没有任何 AI 战胜过顶尖人类选手。
