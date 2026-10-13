@@ -1,40 +1,40 @@
 # Summary
 
-[Course Introduction](README.md)
+[课程简介](README.md)
 
-# Foundations
+# 基础
 
-- [L1 Introduction](ch01-introduction.md)
-- [L2 Perfect-Information Games 1: Tree Search](ch02-perfect-info-1.md)
-- [L3 Perfect-Information Games 2: MCTS and AlphaGo](ch03-mcts.md)
-- [L4 Normal-Form Games: LP, FTRL, Regret Matching](ch04-normal-form.md)
+- [L1 导论](ch01-introduction.md)
+- [L2 完全信息博弈 1：树搜索](ch02-perfect-info-1.md)
+- [L3 完全信息博弈 2：MCTS 与 AlphaGo](ch03-mcts.md)
+- [L4 标准式博弈：LP、FTRL 与后悔匹配](ch04-normal-form.md)
 
-# Imperfect-Information Games
+# 不完全信息博弈
 
-- [L5 Extensive-Form Games 1: CFR](ch05-efg-cfr.md)
-- [L6 Correlated Equilibria and Φ-Regret](ch06-phi-regret.md)
-- [L7 Minimizing Φ-Regret: Nonlinear Deviations](ch07-nonlinear-deviations.md)
-- [L8 Optimism and Last-Iterate Convergence](ch08-optimism.md)
-- [L9 CFR Speedups](ch09-cfr-speedups.md)
-- [L10 Game Abstraction 1](ch10-abstraction-1.md)
-- [L11 Game Abstraction 2](ch11-abstraction-2.md)
+- [L5 展开式博弈 1：CFR](ch05-efg-cfr.md)
+- [L6 相关均衡与 Φ-后悔](ch06-phi-regret.md)
+- [L7 最小化 Φ-后悔：非线性偏离](ch07-nonlinear-deviations.md)
+- [L8 乐观主义与最终迭代收敛](ch08-optimism.md)
+- [L9 CFR 加速技术](ch09-cfr-speedups.md)
+- [L10 博弈抽象 1](ch10-abstraction-1.md)
+- [L11 博弈抽象 2](ch11-abstraction-2.md)
 
-# Poker AI: State of the Art
+# 扑克 AI 前沿
 
-- [L12 Libratus I: History and Match Setup](ch12-libratus-1.md)
-- [L13 Libratus II: Subgame Solving](ch13-libratus-2.md)
-- [L14 Libratus III: Self-Improver](ch14-libratus-3.md)
-- [L15 Knowledge-Limited Subgame Solving](ch15-klss.md)
-- [L16 Pluribus: Multiplayer No-Limit Hold'em](ch16-pluribus.md)
+- [L12 Libratus（上）：历史与人机大战](ch12-libratus-1.md)
+- [L13 Libratus（中）：子博弈求解](ch13-libratus-2.md)
+- [L14 Libratus（下）：自我改进器](ch14-libratus-3.md)
+- [L15 知识受限子博弈求解（KLSS）](ch15-klss.md)
+- [L16 Pluribus：多人无限注德州扑克](ch16-pluribus.md)
 
-# Frontiers
+# 前沿专题
 
-- [L17 Deep Learning in Game Solving](ch17-deep-learning.md)
-- [L18 Team Games](ch18-team-games.md)
-- [L19 Automated Mechanism Design](ch19-mechanism-design.md)
-- [L21 Double Oracle and PSRO](ch20-double-oracle.md)
+- [L17 博弈求解中的深度学习](ch17-deep-learning.md)
+- [L18 团队博弈](ch18-team-games.md)
+- [L19 自动化机制设计](ch19-mechanism-design.md)
+- [L21 双预言机方法（DO/PSRO）](ch20-double-oracle.md)
 
-# Homework
+# 作业
 
-- [Homework 1: LP Equilibrium Computation](hw1.md)
-- [Homework 2: CFR Implementation](hw2.md)
+- [作业 1：LP 均衡计算](hw1.md)
+- [作业 2：CFR 实现](hw2.md)
