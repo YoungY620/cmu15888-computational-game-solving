@@ -1,0 +1,11 @@
+[book]
+title = "CMU 15-888 计算博弈求解"
+authors = ["CMU (Tuomas Sandholm) · 中文精读"]
+language = "zh"
+src = "src"
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/YoungY620/cmu15888-computational-game-solving"
+additional-js = ["theme/lang-toggle.js", "theme/mathjax.js"]

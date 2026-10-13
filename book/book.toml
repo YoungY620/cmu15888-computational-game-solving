@@ -1,0 +1,11 @@
+[book]
+title = "CMU 15-888 Computational Game Solving"
+authors = ["CMU (Tuomas Sandholm) · condensed rendition"]
+language = "en"
+src = "src"
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/YoungY620/cmu15888-computational-game-solving"
+additional-js = ["theme/lang-toggle.js", "theme/mathjax.js"]

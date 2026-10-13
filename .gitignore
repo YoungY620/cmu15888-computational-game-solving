@@ -1,0 +1,6 @@
+materials/
+book/book/
+book-zh/book/
+tools/render-check/node_modules/
+tools/render-check/shots/
+.DS_Store
