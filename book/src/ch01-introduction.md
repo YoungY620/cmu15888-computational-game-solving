@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # L1 Introduction
 
 This chapter lays out the basic language used throughout the course: the two classical representations of games, the core solution concepts (dominant strategy equilibrium and Nash equilibrium), existence theorems for pure- and mixed-strategy equilibria, and the computational complexity landscape of equilibrium finding. It closes with two-player zero-sum games, whose elegant properties are the theoretical foundation for every large-scale game-solving algorithm that follows.
@@ -10,17 +11,17 @@ In single-agent settings, an agent's expected-utility-maximizing strategy is wel
 
 - **Agent**: a player.
 - **Action**: a move, a choice the agent can make at a point in the game.
-- **Strategy** $s_i$: a mapping from history (to the extent that agent $i$ can distinguish it) to actions. It can encompass "strategic", "operational", and "tactical" decisions at once.
-- **Strategy set** $S_i$: the strategies available to the agent.
-- **Strategy profile** $(s_1, s_2, \dots, s_{|A|})$: a tuple with one strategy for each agent.
-- **Utility**: after every agent (including "nature", which is used to model uncertainty) has chosen its strategy and the game has been played out, agent $i$'s utility is determined as $u_i = u_i(s_1, s_2, \dots, s_{|A|})$.
+- **Strategy** $s\_i$: a mapping from history (to the extent that agent $i$ can distinguish it) to actions. It can encompass "strategic", "operational", and "tactical" decisions at once.
+- **Strategy set** $S\_i$: the strategies available to the agent.
+- **Strategy profile** $(s\_1, s\_2, \dots, s\_{|A|})$: a tuple with one strategy for each agent.
+- **Utility**: after every agent (including "nature", which is used to model uncertainty) has chosen its strategy and the game has been played out, agent $i$'s utility is determined as $u\_i = u\_i(s\_1, s\_2, \dots, s\_{|A|})$.
 
 ## Agents and Utility
 
-An agent attempts to maximize its expected utility. Agent $i$'s **utility function** $u_i$ is a mapping from outcomes to real numbers; it incorporates the agent's risk attitude and thereby allows quantitative tradeoffs. Consider outcomes over money, and compare two lotteries:
+An agent attempts to maximize its expected utility. Agent $i$'s **utility function** $u\_i$ is a mapping from outcomes to real numbers; it incorporates the agent's risk attitude and thereby allows quantitative tradeoffs. Consider outcomes over money, and compare two lotteries:
 
-- Lottery 1: \$0.5M with probability 1;
-- Lottery 2: \$1M with probability 0.5, \$0 with probability 0.5.
+- Lottery 1: \\$0.5M with probability 1;
+- Lottery 2: \\$1M with probability 0.5, \\$0 with probability 0.5.
 
 The two lotteries have the same expected monetary value, yet a risk-averse agent prefers Lottery 1, a risk-seeking agent prefers Lottery 2, and a risk-neutral agent is indifferent. The agent's strategy here is simply the choice of lottery. Risk aversion is precisely the reason insurance companies exist. In game theory we usually speak directly of **expected payoff** or **expected value (EV)**.
 
@@ -31,10 +32,10 @@ As the figure shows, the curvature of the utility function over money captures r
 **Utility functions are scale-invariant.** Agent $i$ chooses a strategy that maximizes expected utility:
 
 $$
-\max_{\text{strategy}} \sum_{\text{outcome}} p(\text{outcome} \mid \text{strategy}) \, u_i(\text{outcome})
+\max\_{\text{strategy}} \sum\_{\text{outcome}} p(\text{outcome} \mid \text{strategy}) \\, u\_i(\text{outcome})
 $$
 
-If $u_i'(\cdot) = a\, u_i(\cdot) + b$ with $a > 0$, then the agent will choose exactly the same strategy under $u_i'$ as under $u_i$: positive affine transformations do not change the preference order. (Note that $u_i$ must be finite for every possible outcome; otherwise the expected utility could be infinite for several strategies at once, and the strategies could no longer be compared.) Inter-agent utility comparison, however, is problematic: one cannot conclude from the numbers "whose payoff is larger".
+If $u\_i'(\cdot) = a\\, u\_i(\cdot) + b$ with $a > 0$, then the agent will choose exactly the same strategy under $u\_i'$ as under $u\_i$: positive affine transformations do not change the preference order. (Note that $u\_i$ must be finite for every possible outcome; otherwise the expected utility could be infinite for several strategies at once, and the strategies could no longer be compared.) Inter-agent utility comparison, however, is problematic: one cannot conclude from the numbers "whose payoff is larger".
 
 ## Classical Game Representations
 
@@ -45,14 +46,14 @@ There are two classical representations of a game:
 
 ![The same game in extensive form (left) and matrix form (right)](assets/ch01-introduction-2.png)
 
-On the left of the figure is the extensive form of a two-stage game. Player 1 first chooses Up/Down, Player 2 observes this and then chooses Left/Right, and the leaves $(u_1, u_2)$ give both players' payoffs. On the right is the matrix form of the same game. Player 1 has two strategies (Up, Down), while Player 2's strategy must specify an action at each of her two decision nodes, giving four strategies (Left,Left), (Left,Right), (Right,Left), (Right,Right). Notice that even this toy game already exhibits redundancy in matrix form: **converting from extensive form to matrix form causes a combinatorial explosion**. This is exactly why many algorithms in this course operate directly on the extensive form.
+On the left of the figure is the extensive form of a two-stage game. Player 1 first chooses Up/Down, Player 2 observes this and then chooses Left/Right, and the leaves $(u\_1, u\_2)$ give both players' payoffs. On the right is the matrix form of the same game. Player 1 has two strategies (Up, Down), while Player 2's strategy must specify an action at each of her two decision nodes, giving four strategies (Left,Left), (Left,Right), (Right,Left), (Right,Right). Notice that even this toy game already exhibits redundancy in matrix form: **converting from extensive form to matrix form causes a combinatorial explosion**. This is exactly why many algorithms in this course operate directly on the extensive form.
 
 ## Dominant Strategy Equilibrium
 
-> **Definition (best response).** Given a strategy profile $s_{-i}$ of the other players, strategy $s_i^*$ is a best response for $i$ if and only if for all $s_i'$,
-> $$u_i(s_i^*, s_{-i}) \ge u_i(s_i', s_{-i}).$$
+> **Definition (best response).** Given a strategy profile $s\_{-i}$ of the other players, strategy $s\_i^\*$ is a best response for $i$ if and only if for all $s\_i'$,
+> $$u\_i(s\_i^\*, s\_{-i}) \ge u\_i(s\_i', s\_{-i}).$$
 
-> **Definition (dominant strategy).** $s_i^*$ is a dominant strategy if and only if it is a best response for **all** $s_{-i}$. A dominant strategy does not always exist; inferior strategies are called **dominated**.
+> **Definition (dominant strategy).** $s\_i^\*$ is a dominant strategy if and only if it is a best response for **all** $s\_{-i}$. A dominant strategy does not always exist; inferior strategies are called **dominated**.
 
 > **Definition (dominant strategy equilibrium).** A strategy profile in which every agent has picked its dominant strategy. It, too, does not always exist.
 
@@ -69,8 +70,8 @@ For each player, Defect is strictly better than Cooperate regardless of what the
 
 In many games, an agent's best response depends on the others' strategies, so no agent has a dominant strategy. The Nash equilibrium [Nash 1950] is a weaker stability concept:
 
-> **Definition (Nash equilibrium).** A strategy profile $s^*$ is a Nash equilibrium if and only if no player has an incentive to deviate unilaterally given that the others do not deviate; that is, for every agent $i$ and all $s_i'$,
-> $$u_i(s_i^*, s_{-i}^*) \ge u_i(s_i', s_{-i}^*).$$
+> **Definition (Nash equilibrium).** A strategy profile $s^\*$ is a Nash equilibrium if and only if no player has an incentive to deviate unilaterally given that the others do not deviate; that is, for every agent $i$ and all $s\_i'$,
+> $$u\_i(s\_i^\*, s\_{-i}^\*) \ge u\_i(s\_i', s\_{-i}^\*).$$
 
 Every dominant strategy equilibrium is a Nash equilibrium, but not vice versa. In the Prisoners' Dilemma, (Defect, Defect) is the only Nash equilibrium. The Battle of the Sexes, by contrast, has no dominant strategies at all:
 
@@ -88,7 +89,7 @@ It has two pure-strategy Nash equilibria: (Boxing, Boxing) and (Ballet, Ballet).
    - Focal points, mediation, communication, convention, and learning.
 2. **It may fail to exist** (in pure strategies). For example, no pure-strategy profile of the following game is stable:
 $$
-\begin{pmatrix} 1,0 & 0,1 \\ 0,1 & 1,0 \end{pmatrix}
+\begin{pmatrix} 1,0 & 0,1 \\\ 0,1 & 1,0 \end{pmatrix}
 $$
 
 ## Imperfect-Information Games
@@ -143,20 +144,20 @@ Two-player zero-sum games enjoy beautiful properties that other games do not:
 - A player's equilibrium strategies form a **bounded convex polytope**: any convex combination of her equilibrium strategies is again an equilibrium strategy.
 - The set of Nash equilibria is exactly the set of solutions to the **minmax problem**
 $$
-\max_x \min_y u_1(x, y).
+\max\_x \min\_y u\_1(x, y).
 $$
 - **Minmax theorem** [von Neumann 1928]: it does not matter which player "reveals" her mixed strategy first:
 $$
-\max_x \min_y u_1(x, y) = \min_y \max_x u_1(x, y),
+\max\_x \min\_y u\_1(x, y) = \min\_y \max\_x u\_1(x, y),
 $$
 and this common value is called the **game value**.
 
 More generally, the theorem has a convex-analytic form:
 
 > **Theorem (saddle point theorem).** Let $X \subset \mathbb{R}^n$ and $Y \subset \mathbb{R}^m$ be compact convex sets, and let $f: X \times Y \to \mathbb{R}$ be continuous and **concave-convex**, i.e., for each fixed $y$, $f(\cdot, y): X \to \mathbb{R}$ is concave, and for each fixed $x$, $f(x, \cdot): Y \to \mathbb{R}$ is convex. Then
-> $$\max_{x \in X} \min_{y \in Y} f(x, y) = \min_{y \in Y} \max_{x \in X} f(x, y).$$
+> $$\max\_{x \in X} \min\_{y \in Y} f(x, y) = \min\_{y \in Y} \max\_{x \in X} f(x, y).$$
 
-**Example.** Take $f(x, y) = x^\top A y$ (where $A \in \mathbb{R}^{n \times m}$ is a finite matrix); this is exactly the two-player zero-sum matrix game under mixed strategies, and the equality above gives $\max_x \min_y x^\top A y = \min_y \max_x x^\top A y$.
+**Example.** Take $f(x, y) = x^\top A y$ (where $A \in \mathbb{R}^{n \times m}$ is a finite matrix); this is exactly the two-player zero-sum matrix game under mixed strategies, and the equality above gives $\max\_x \min\_y x^\top A y = \min\_y \max\_x x^\top A y$.
 
 ![The saddle-point function $f(x,y) = y^2 - x^2$ is concave-convex (concave in $x$, convex in $y$); the red dot marks the saddle point](assets/ch01-introduction-4.png)
 

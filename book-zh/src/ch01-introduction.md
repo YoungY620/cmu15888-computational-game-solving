@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # 导论：博弈表示、解概念与复杂度
 
 本章给出整门课程的基本语言：博弈的两种经典表示、核心解概念（占优策略均衡与纳什均衡）、纯策略与混合策略均衡的存在性定理，以及求均衡的计算复杂度图景。最后聚焦双人零和博弈——它的优良性质是后续所有大规模博弈求解算法的理论基点。
@@ -10,14 +11,14 @@
 
 - **智能体（agent）**：即参与人（player）。
 - **行动（action）**：即着法（move），智能体在博弈中某一点可做的一次选择。
-- **策略（strategy）** $s_i$：从（智能体 $i$ 所能区分的）历史到行动的映射。它可以同时包含"战略性""战役性""战术性"的决策。
-- **策略集（strategy set）** $S_i$：智能体可用的所有策略。
-- **策略组合（strategy profile）** $(s_1, s_2, \dots, s_{|A|})$：每个智能体各取一个策略构成的元组。
-- **效用（utility）**：当每个智能体（包括用来建模不确定性的"自然"）都选定策略、博弈进行完毕之后，智能体 $i$ 的效用确定为 $u_i = u_i(s_1, s_2, \dots, s_{|A|})$。
+- **策略（strategy）** $s\_i$：从（智能体 $i$ 所能区分的）历史到行动的映射。它可以同时包含"战略性""战役性""战术性"的决策。
+- **策略集（strategy set）** $S\_i$：智能体可用的所有策略。
+- **策略组合（strategy profile）** $(s\_1, s\_2, \dots, s\_{|A|})$：每个智能体各取一个策略构成的元组。
+- **效用（utility）**：当每个智能体（包括用来建模不确定性的"自然"）都选定策略、博弈进行完毕之后，智能体 $i$ 的效用确定为 $u\_i = u\_i(s\_1, s\_2, \dots, s\_{|A|})$。
 
 ## 智能体与效用
 
-智能体试图最大化其期望效用。智能体 $i$ 的**效用函数（utility function）** $u_i$ 是从结局到实数的映射，它内嵌了智能体的风险态度（risk attitude），从而允许做定量权衡。以金钱结局为例，比较两个彩票（lottery）：
+智能体试图最大化其期望效用。智能体 $i$ 的**效用函数（utility function）** $u\_i$ 是从结局到实数的映射，它内嵌了智能体的风险态度（risk attitude），从而允许做定量权衡。以金钱结局为例，比较两个彩票（lottery）：
 
 - 彩票 1：以概率 1 获得 50 万美元；
 - 彩票 2：以概率 0.5 获得 100 万美元，以概率 0.5 获得 0 元。
@@ -31,10 +32,10 @@
 **效用函数是尺度不变的（scale-invariant）。** 智能体 $i$ 选择最大化期望效用的策略：
 
 $$
-\max_{\text{strategy}} \sum_{\text{outcome}} p(\text{outcome} \mid \text{strategy}) \, u_i(\text{outcome})
+\max\_{\text{strategy}} \sum\_{\text{outcome}} p(\text{outcome} \mid \text{strategy}) \\, u\_i(\text{outcome})
 $$
 
-若 $u_i'(\cdot) = a\, u_i(\cdot) + b$（其中 $a > 0$），则智能体在效用函数 $u_i'$ 下会选择与 $u_i$ 下完全相同的策略——正仿射变换不改变偏好序。（注意 $u_i$ 必须对每个可能结局都取有限值，否则多个策略的期望效用可能同时为无穷，策略之间便无法比较。）但不同智能体之间的效用比较（inter-agent utility comparison）是有问题的，不能据此断言"谁的收益更大"。
+若 $u\_i'(\cdot) = a\\, u\_i(\cdot) + b$（其中 $a > 0$），则智能体在效用函数 $u\_i'$ 下会选择与 $u\_i$ 下完全相同的策略——正仿射变换不改变偏好序。（注意 $u\_i$ 必须对每个可能结局都取有限值，否则多个策略的期望效用可能同时为无穷，策略之间便无法比较。）但不同智能体之间的效用比较（inter-agent utility comparison）是有问题的，不能据此断言"谁的收益更大"。
 
 ## 经典博弈表示
 
@@ -45,14 +46,14 @@ $$
 
 ![同一博弈的扩展式（左）与矩阵式（右）表示](assets/ch01-introduction-2.png)
 
-上图左侧是一个两阶段博弈的扩展式：参与人 1 先选 Up/Down，参与人 2 观察到后选 Left/Right，叶节点 $(u_1, u_2)$ 为双方收益。右侧是同一博弈的矩阵式：参与人 1 有两个策略（Up、Down），参与人 2 的策略必须对两个决策点各指定一个行动，故有四个策略（Left,Left）、（Left,Right）、（Right,Left）、（Right,Right）。注意，即便在这个微型博弈中，矩阵式已经出现冗余——**从扩展式转成矩阵式会发生组合爆炸（combinatorial explosion）**，这正是本课程大量算法直接在扩展式上工作的原因。
+上图左侧是一个两阶段博弈的扩展式：参与人 1 先选 Up/Down，参与人 2 观察到后选 Left/Right，叶节点 $(u\_1, u\_2)$ 为双方收益。右侧是同一博弈的矩阵式：参与人 1 有两个策略（Up、Down），参与人 2 的策略必须对两个决策点各指定一个行动，故有四个策略（Left,Left）、（Left,Right）、（Right,Left）、（Right,Right）。注意，即便在这个微型博弈中，矩阵式已经出现冗余——**从扩展式转成矩阵式会发生组合爆炸（combinatorial explosion）**，这正是本课程大量算法直接在扩展式上工作的原因。
 
 ## 占优策略均衡
 
-> **定义（最优响应，best response）**：给定其他参与人的策略组合 $s_{-i}$，策略 $s_i^*$ 是 $i$ 的最优响应，当且仅当对所有 $s_i'$ 都有
-> $$u_i(s_i^*, s_{-i}) \ge u_i(s_i', s_{-i}).$$
+> **定义（最优响应，best response）**：给定其他参与人的策略组合 $s\_{-i}$，策略 $s\_i^\*$ 是 $i$ 的最优响应，当且仅当对所有 $s\_i'$ 都有
+> $$u\_i(s\_i^\*, s\_{-i}) \ge u\_i(s\_i', s\_{-i}).$$
 
-> **定义（占优策略，dominant strategy）**：$s_i^*$ 是占优策略，当且仅当它对**所有** $s_{-i}$ 都是最优响应。占优策略不总存在；被占劣的策略称为**被支配策略（dominated strategy）**。
+> **定义（占优策略，dominant strategy）**：$s\_i^\*$ 是占优策略，当且仅当它对**所有** $s\_{-i}$ 都是最优响应。占优策略不总存在；被占劣的策略称为**被支配策略（dominated strategy）**。
 
 > **定义（占优策略均衡，dominant strategy equilibrium）**：每个智能体都选择了自己的占优策略的策略组合。它同样不总存在。
 
@@ -69,8 +70,8 @@ $$
 
 在许多博弈中，一个智能体的最优响应依赖于他人的策略，因而不存在占优策略。纳什均衡（Nash equilibrium）[Nash 1950] 是更弱的稳定性概念：
 
-> **定义（纳什均衡）**：策略组合 $s^*$ 是纳什均衡，当且仅当在他人不偏离的前提下，没有任何参与人有动机单方面偏离，即对每个智能体 $i$、对所有 $s_i'$，
-> $$u_i(s_i^*, s_{-i}^*) \ge u_i(s_i', s_{-i}^*).$$
+> **定义（纳什均衡）**：策略组合 $s^\*$ 是纳什均衡，当且仅当在他人不偏离的前提下，没有任何参与人有动机单方面偏离，即对每个智能体 $i$、对所有 $s\_i'$，
+> $$u\_i(s\_i^\*, s\_{-i}^\*) \ge u\_i(s\_i', s\_{-i}^\*).$$
 
 占优策略均衡必是纳什均衡，反之不然。囚徒困境中（背叛，背叛）是唯一的纳什均衡。而"性别之战"（Battle of the Sexes）没有任何占优策略：
 
@@ -88,7 +89,7 @@ $$
    - 聚点（focal points）、调解（mediation）、沟通（communication）、惯例（convention）、学习（learning）。
 2. **可能不存在**（在纯策略意义下）。例如下述博弈没有任何纯策略组合是稳定的：
 $$
-\begin{pmatrix} 1,0 & 0,1 \\ 0,1 & 1,0 \end{pmatrix}
+\begin{pmatrix} 1,0 & 0,1 \\\ 0,1 & 1,0 \end{pmatrix}
 $$
 
 ## 不完美信息博弈
@@ -143,21 +144,21 @@ $$
 - 一个参与人的均衡策略全体构成一个**有界凸多胞形（bounded convex polytope）**：其均衡策略的任意凸组合仍是均衡策略。
 - 纳什均衡的集合恰好是**极小极大问题（minmax problem）**
 $$
-\max_x \min_y u_1(x, y)
+\max\_x \min\_y u\_1(x, y)
 $$
 的解集。
 - **极小极大定理（minmax theorem）[von Neumann 1928]**：哪一方先"亮出"自己的混合策略都无所谓：
 $$
-\max_x \min_y u_1(x, y) = \min_y \max_x u_1(x, y),
+\max\_x \min\_y u\_1(x, y) = \min\_y \max\_x u\_1(x, y),
 $$
 这个共同值称为**博弈值（game value）**。
 
 更一般地，该定理有凸分析形式：
 
 > **定理（鞍点定理）**：设 $X \subset \mathbb{R}^n$ 与 $Y \subset \mathbb{R}^m$ 为紧致凸集，$f: X \times Y \to \mathbb{R}$ 连续且为**凹-凸（concave-convex）**函数，即对每个固定的 $y$，$f(\cdot, y): X \to \mathbb{R}$ 为凹函数；对每个固定的 $x$，$f(x, \cdot): Y \to \mathbb{R}$ 为凸函数。则有
-> $$\max_{x \in X} \min_{y \in Y} f(x, y) = \min_{y \in Y} \max_{x \in X} f(x, y).$$
+> $$\max\_{x \in X} \min\_{y \in Y} f(x, y) = \min\_{y \in Y} \max\_{x \in X} f(x, y).$$
 
-**例**：取 $f(x, y) = x^\top A y$（$A \in \mathbb{R}^{n \times m}$ 为有限矩阵），这正是混合策略下的双人零和矩阵博弈，由上式得 $\max_x \min_y x^\top A y = \min_y \max_x x^\top A y$。
+**例**：取 $f(x, y) = x^\top A y$（$A \in \mathbb{R}^{n \times m}$ 为有限矩阵），这正是混合策略下的双人零和矩阵博弈，由上式得 $\max\_x \min\_y x^\top A y = \min\_y \max\_x x^\top A y$。
 
 ![鞍点函数 $f(x,y) = y^2 - x^2$ 是凹-凸函数（对 $x$ 凹、对 $y$ 凸），红点为鞍点](assets/ch01-introduction-4.png)
 

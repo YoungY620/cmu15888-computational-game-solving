@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # Summary
 
 [课程简介](README.md)

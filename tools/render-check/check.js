@@ -1,12 +1,12 @@
 // 真实渲染检查：无头 Chromium 逐页加载 mdBook 站点
 // 用法: node check.js [baseURL]
-//   默认 http://127.0.0.1:8734（先在被检目录起 python3 -m http.server 8734）
+//   默认 http://127.0.0.1:8735（先在被检目录起 python3 -m http.server 8734）
 //   也可传 https://youngy620.github.io/mit15s50-poker-theory 检查线上
 const { chromium } = require('playwright-core');
 const fs = require('fs');
 const path = require('path');
 
-const BASE = process.argv[2] || 'http://127.0.0.1:8734';
+const BASE = process.argv[2] || 'http://127.0.0.1:8735';
 const CHROME = process.env.CHROME_PATH ||
   `${process.env.HOME}/Library/Caches/ms-playwright/chromium-1124/chrome-mac/Chromium.app/Contents/MacOS/Chromium`;
 const SHOTS = path.join(__dirname, 'shots');
@@ -56,7 +56,7 @@ const PAGES = [
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
           acceptNode: n => skip.has(n.parentElement?.tagName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT,
         });
-        const re = /\$[^$\n]{2,80}\$|\\\\dfrac|\\\\frac|\\\\text\{|\\\\times|\\\\approx|\\\\ln /;
+        const re = /\$[^$\n]{2,80}\$|\\[A-Za-z]{2,}\{?|Missing or unrecognized|Undefined control sequence/;
         let n;
         while ((n = walker.nextNode())) {
           const t = n.nodeValue;

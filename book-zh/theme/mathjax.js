@@ -2,7 +2,11 @@ window.MathJax = {
   tex: {
     inlineMath: [['$', '$'], ['\\(', '\\)']],
     displayMath: [['$$', '$$'], ['\\[', '\\]']],
-    processEscapes: true
+    processEscapes: true,
+    macros: {
+      coloneqq: '\\mathrel{:=}',
+      textsc: ['\\textrm{#1}', 1]
+    }
   },
   chtml: { scale: 1 },
   startup: { typeset: true }

@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # Summary
 
 [Course Introduction](README.md)

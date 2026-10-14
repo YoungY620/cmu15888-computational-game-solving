@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # L2 Perfect-Information Games 1: Tree Search
 
 This lecture uses chess as its running example. It presents the classical machinery for solving sequential zero-sum perfect-information games: minimax search, alpha-beta pruning, and a series of engineering and algorithmic improvements on top of them. This line of techniques culminated in 1997, when Deep Blue defeated world champion Garry Kasparov 3½–2½ (the six-game record was loss–win–draw–draw–draw–win from Deep Blue's perspective). The ideas behind it remain the starting point for understanding more modern game-solving methods.
@@ -48,7 +49,7 @@ Taking the two-level search in the figure as an example, the algorithm proceeds 
 
 1. Expand the game tree to a depth of two levels (note that not all moves at the first two levels are shown in the figure).
 2. Assign a score to each terminal position (this example uses only the material difference: in position D, White is up three pawns, so the score is +3).
-3. Assign backed-up scores to the non-terminal positions: a MIN node takes the minimum of its children, a MAX node the maximum. For instance, position B's two successors score +3 and +1, so its backed-up value is +1; position C's backed-up value is −3; the root position A (a MAX node) takes $\max\{+1, -3\} = +1$.
+3. Assign backed-up scores to the non-terminal positions: a MIN node takes the minimum of its children, a MAX node the maximum. For instance, position B's two successors score +3 and +1, so its backed-up value is +1; position C's backed-up value is −3; the root position A (a MAX node) takes $\max\\{+1, -3\\} = +1$.
 4. Determine the principal continuation, the path of best responses by both sides (shown in bold in the figure).
 5. Play the first move on that principal continuation.
 
@@ -97,7 +98,7 @@ function MIN-VALUE(state, game, α, β) returns the minimax value of state
 
 ### Complexity of Alpha-Beta Search
 
-Let the branching factor be about $b = 30$ and the search depth be $d$. In the **best case** (ideal move ordering), alpha-beta needs to examine only about $2\,b^{d/2}$ terminal positions:
+Let the branching factor be about $b = 30$ and the search depth be $d$. In the **best case** (ideal move ordering), alpha-beta needs to examine only about $2\\,b^{d/2}$ terminal positions:
 
 | Search depth $d$ | Best-case number of terminal positions (approx.) | Value |
 |---|---|---|

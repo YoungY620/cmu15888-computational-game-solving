@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # CMU 15-888 Computational Game Solving
 
 > This book is a faithful condensed rendition of the Carnegie Mellon University course **15-888 Computational Game Solving** (Fall 2025, Prof. Tuomas Sandholm). All content comes exclusively from the course's publicly posted materials: lecture slides, course lecture notes, the per-lecture assigned readings (open-access versions of textbook chapters and papers), and the homework handouts. These are reorganized to mirror the original course structure, with every knowledge point (definitions, theorems, proof ideas, algorithms, complexity bounds) preserved and filler removed. Copyright of the original materials belongs to CMU and the respective authors; this book is for personal study only.

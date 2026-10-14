@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # Homework 1: LP Equilibrium Computation
 
 - Course: 15-888 Computational Game Solving (Fall 2025)
@@ -10,10 +11,10 @@
 
 ### Problem 1: A Regret-Based Proof of the Minimax Theorem (20 points)
 
-Let $\mathcal{X} \subseteq \mathbb{R}^{m_1}$ and $\mathcal{Y} \subseteq \mathbb{R}^{m_2}$ be convex and compact sets, and $\mathbf{A} \in \mathbb{R}^{m_1 \times m_2}$. The minimax theorem asserts that
+Let $\mathcal{X} \subseteq \mathbb{R}^{m\_1}$ and $\mathcal{Y} \subseteq \mathbb{R}^{m\_2}$ be convex and compact sets, and $\mathbf{A} \in \mathbb{R}^{m\_1 \times m\_2}$. The minimax theorem asserts that
 
 $$
-\min_{\vec{x}\in\mathcal{X}} \max_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle = \max_{\vec{y}\in\mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle.
+\min\_{\vec{x}\in\mathcal{X}} \max\_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle = \max\_{\vec{y}\in\mathcal{Y}} \min\_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle.
 $$
 
 In this problem, you will show that the mere existence of (external) regret minimization algorithms is powerful enough to imply the minimax theorem.
@@ -23,107 +24,107 @@ One direction of the proof (called **weak duality**) is easy and very general.
 **Problem 1.1 (5 points).** Show that
 
 $$
-\min_{\vec{x}\in\mathcal{X}} \max_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle \geq \max_{\vec{y}\in\mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle. \tag{1}
+\min\_{\vec{x}\in\mathcal{X}} \max\_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle \geq \max\_{\vec{y}\in\mathcal{Y}} \min\_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle. \tag{1}
 $$
 
-To show the reverse inequality, we will employ regret minimization to solve the bilinear saddle point problem $\max_{\vec{y}\in\mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle$. At each time $t$, we let a regret minimizer $\mathfrak{R}_\mathcal{Y}$ pick strategies $\vec{y}^{(t)} \in\mathcal{Y}$, while the environment always chooses $\vec{x}^{(t)} \in\mathcal{X}$ to best respond to $\vec{y}^{(t)}$, that is,
+To show the reverse inequality, we will employ regret minimization to solve the bilinear saddle point problem $\max\_{\vec{y}\in\mathcal{Y}} \min\_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle$. At each time $t$, we let a regret minimizer $\mathfrak{R}\_\mathcal{Y}$ pick strategies $\vec{y}^{(t)} \in\mathcal{Y}$, while the environment always chooses $\vec{x}^{(t)} \in\mathcal{X}$ to best respond to $\vec{y}^{(t)}$, that is,
 
 $$
-\vec{x}^{(t)} \in \arg\min_{\vec{x} \in \mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y}^{(t)} \rangle .
+\vec{x}^{(t)} \in \arg\min\_{\vec{x} \in \mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y}^{(t)} \rangle .
 $$
 
-The utility function observed by $\mathfrak{R}_\mathcal{Y}$ at each time $t$ is set to
+The utility function observed by $\mathfrak{R}\_\mathcal{Y}$ at each time $t$ is set to
 
 $$
-u^t_\mathcal{Y} : \vec{y} \mapsto \langle \vec{x}^{(t)}, \mathbf{A} \vec{y} \rangle = \langle \vec{y}, \mathbf{A}^\top \vec{x}^{(t)} \rangle .
+u^t\_\mathcal{Y} : \vec{y} \mapsto \langle \vec{x}^{(t)}, \mathbf{A} \vec{y} \rangle = \langle \vec{y}, \mathbf{A}^\top \vec{x}^{(t)} \rangle .
 $$
 
-We will assume that $\mathfrak{R}_\mathcal{Y}$ guarantees **sublinear regret** under any sequence of utilities; we have seen many algorithms with this property, such as FTRL and RM.
+We will assume that $\mathfrak{R}\_\mathcal{Y}$ guarantees **sublinear regret** under any sequence of utilities; we have seen many algorithms with this property, such as FTRL and RM.
 
 Let $\bar{\vec{x}}^{(T)} \in \mathcal{X}$ and $\bar{\vec{y}}^{(T)} \in \mathcal{Y}$ be the average strategies output up to time $T$, that is,
 
 $$
-\bar{\vec{x}}^{(T)} \coloneqq \frac{1}{T}\sum_{t=1}^T \vec{x}^{(t)} \qquad \bar{\vec{y}}^{(T)} \coloneqq \frac{1}{T}\sum_{t=1}^T \vec{y}^{(t)}.
+\bar{\vec{x}}^{(T)} \coloneqq \frac{1}{T}\sum\_{t=1}^T \vec{x}^{(t)} \qquad \bar{\vec{y}}^{(T)} \coloneqq \frac{1}{T}\sum\_{t=1}^T \vec{y}^{(t)}.
 $$
 
 **Problem 1.2 (5 points).** Argue that at all $T$,
 
 $$
-\max_{\vec{y} \in \mathcal{Y}} \min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle \ge \frac{1}{T} \min_{\vec{x}\in\mathcal{X}} \sum_{t=1}^T \langle \vec{x}, \mathbf{A} \vec{y}^{(t)} \rangle  \ge \frac{1}{T}\sum_{t=1}^T \langle \vec{x}^{(t)}, \mathbf{A} \vec{y}^{(t)} \rangle . \tag{2}
+\max\_{\vec{y} \in \mathcal{Y}} \min\_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle \ge \frac{1}{T} \min\_{\vec{x}\in\mathcal{X}} \sum\_{t=1}^T \langle \vec{x}, \mathbf{A} \vec{y}^{(t)} \rangle  \ge \frac{1}{T}\sum\_{t=1}^T \langle \vec{x}^{(t)}, \mathbf{A} \vec{y}^{(t)} \rangle . \tag{2}
 $$
 
 > Hint: use the definition of $\bar{\vec{y}}^{(T)}$. Then, use the information you have on $\vec{x}^{(t)}$.
 
-**Problem 1.3 (5 points).** Let $R_\mathcal{Y}^{(T)}$ be the regret accumulated by $\mathfrak{R}_\mathcal{Y}$ up to time $T$. Using (2), argue that at all times $T$
+**Problem 1.3 (5 points).** Let $R\_\mathcal{Y}^{(T)}$ be the regret accumulated by $\mathfrak{R}\_\mathcal{Y}$ up to time $T$. Using (2), argue that at all times $T$
 
 $$
-\max_{\vec{y}\in\mathcal{Y}}\min_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle \ge \min_{\vec{x}\in\mathcal{X}} \max_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle - \frac{R^{(T)}_\mathcal{Y}}{T}. \tag{3}
+\max\_{\vec{y}\in\mathcal{Y}}\min\_{\vec{x}\in\mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle \ge \min\_{\vec{x}\in\mathcal{X}} \max\_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle - \frac{R^{(T)}\_\mathcal{Y}}{T}. \tag{3}
 $$
 
-> Hint: use the definition of regret $R_\mathcal{Y}^{(T)}$.
+> Hint: use the definition of regret $R\_\mathcal{Y}^{(T)}$.
 
 **Problem 1.4 (5 points).** Use (3) and (1) to conclude that
 
 $$
-\max_{\vec{y} \in \mathcal{Y}}\min_{\vec{x} \in \mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle = \min_{\vec{x}\in\mathcal{X}}\max_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle.
+\max\_{\vec{y} \in \mathcal{Y}}\min\_{\vec{x} \in \mathcal{X}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle = \min\_{\vec{x}\in\mathcal{X}}\max\_{\vec{y}\in\mathcal{Y}} \langle \vec{x}, \mathbf{A} \vec{y} \rangle.
 $$
 
 ### Problem 2: Deriving CFR from Regret Circuits (30 points)
 
 In this problem, you will derive CFR using regret circuits. For your convenience, we include the pseudocode from Lecture 5 for the subroutine that computes the counterfactual utilities (Algorithm 1). The goal of this problem is to show that applying regret circuits in a bottom-up fashion in a tree-form decision problem produces CFR.
 
-Recall that the sequence-form strategy set can be decomposed as follows. First, in any observation point $k \in \mathcal{K}$ with a set of children $\{p_1, \dots, p_\nu \} = \{ \rho(k, s) : s \in \mathcal{S}_k \}$,
+Recall that the sequence-form strategy set can be decomposed as follows. First, in any observation point $k \in \mathcal{K}$ with a set of children $\\{p\_1, \dots, p\_\nu \\} = \\{ \rho(k, s) : s \in \mathcal{S}\_k \\}$,
 
 $$
-\mathcal{X}_{k} = \mathcal{X}_{p_1} \times \mathcal{X}_{p_2} \times \dots \times \mathcal{X}_{p_\nu}, \tag{4}
+\mathcal{X}\_{k} = \mathcal{X}\_{p\_1} \times \mathcal{X}\_{p\_2} \times \dots \times \mathcal{X}\_{p\_\nu}, \tag{4}
 $$
 
-where $\mathcal{X}_{p_i}$ is the sequence-form polytope corresponding to the subtree rooted at point $p_i$. Second, in any decision point $j \in \mathcal{J}$ with a set of children $\{ p_1, \dots, p_\nu \} = \{ \rho(j, a) : a \in \mathcal{A}_j \}$,
+where $\mathcal{X}\_{p\_i}$ is the sequence-form polytope corresponding to the subtree rooted at point $p\_i$. Second, in any decision point $j \in \mathcal{J}$ with a set of children $\\{ p\_1, \dots, p\_\nu \\} = \\{ \rho(j, a) : a \in \mathcal{A}\_j \\}$,
 
 $$
-\mathcal{X}_{j} \coloneqq \mathrm{co} \left\{
+\mathcal{X}\_{j} \coloneqq \mathrm{co} \left\\{
 \begin{pmatrix}
-\vec{e}_1 \\
-\mathcal{X}_{p_1} \\
-\vec{0} \\
-\vdots \\
+\vec{e}\_1 \\\
+\mathcal{X}\_{p\_1} \\\
+\vec{0} \\\
+\vdots \\\
 \vec{0}
 \end{pmatrix},
 \begin{pmatrix}
-\vec{e}_2 \\
-\vec{0} \\
-\mathcal{X}_{p_2} \\
-\vdots \\
+\vec{e}\_2 \\\
+\vec{0} \\\
+\mathcal{X}\_{p\_2} \\\
+\vdots \\\
 \vec{0}
 \end{pmatrix},
  \dots,
  \begin{pmatrix}
-\vec{e}_\nu \\
-\vec{0} \\
-\vec{0} \\
-\vdots \\
-\mathcal{X}_{p_\nu}
+\vec{e}\_\nu \\\
+\vec{0} \\\
+\vec{0} \\\
+\vdots \\\
+\mathcal{X}\_{p\_\nu}
 \end{pmatrix}
-\right\}, \tag{5}
+\right\\}, \tag{5}
 $$
 
-where $\vec{e}_i \in \mathbb{R}^{\mathcal{A}_j}$ is the $i$th unit vector and $\mathrm{co}$ denotes the convex hull.
+where $\vec{e}\_i \in \mathbb{R}^{\mathcal{A}\_j}$ is the $i$th unit vector and $\mathrm{co}$ denotes the convex hull.
 
 **Algorithm 1: Counterfactual regret minimization (CFR).**
 
-- **Input:** A regret minimizer $\mathfrak{R}_j$ for each decision point $j \in \mathcal{J}$ of the tree-form decision process.
+- **Input:** A regret minimizer $\mathfrak{R}\_j$ for each decision point $j \in \mathcal{J}$ of the tree-form decision process.
 - $\textsc{ObserveUtility}(\vec{u}^{(t)} \in \mathbb{R}^{\Sigma})$:
   1. $V^{(t)}[\bot] \coloneqq 0$;
   2. for each node in the tree $p \in \mathcal{J} \cup \mathcal{K}$ in bottom-up order:
-     - if $p \in \mathcal{J}$: let $j = p$ and set $V^{(t)}[j] \coloneqq \sum_{a \in \mathcal{A}_j} b_j^{(t)}[a] \cdot (\vec{u}^{(t)}[(j, a)] + V^{(t)}[\rho(j, a)])$;
-     - else: let $k = p$ and set $V^{(t)}[k] \coloneqq \sum_{s \in \mathcal{S}_k} V^{(t)}[\rho(k, s)]$;
+     - if $p \in \mathcal{J}$: let $j = p$ and set $V^{(t)}[j] \coloneqq \sum\_{a \in \mathcal{A}\_j} b\_j^{(t)}[a] \cdot (\vec{u}^{(t)}[(j, a)] + V^{(t)}[\rho(j, a)])$;
+     - else: let $k = p$ and set $V^{(t)}[k] \coloneqq \sum\_{s \in \mathcal{S}\_k} V^{(t)}[\rho(k, s)]$;
   3. for each decision point $j \in \mathcal{J}$:
-     - for each action $a \in \mathcal{A}_j$: $\vec{u}_j^{(t)}[a] \coloneqq \vec{u}^{(t)}[(j, a)] + V^{(t)}[\rho(j, a)]$;
-     - call $\mathfrak{R}_j.\textsc{ObserveUtility}(\vec{u}_j^{(t)})$.
+     - for each action $a \in \mathcal{A}\_j$: $\vec{u}\_j^{(t)}[a] \coloneqq \vec{u}^{(t)}[(j, a)] + V^{(t)}[\rho(j, a)]$;
+     - call $\mathfrak{R}\_j.\textsc{ObserveUtility}(\vec{u}\_j^{(t)})$.
 
 You will prove soundness of CFR by induction, proceeding in a bottom-up fashion.
 
-**Problem 2.1 (5 points).** Argue that the utility at every **terminal** decision point $j \in \mathcal{J}$ is given by $\vec{u}^{(t)}_j[a] = \vec{u}^{(t)}[(j, a)]$ for all $a \in \mathcal{A}_j$.
+**Problem 2.1 (5 points).** Argue that the utility at every **terminal** decision point $j \in \mathcal{J}$ is given by $\vec{u}^{(t)}\_j[a] = \vec{u}^{(t)}[(j, a)]$ for all $a \in \mathcal{A}\_j$.
 
 > Hint: this is the basis of the induction. Use the fact that the strategy set at each terminal decision point is a probability simplex. Observe that this matches the utilities of CFR at the terminal decision nodes.
 
@@ -131,11 +132,11 @@ You will prove soundness of CFR by induction, proceeding in a bottom-up fashion.
 
 > Hint: use the decomposition given in (4).
 
-**Problem 2.3 (10 points).** Apply the regret circuit for the convex hull in each decision node $p \in \mathcal{J}$. Derive the utility vector given as input to the regret minimizer $\mathfrak{R}_j$ that is responsible for mixing over $\mathcal{A}_j$, and show that it matches the utilities specified in Algorithm 1.
+**Problem 2.3 (10 points).** Apply the regret circuit for the convex hull in each decision node $p \in \mathcal{J}$. Derive the utility vector given as input to the regret minimizer $\mathfrak{R}\_j$ that is responsible for mixing over $\mathcal{A}\_j$, and show that it matches the utilities specified in Algorithm 1.
 
 > Hint: use the decomposition given in (5).
 
-**Problem 2.4 (10 points).** Show that the regret of CFR is bounded by $\sum_{j \in \mathcal{J}} \max\{0, R_j^{(T)} \}$, where $R_j^{(T)}$ is the regret of $\mathfrak{R}_j$. What is the regret of CFR when each $\mathfrak{R}_j$ is instantiated using MWU? What is the regret of CFR when each $\mathfrak{R}_j$ is instantiated using RM?
+**Problem 2.4 (10 points).** Show that the regret of CFR is bounded by $\sum\_{j \in \mathcal{J}} \max\\{0, R\_j^{(T)} \\}$, where $R\_j^{(T)}$ is the regret of $\mathfrak{R}\_j$. What is the regret of CFR when each $\mathfrak{R}\_j$ is instantiated using MWU? What is the regret of CFR when each $\mathfrak{R}\_j$ is instantiated using RM?
 
 > Hint: recall that the regret bound depends on the norm of the utility; argue about how large that norm can be.
 
@@ -150,24 +151,24 @@ As a warm-up, you will implement the linear program formulation of Nash equilibr
 **Linear programming formulation of Nash equilibrium strategies.** For your convenience, here are again the linear programs, for Player 1 and Player 2 respectively, that you need to implement:
 
 $$
-\mathcal{P}_1 : \begin{cases}
-\max\ \vec{f}_2^\top \vec{v} \\[1mm]
+\mathcal{P}\_1 : \begin{cases}
+\max\ \vec{f}\_2^\top \vec{v} \\\[1mm]
 \ \text{s.t.}\quad
-①\ \ \mathbf{A}^\top \vec{x} - \mathbf{F}_2^\top \vec{v} \ge \vec{0} \\
-②\ \ \mathbf{F}_1\vec{x} = \vec{f}_1 \\
+①\ \ \mathbf{A}^\top \vec{x} - \mathbf{F}\_2^\top \vec{v} \ge \vec{0} \\\
+②\ \ \mathbf{F}\_1\vec{x} = \vec{f}\_1 \\\
 ③\ \ \vec{x} \ge \vec{0},\ \vec{v}\ \text{free},
 \end{cases}
 \qquad
-\mathcal{P}_2 : \begin{cases}
-\max\ \vec{f}_1^\top \vec{v} \\[1mm]
+\mathcal{P}\_2 : \begin{cases}
+\max\ \vec{f}\_1^\top \vec{v} \\\[1mm]
 \ \text{s.t.}\quad
-①\ \ {-}\mathbf{A} \vec{y} - \mathbf{F}_1^\top \vec{v} \ge \vec{0} \\
-②\ \ \mathbf{F}_2\vec{y} = \vec{f}_2 \\
+①\ \ {-}\mathbf{A} \vec{y} - \mathbf{F}\_1^\top \vec{v} \ge \vec{0} \\\
+②\ \ \mathbf{F}\_2\vec{y} = \vec{f}\_2 \\\
 ③\ \ \vec{y} \ge \vec{0},\ \vec{v}\ \text{free},
 \end{cases} \tag{6}
 $$
 
-where $\{\vec{x}\in\mathbb{R}^{|\Sigma_1|}: \mathbf{F}_1 \vec{x} = \vec{f}_1,\ \vec{x}\ge\vec{0}\}$ and $\{\vec{y}\in\mathbb{R}^{|\Sigma_2|}: \mathbf{F}_2 \vec{y} = \vec{f}_2,\ \vec{y}\ge\vec{0}\}$ are the sequence-form polytopes of the two players, and $\mathbf{A}$ is the payoff matrix for Player 1. Conveniently, the objective values of $\mathcal{P}_1$ and $\mathcal{P}_2$ will be the exact expected utility that each player can secure by playing against a perfectly rational opponent. Since all games are zero sum, the objective values of $\mathcal{P}_1$ and $\mathcal{P}_2$ will sum to $0$ (if they do not, you must have a bug somewhere).
+where $\\{\vec{x}\in\mathbb{R}^{|\Sigma\_1|}: \mathbf{F}\_1 \vec{x} = \vec{f}\_1,\ \vec{x}\ge\vec{0}\\}$ and $\\{\vec{y}\in\mathbb{R}^{|\Sigma\_2|}: \mathbf{F}\_2 \vec{y} = \vec{f}\_2,\ \vec{y}\ge\vec{0}\\}$ are the sequence-form polytopes of the two players, and $\mathbf{A}$ is the payoff matrix for Player 1. Conveniently, the objective values of $\mathcal{P}\_1$ and $\mathcal{P}\_2$ will be the exact expected utility that each player can secure by playing against a perfectly rational opponent. Since all games are zero sum, the objective values of $\mathcal{P}\_1$ and $\mathcal{P}\_2$ will sum to $0$ (if they do not, you must have a bug somewhere).
 
 **Problem 3.1.1 (15 points).** Implement the linear program for computing Nash equilibrium strategies for both Player 1 and Player 2.
 
@@ -177,8 +178,8 @@ For each of the three games (rock-paper-superscissors, Kuhn poker, and Leduc pok
 >
 > - Make sure to take a look at the "Gurobi tips and tricks" at the end of this document (see the "Programming Assignment" section). It includes some tips as to how to debug common issues.
 > - Start from rock-paper-superscissors, and only then move to the more complex games.
-> - Since all games are zero-sum, the objective values of $\mathcal{P}_1$ and $\mathcal{P}_2$ must sum to $0$.
-> - The objective value for $\mathcal{P}_1$ should be $0$ for rock-paper-superscissors, $-0.0555$ for Kuhn poker, and $-0.0856$ for Leduc poker.
+> - Since all games are zero-sum, the objective values of $\mathcal{P}\_1$ and $\mathcal{P}\_2$ must sum to $0$.
+> - The objective value for $\mathcal{P}\_1$ should be $0$ for rock-paper-superscissors, $-0.0555$ for Kuhn poker, and $-0.0856$ for Leduc poker.
 
 Your solution should include six Gurobi outputs (3 games, 2 players per game). Feel free to use a `verbatim`-style dump of the output, but make sure to specify what game and what player each Gurobi output refers to. Do not forget to include your code at the end of your homework. For example, your output in the case of rock-paper-superscissors for Player 1 should look roughly like this:
 
@@ -206,23 +207,23 @@ Optimal objective -0.000000000e+00
 
 #### 3.2 Computing Optimal Deterministic Strategies (15 points)
 
-In this subsection we study how much worse each player is if they (but not the opponent) are restricted to playing deterministic strategies only. To model this, we will add a constraint saying that all entries of the sequence-form strategy vectors $\vec{x}$ and $\vec{y}$ in (6) can only take values in $\{0, 1\}$. The resulting **integer** programs, which we call $\tilde{\mathcal{P}}_1$ and $\tilde{\mathcal{P}}_2$, are given next.
+In this subsection we study how much worse each player is if they (but not the opponent) are restricted to playing deterministic strategies only. To model this, we will add a constraint saying that all entries of the sequence-form strategy vectors $\vec{x}$ and $\vec{y}$ in (6) can only take values in $\\{0, 1\\}$. The resulting **integer** programs, which we call $\tilde{\mathcal{P}}\_1$ and $\tilde{\mathcal{P}}\_2$, are given next.
 
 $$
-\tilde{\mathcal{P}}_1 : \begin{cases}
-\max\ \vec{f}_2^\top \vec{v} \\[1mm]
+\tilde{\mathcal{P}}\_1 : \begin{cases}
+\max\ \vec{f}\_2^\top \vec{v} \\\[1mm]
 \ \text{s.t.}\quad
-①\ \ \mathbf{A}^\top \vec{x} - \mathbf{F}_2^\top \vec{v} \ge \vec{0} \\
-②\ \ \mathbf{F}_1\vec{x} = \vec{f}_1 \\
-③\ \ \vec{x} \in \{0,1\}^{|\Sigma_1|},\ \vec{v}\ \text{free},
+①\ \ \mathbf{A}^\top \vec{x} - \mathbf{F}\_2^\top \vec{v} \ge \vec{0} \\\
+②\ \ \mathbf{F}\_1\vec{x} = \vec{f}\_1 \\\
+③\ \ \vec{x} \in \\{0,1\\}^{|\Sigma\_1|},\ \vec{v}\ \text{free},
 \end{cases}
 \qquad
-\tilde{\mathcal{P}}_2 : \begin{cases}
-\max\ \vec{f}_1^\top \vec{v} \\[1mm]
+\tilde{\mathcal{P}}\_2 : \begin{cases}
+\max\ \vec{f}\_1^\top \vec{v} \\\[1mm]
 \ \text{s.t.}\quad
-①\ \ {-}\mathbf{A} \vec{y} - \mathbf{F}_1^\top \vec{v} \ge \vec{0} \\
-②\ \ \mathbf{F}_2\vec{y} = \vec{f}_2 \\
-③\ \ \vec{y} \in \{0,1\}^{|\Sigma_2|},\ \vec{v}\ \text{free}.
+①\ \ {-}\mathbf{A} \vec{y} - \mathbf{F}\_1^\top \vec{v} \ge \vec{0} \\\
+②\ \ \mathbf{F}\_2\vec{y} = \vec{f}\_2 \\\
+③\ \ \vec{y} \in \\{0,1\\}^{|\Sigma\_2|},\ \vec{v}\ \text{free}.
 \end{cases} \tag{7}
 $$
 
@@ -234,7 +235,7 @@ For each of the three games (rock-paper-superscissors, Kuhn poker, and Leduc pok
 >
 > - Make sure to take a look at the "Gurobi tips and tricks".
 > - Start from rock-paper-superscissors, and only then move to the more complex games.
-> - Here there are **no guarantees** that the value of $\tilde{\mathcal{P}}_1$ and the value of $\tilde{\mathcal{P}}_2$ sum to $0$ anymore! In fact, that will be false in all games.
+> - Here there are **no guarantees** that the value of $\tilde{\mathcal{P}}\_1$ and the value of $\tilde{\mathcal{P}}\_2$ sum to $0$ anymore! In fact, that will be false in all games.
 
 Your solution should include six Gurobi outputs (3 games, 2 players per game), each labeled with the game and the player it refers to, and your code at the end. For example, your output in the case of Kuhn poker for Player 1 should look roughly like this:
 
@@ -279,31 +280,31 @@ Best objective -1.666666666667e-01, best bound -1.666666666667e-01, gap 0.0000%
 
 In Problem 3.1.1 no determinism constraint was present. At the other extreme, in Problem 3.2.1 we insisted that at all decision points a deterministic strategy be followed. In this last subsection we will explore intermediate cases: for each value of $k$, we will study how much value each player can secure if they are constrained to play deterministically in at least $k$ decision points. When $k=0$, we will recover the objective values seen in Problem 3.1.1. When $k$ is equal to the number of decision points of the player in the game, we will recover the objective values seen in Problem 3.2.1.
 
-**Integer programming model.** The solution to the integer linear program $\mathcal{P}_1(k)$ given in (8) is an optimal strategy for Player 1 subject to the constraint that at least $k$ decision points must prescribe a deterministic strategy. Understanding the details is not important for this problem, though we included a description of the meaning of each constraint just in case you are curious.
+**Integer programming model.** The solution to the integer linear program $\mathcal{P}\_1(k)$ given in (8) is an optimal strategy for Player 1 subject to the constraint that at least $k$ decision points must prescribe a deterministic strategy. Understanding the details is not important for this problem, though we included a description of the meaning of each constraint just in case you are curious.
 
 $$
-\mathcal{P}_1(k) : \begin{cases}
-\max\ \vec{f}_2^\top \vec{v} \\[1mm]
+\mathcal{P}\_1(k) : \begin{cases}
+\max\ \vec{f}\_2^\top \vec{v} \\\[1mm]
 \ \text{s.t.}\quad
-①\ \ \mathbf{A}^\top \vec{x} - \mathbf{F}_2^\top \vec{v} \ge \vec{0} \\[1mm]
-②\ \ \mathbf{F}_1\vec{x} = \vec{f}_1 \\[1mm]
-③\ \ \vec{x}[(j,a)] \ge \vec{z}[(j,a)] \qquad\qquad\ \forall j\in\mathcal{J}_1: p_j = \varnothing,\ a\in \mathcal{A}_j\\[1mm]
-④\ \ \vec{x}[(j,a)] \ge \vec{x}[p_j] + \vec{z}[(j,a)] - 1 \qquad \forall j\in\mathcal{J}_1: p_j \neq \varnothing,\ a\in \mathcal{A}_j\\[1mm]
-⑤\ \ \sum_{a\in \mathcal{A}_j} \vec{z}[(j,a)] \le 1 \qquad\qquad\quad\ \forall\,j\in\mathcal{J}_1\\[1mm]
-⑥\ \ \sum_{j\in \mathcal{J}_1} \sum_{a\in \mathcal{A}_j} \vec{z}[(j,a)]\ge k\\[1mm]
-⑦\ \ \vec{x} \ge \vec{0},\ \vec{z}\in\{0,1\}^{|\Sigma_1|},\ \vec{v}\ \text{free},
+①\ \ \mathbf{A}^\top \vec{x} - \mathbf{F}\_2^\top \vec{v} \ge \vec{0} \\\[1mm]
+②\ \ \mathbf{F}\_1\vec{x} = \vec{f}\_1 \\\[1mm]
+③\ \ \vec{x}[(j,a)] \ge \vec{z}[(j,a)] \qquad\qquad\ \forall j\in\mathcal{J}\_1: p\_j = \varnothing,\ a\in \mathcal{A}\_j\\\[1mm]
+④\ \ \vec{x}[(j,a)] \ge \vec{x}[p\_j] + \vec{z}[(j,a)] - 1 \qquad \forall j\in\mathcal{J}\_1: p\_j \neq \varnothing,\ a\in \mathcal{A}\_j\\\[1mm]
+⑤\ \ \sum\_{a\in \mathcal{A}\_j} \vec{z}[(j,a)] \le 1 \qquad\qquad\quad\ \forall\\,j\in\mathcal{J}\_1\\\[1mm]
+⑥\ \ \sum\_{j\in \mathcal{J}\_1} \sum\_{a\in \mathcal{A}\_j} \vec{z}[(j,a)]\ge k\\\[1mm]
+⑦\ \ \vec{x} \ge \vec{0},\ \vec{z}\in\\{0,1\\}^{|\Sigma\_1|},\ \vec{v}\ \text{free},
 \end{cases} \tag{8}
 $$
 
-- $\vec{z} \in \{0,1\}^{|\Sigma_1|}$ is a binary vector that decides, for each strategy $(j,a) \in \Sigma_1$ of Player 1, whether to pick action $a$ at $j$ with probability $1$. Since the strategy vector $\vec{x}$ is expressed in sequence form, picking action $a$ with probability $1$ at $j$ is expressed through constraints ③ and ④.
+- $\vec{z} \in \\{0,1\\}^{|\Sigma\_1|}$ is a binary vector that decides, for each strategy $(j,a) \in \Sigma\_1$ of Player 1, whether to pick action $a$ at $j$ with probability $1$. Since the strategy vector $\vec{x}$ is expressed in sequence form, picking action $a$ with probability $1$ at $j$ is expressed through constraints ③ and ④.
 - Constraint ⑤ asserts that no more than one action at each decision point can be forced to be played with probability $1$.
 - Constraint ⑥ asserts that in at least $k$ decision points, exactly one of the actions will be forced to be played with probability $1$.
 
-The integer program $\mathcal{P}_2(k)$ for Player 2 is analogous.
+The integer program $\mathcal{P}\_2(k)$ for Player 2 is analogous.
 
-**Problem 3.3.1 (15 points).** Implement the integer linear programs $\mathcal{P}_1(k)$ and $\mathcal{P}_2(k)$, described above, for computing optimal strategies with a given lower bound on the amount of determinism.
+**Problem 3.3.1 (15 points).** Implement the integer linear programs $\mathcal{P}\_1(k)$ and $\mathcal{P}\_2(k)$, described above, for computing optimal strategies with a given lower bound on the amount of determinism.
 
-For each of the three games (rock-paper-superscissors, Kuhn poker, and Leduc poker), and for each of the two players $i$, plot the objective value of $\mathcal{P}_i(k)$ as a function of $k \in \{0, \dots, |\mathcal{J}_i|\}$ (number of decision points of Player $i$).
+For each of the three games (rock-paper-superscissors, Kuhn poker, and Leduc poker), and for each of the two players $i$, plot the objective value of $\mathcal{P}\_i(k)$ as a function of $k \in \\{0, \dots, |\mathcal{J}\_i|\\}$ (number of decision points of Player $i$).
 
 > Hints:
 >
@@ -338,14 +339,14 @@ The tree of decision points and observation points of each decision problem is s
 | `actions` | (decision points only) A set of strings: the actions available at the decision node |
 | `signals` | (observation points only) A set of strings: the signals that can be observed at the observation node |
 | `parent_edge` | The parent edge of the node. `null` if the node is the root of the tree; otherwise a pair `(parent_node_id, action_or_signal)`, where the first member is the `id` of the parent node and `action_or_signal` is the action or signal connecting the node to its parent |
-| `parent_sequence` | (decision points only) The parent sequence $p_j$ of the decision point: the last sequence (that is, decision point–action pair) encountered on the path from the root of the decision process to $j$ |
+| `parent_sequence` | (decision points only) The parent sequence $p\_j$ of the decision point: the last sequence (that is, decision point–action pair) encountered on the path from the root of the decision process to $j$ |
 
 > Note: the list of nodes of the TFSDP is given in **top-down** traversal order. The bottom-up traversal order can be obtained by reading the list of nodes backwards.
 
 The bilinear utility function for Player 1 is given through the payoff matrix $\mathbf{A}$ such that the (expected) utility of Player 1 can be written as
 
 $$
-u_1(\vec{x}, \vec{y}) = \langle \vec{x}, \mathbf{A} \vec{y} \rangle,
+u\_1(\vec{x}, \vec{y}) = \langle \vec{x}, \mathbf{A} \vec{y} \rangle,
 $$
 
 where $\vec{x}$ and $\vec{y}$ are sequence-form strategies for Players 1 and 2 respectively. We represent $\mathbf{A}$ in the file as a list of **all non-zero matrix entries**, storing for each the row index, column index, and value. Each entry is an object with the fields:
@@ -360,8 +361,8 @@ where $\vec{x}$ and $\vec{y}$ are sequence-form strategies for Players 1 and 2 r
 
 $$
 \begin{pmatrix}
- 0 & -1 &  1\\
- 1 &  0 & -2\\
+ 0 & -1 &  1\\\
+ 1 &  0 & -2\\\
 -1 &  2 &  0
 \end{pmatrix}
 \ \begin{array}{l}\text{r}\\\text{p}\\\text{s}\end{array}
@@ -381,15 +382,15 @@ The program reads the game file, converts all sequences from lists to tuples, an
 
 | Function | Problem | Task |
 |---|---|---|
-| `solve_problem_2_1(game)` | Problem 3.1.1 | Implement the LPs $\mathcal{P}_1$, $\mathcal{P}_2$ of (6), solve and report (model name `game_value_pl<player>`) |
-| `solve_problem_2_2(game)` | Problem 3.2.1 | Implement the integer programs $\tilde{\mathcal{P}}_1$, $\tilde{\mathcal{P}}_2$ of (7) (model name `deterministic_pl<player>`) |
-| `solve_problem_2_3(game)` | Problem 3.3.1 | Implement $\mathcal{P}_1(k)$, $\mathcal{P}_2(k)$ of (8), solve for each $k$ and plot |
+| `solve_problem_2_1(game)` | Problem 3.1.1 | Implement the LPs $\mathcal{P}\_1$, $\mathcal{P}\_2$ of (6), solve and report (model name `game_value_pl<player>`) |
+| `solve_problem_2_2(game)` | Problem 3.2.1 | Implement the integer programs $\tilde{\mathcal{P}}\_1$, $\tilde{\mathcal{P}}\_2$ of (7) (model name `deterministic_pl<player>`) |
+| `solve_problem_2_3(game)` | Problem 3.3.1 | Implement $\mathcal{P}\_1(k)$, $\mathcal{P}\_2(k)$ of (8), solve for each $k$ and plot |
 
 (The stub function names refer to "Problem 2.x", which is the numbering in the original handout's problem environment; they correspond to Problems 3.1.1, 3.2.1, 3.3.1 here.)
 
 ### Grading
 
-There is no autograder script for this homework. As required by the problems, put the Gurobi outputs (12 in total, for Problems 3.1.1 and 3.2.1), the six plots of objective value as a function of $k$ (Problem 3.3.1), and your discussion of the results (Problem 3.3.2) into the submitted pdf, and attach the complete code at the end of the pdf. You can use the objective values for self-checking: the objective value of $\mathcal{P}_1$ should be $0$ for rock-paper-superscissors, $-0.0555$ for Kuhn poker, and $-0.0856$ for Leduc poker, and the objective values of $\mathcal{P}_1$ and $\mathcal{P}_2$ must sum to $0$.
+There is no autograder script for this homework. As required by the problems, put the Gurobi outputs (12 in total, for Problems 3.1.1 and 3.2.1), the six plots of objective value as a function of $k$ (Problem 3.3.1), and your discussion of the results (Problem 3.3.2) into the submitted pdf, and attach the complete code at the end of the pdf. You can use the objective values for self-checking: the objective value of $\mathcal{P}\_1$ should be $0$ for rock-paper-superscissors, $-0.0555$ for Kuhn poker, and $-0.0856$ for Leduc poker, and the objective values of $\mathcal{P}\_1$ and $\mathcal{P}\_2$ must sum to $0$.
 
 ### Appendix: Gurobi Tips and Tricks
 

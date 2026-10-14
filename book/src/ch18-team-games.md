@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # L18 Team Games
 
 This chapter turns to **team games**: several players form a team, share a single utility function, and play against an opponent (or an opposing team). The central question is: when teammates cannot communicate freely and cannot share their private information, how should "the team's optimal strategy" be defined, and how can it be computed? We will see that the natural solution concepts are computationally very hard. But by characterizing the team's **common knowledge**, one can recover polynomial-time algorithms when the degree of information asymmetry is bounded (the team belief DAG, TB-DAG). The chapter closes with solution concepts and exact solving of hidden-role games (the "social deduction" genre, e.g., Avalon).
@@ -12,9 +13,9 @@ Write $\bar{x} := 1 - x$. When the team commits first (team maximizes, opponent 
 
 $$
 \begin{aligned}
-&\max_{\substack{x_1 \in \Delta(\Pi_1)\\ x_2 \in \Delta(\Pi_2)}}\; \min_{x_3 \in \Delta(\Pi_3)} u(x_1, x_2, y)
-= \max_{a,b,c,d \in [0,1]}\; \min_{e,f \in [0,1]} \tfrac{1}{2}\big(ac\bar{e} + \bar{a}d\bar{f} + b\bar{c}e + \bar{b}df\big) \\
-&\qquad \le \max_{a,b,c,d} \tfrac{1}{2}\big(ac\bar{c} + \bar{a}d\bar{d} + b\bar{c}c + \bar{b}\bar{d}d\big) \qquad (\text{setting } e \gets c,\ f \gets d) \\
+&\max\_{\substack{x\_1 \in \Delta(\Pi\_1)\\\ x\_2 \in \Delta(\Pi\_2)}}\\; \min\_{x\_3 \in \Delta(\Pi\_3)} u(x\_1, x\_2, y)
+= \max\_{a,b,c,d \in [0,1]}\\; \min\_{e,f \in [0,1]} \tfrac{1}{2}\big(ac\bar{e} + \bar{a}d\bar{f} + b\bar{c}e + \bar{b}df\big) \\\
+&\qquad \le \max\_{a,b,c,d} \tfrac{1}{2}\big(ac\bar{c} + \bar{a}d\bar{d} + b\bar{c}c + \bar{b}\bar{d}d\big) \qquad (\text{setting } e \gets c,\ f \gets d) \\\
 &\qquad \le \frac{1}{2}\cdot\frac{1}{4}\cdot\big(a + \bar{a} + b + \bar{b}\big) = \frac{1}{4} \qquad \Big(\text{since } x\bar{x} = x(1-x) \le \tfrac{1}{4}\Big)
 \end{aligned}
 $$
@@ -24,9 +25,9 @@ In fact, equality holds at $a=b=c=d=1/2$, so the value is exactly $1/4$.
 **The minimax theorem fails here.** Swapping the order of max and min (the opponent commits first, the team responds) gives
 
 $$
-\min_{y \in \Delta(\Pi_3)}\; \max_{\substack{x_1 \in \Delta(\Pi_1)\\ x_2 \in \Delta(\Pi_2)}} u(x_1, x_2, y)
-= \min_{e,f}\; \max_{a,b,c,d} \tfrac{1}{2}\big(ac\bar{e} + \bar{a}d\bar{f} + b\bar{c}e + \bar{b}df\big)
-\ge \min_{e,f} \max\big\{\tfrac{f + \bar{e}}{2},\ \tfrac{e + \bar{f}}{2}\big\} = \frac{1}{2},
+\min\_{y \in \Delta(\Pi\_3)}\\; \max\_{\substack{x\_1 \in \Delta(\Pi\_1)\\\ x\_2 \in \Delta(\Pi\_2)}} u(x\_1, x\_2, y)
+= \min\_{e,f}\\; \max\_{a,b,c,d} \tfrac{1}{2}\big(ac\bar{e} + \bar{a}d\bar{f} + b\bar{c}e + \bar{b}df\big)
+\ge \min\_{e,f} \max\big\\{\tfrac{f + \bar{e}}{2},\ \tfrac{e + \bar{f}}{2}\big\\} = \frac{1}{2},
 $$
 
 where the lower bound comes from two pure profiles of the team ($a=c=0, b=d=1$ or $a=c=1, b=d=0$), after which the opponent sets $e=f$ so that $f + \bar{e} = e + \bar{f} = 1$. Hence $\min\max = 1/2 > 1/4 = \max\min$. Why? Intuitively, two teammates who randomize independently cannot share a "secret coin" to coordinate their random choices; that is exactly what distinguishes a team of players from a single player.
@@ -36,15 +37,15 @@ where the lower bound comes from two pure profiles of the team ($a=c=0, b=d=1$ o
 Nash equilibrium is not a good answer: the profile $(a,b;\ c,d;\ e,f) = (1,0;\ 1,0;\ 1,0)$ is a Nash equilibrium in which P1/P2 **always lose**: Nash cannot express the goal of "jointly optimal play by the team."
 
 > **Definition (Team min-max equilibrium, TME).** A team min-max equilibrium (TME) is a solution to the optimization problem
-> $$\max_{\substack{x_1 \in \Delta(\Pi_1)\\ x_2 \in \Delta(\Pi_2)}}\; \min_{y \in \Delta(\Pi_3)} u(x_1, x_2, y).$$
+> $$\max\_{\substack{x\_1 \in \Delta(\Pi\_1)\\\ x\_2 \in \Delta(\Pi\_2)}}\\; \min\_{y \in \Delta(\Pi\_3)} u(x\_1, x\_2, y).$$
 > (These are precisely the solutions we computed above, with value $1/4$.)
 
 The problem: this is a **nonconvex optimization**, hence hard, and as shown above the minimax theorem does not hold; calling it an "equilibrium" is already a stretch.
 
-> **Definition (Team min-max equilibrium with correlation, TMECor).** The teammates may correlate their strategies before the game using **team-private randomness**, i.e., they jointly sample $\mu \in \Delta(\Pi_1 \times \Pi_2)$:
-> $$\max_{\mu \in \Delta(\Pi_1 \times \Pi_2)}\; \min_{y \in \Delta(\Pi_3)}\; \mathbb{E}_{(x_1, x_2) \sim \mu}\; u(x_1, x_2, y).$$
+> **Definition (Team min-max equilibrium with correlation, TMECor).** The teammates may correlate their strategies before the game using **team-private randomness**, i.e., they jointly sample $\mu \in \Delta(\Pi\_1 \times \Pi\_2)$:
+> $$\max\_{\mu \in \Delta(\Pi\_1 \times \Pi\_2)}\\; \min\_{y \in \Delta(\Pi\_3)}\\; \mathbb{E}\_{(x\_1, x\_2) \sim \mu}\\; u(x\_1, x\_2, y).$$
 
-In the communication game: the TME value is $1/4$; the TMECor value is $1/2$: P1/P2 correlate uniformly between the two pure profiles $(1,0;\,1,0)$ and $(0,1;\,0,1)$ (a "random one-time pad"), which hides the bit from P3 completely.
+In the communication game: the TME value is $1/4$; the TMECor value is $1/2$: P1/P2 correlate uniformly between the two pure profiles $(1,0;\\,1,0)$ and $(0,1;\\,0,1)$ (a "random one-time pad"), which hides the bit from P3 completely.
 
 More formally, correlation in TMECor is implemented through a **coordination device** (Farina, Celli, Gatti, Sandholm, NeurIPS 2018): before the game, the teammates agree on a set of joint pure plans; just before play begins, the device draws one joint pure plan from the distribution $\mu$, and each teammate plays according to it. Note that this differs from the usual notion of correlated equilibrium: no incentive-compatibility constraints are needed here, because teammates naturally share payoffs, so the paper calls it "coordination" rather than "correlation." The value of ex ante coordination can be enormous: the team's utility gain over no coordination can be as large as a factor on the order of the number of leaves in the game tree; conversely, restricting the solution concept to TME can cost the team an arbitrarily large amount of utility. But the benefit comes at a price: even computing a team best response to a fixed opponent strategy is already NP-hard and inapproximable (Basilico et al., AAAI 2017; Celli & Gatti, AAAI 2018).
 
@@ -72,10 +73,10 @@ The crucial caveat: **Kuhn's theorem does not apply**; for imperfect-recall game
 
 ## Representing Team Strategy Profiles: The Realization Form
 
-How should we represent correlated strategy profiles of a team? With the **realization form**. Let $Z$ be the set of terminal nodes; a pure strategy of the team is a vector $\boldsymbol{x} \in \{0,1\}^Z$ where $\boldsymbol{x}[z] = 1$ if team ▲ plays all of its own actions on the path to $z$ (similarly for team ▼). Then TMECor is a saddle point of the following bilinear saddle-point problem:
+How should we represent correlated strategy profiles of a team? With the **realization form**. Let $Z$ be the set of terminal nodes; a pure strategy of the team is a vector $\boldsymbol{x} \in \\{0,1\\}^Z$ where $\boldsymbol{x}[z] = 1$ if team ▲ plays all of its own actions on the path to $z$ (similarly for team ▼). Then TMECor is a saddle point of the following bilinear saddle-point problem:
 
 $$
-\max_{\boldsymbol{x} \in \mathrm{conv}\, X}\; \min_{\boldsymbol{y} \in \mathrm{conv}\, Y}\; \boldsymbol{x}^{\top} \boldsymbol{A} \boldsymbol{y}, \qquad \text{where } \boldsymbol{A}[z, z] = p_{\mathrm{chance}}(z) \cdot u(z).
+\max\_{\boldsymbol{x} \in \mathrm{conv}\\, X}\\; \min\_{\boldsymbol{y} \in \mathrm{conv}\\, Y}\\; \boldsymbol{x}^{\top} \boldsymbol{A} \boldsymbol{y}, \qquad \text{where } \boldsymbol{A}[z, z] = p\_{\mathrm{chance}}(z) \cdot u(z).
 $$
 
 This is a **convex, bilinear saddle-point problem**! Intuition: if both teams consist of a single player, this reduces (modulo a linear transformation) to the sequence-form max-min problem.
@@ -85,31 +86,31 @@ A few precise facts from the theory of the realization form (Farina et al., Neur
 - **Reach-probability decomposition**: the reach probability of every terminal node $z$ factors uniquely into the product of the players' contributions times the chance player's contribution; this is exactly why $\boldsymbol{A}$ is a diagonal matrix.
 - **The realization function is linear**, so its range, the realization polytope, is indeed a convex polytope; all mixed strategies inducing the same realization vector are payoff-equivalent, and this redundancy is compressed away.
 - **Relation to the sequence form**: for a perfect-recall player, the realization form is a projection of the sequence form (after dropping the non-terminal sequence variables and applying a simple linear transformation), describable with linearly many constraints; for an imperfect-recall player (such as a team), the description may require exponentially many constraints.
-- **TMECor is the "convexification" of TME**: writing $\tilde\Omega$ for the set of realization vectors achievable by behavioral strategies (in general nonconvex), one has $\Omega = \mathrm{conv}\,\tilde\Omega$ for any player who is not absent-minded.
+- **TMECor is the "convexification" of TME**: writing $\tilde\Omega$ for the set of realization vectors achievable by behavioral strategies (in general nonconvex), one has $\Omega = \mathrm{conv}\\,\tilde\Omega$ for any player who is not absent-minded.
 
 ## Computing TMECor Is Hard
 
-Unfortunately, the realization form alone does not yield an efficient algorithm. The following reduction shows the hardness is intrinsic. Given a 3-SAT formula, say $\phi(x_1, x_2, x_3) = (x_1 \lor x_2) \land (\neg x_1 \lor x_3)$, construct this team game:
+Unfortunately, the realization form alone does not yield an efficient algorithm. The following reduction shows the hardness is intrinsic. Given a 3-SAT formula, say $\phi(x\_1, x\_2, x\_3) = (x\_1 \lor x\_2) \land (\neg x\_1 \lor x\_3)$, construct this team game:
 
 ![The game tree of the SAT reduction: chance picks a clause, P1 picks a variable in that clause, P2 learns the variable (but not which clause it came from) and assigns it T or F](assets/ch18-team-games-2-09.png)
 
 - Chance picks a clause uniformly; P1 picks a variable in that clause; P2 **learns the variable (but not the clause)** and assigns it T or F; the team wins if and only if the assignment satisfies the corresponding clause.
 
-P2's pure strategies are exactly the assignments $\boldsymbol{x} \in \{T, F\}^3$; P1 and P2 can win with probability 1 **if and only if** P2 plays a satisfying assignment. Therefore:
+P2's pure strategies are exactly the assignments $\boldsymbol{x} \in \\{T, F\\}^3$; P1 and P2 can win with probability 1 **if and only if** P2 plays a satisfying assignment. Therefore:
 
-- Even computing an optimal strategy for a **single team** (against no strategic opponent) is NP-hard. The finer complexity classification is as follows ($\Delta_2^P$ and $\Sigma_2^P$ are classes in the polynomial hierarchy — polynomial time with a SAT oracle, and nondeterministic polynomial time with a SAT oracle, respectively — satisfying $\mathrm{NP} \subseteq \Delta_2^P \subseteq \Sigma_2^P$):
+- Even computing an optimal strategy for a **single team** (against no strategic opponent) is NP-hard. The finer complexity classification is as follows ($\Delta\_2^P$ and $\Sigma\_2^P$ are classes in the polynomial hierarchy — polynomial time with a SAT oracle, and nondeterministic polynomial time with a SAT oracle, respectively — satisfying $\mathrm{NP} \subseteq \Delta\_2^P \subseteq \Sigma\_2^P$):
 
   | | team vs. player | team vs. team |
   |---|---|---|
-  | Computing TMECor (value) | NP-complete (Koller & Megiddo, 1992) | $\Delta_2^P$-complete (Zhang, Farina, Sandholm, ICML 2023) |
-  | Computing TME (value) | NP-complete (Koller & Megiddo, 1992) | $\Sigma_2^P$-complete (same) |
+  | Computing TMECor (value) | NP-complete (Koller & Megiddo, 1992) | $\Delta\_2^P$-complete (Zhang, Farina, Sandholm, ICML 2023) |
+  | Computing TME (value) | NP-complete (Koller & Megiddo, 1992) | $\Sigma\_2^P$-complete (same) |
 
   Unless the polynomial hierarchy collapses, team-vs.-team is strictly harder than team-vs.-player, and within team-vs.-team, TME is strictly harder than TMECor, complexity evidence that the two solution concepts call for different algorithmic techniques.
 - Corollary: **realization polytopes admit no efficient representation** (otherwise TMECor could be solved in polynomial time by LP, contradicting NP-hardness).
 
 **So what can we do?** In practice, the readings give two main routes that work around the hardness while exploiting the "low-dimensional but hard-to-describe" realization polytope.
 
-*Auxiliary game and column generation (Farina et al., NeurIPS 2018).* Computing a TMECor reduces to computing a two-player zero-sum Nash equilibrium in an **auxiliary game $\Gamma^*$**: $\Gamma^*$ is a perfect-recall two-player game in which each action at a root node $\phi$ corresponds to one pure plan of the team's "pivot" member, with the subgame of the original game under that fixed plan attached below, and the opponent does not observe the choice at $\phi$. Since $\Gamma^*$ is equivalent to the original game in realization form, one can in principle run fictitious play on it. This is the **fictitious team-play** algorithm: it never constructs the exponentially large $\Gamma^*$ explicitly, but instead computes best responses for both sides on the original game via mixed-integer linear programming (MILP), maintaining average strategies in realization form; the algorithm is anytime and guaranteed to converge to a TMECor, and on three-player Kuhn and three-player Leduc poker it scales to dramatically larger games than the only prior algorithm (the hybrid column-generation algorithm, which exceeded its 40 GB memory budget on the Leduc instances).
+*Auxiliary game and column generation (Farina et al., NeurIPS 2018).* Computing a TMECor reduces to computing a two-player zero-sum Nash equilibrium in an **auxiliary game $\Gamma^\*$**: $\Gamma^\*$ is a perfect-recall two-player game in which each action at a root node $\phi$ corresponds to one pure plan of the team's "pivot" member, with the subgame of the original game under that fixed plan attached below, and the opponent does not observe the choice at $\phi$. Since $\Gamma^\*$ is equivalent to the original game in realization form, one can in principle run fictitious play on it. This is the **fictitious team-play** algorithm: it never constructs the exponentially large $\Gamma^\*$ explicitly, but instead computes best responses for both sides on the original game via mixed-integer linear programming (MILP), maintaining average strategies in realization form; the algorithm is anytime and guaranteed to converge to a TMECor, and on three-player Kuhn and three-player Leduc poker it scales to dramatically larger games than the only prior algorithm (the hybrid column-generation algorithm, which exceeded its 40 GB memory budget on the Leduc instances).
 
 *Team-PSRO (McAleer et al., NeurIPS 2023).* The second route is to run PSRO (policy-space response oracles). Its tabular version, **team double oracle (Team DO)**, maintains a population of joint pure strategies for each team; each round solves a Nash equilibrium of the restricted zero-sum normal-form game spanned by the populations and adds the team's joint best response to that equilibrium into the population; it terminates when the best response cannot improve the Nash value of the restricted game, at which point the restricted equilibrium is a TMECor of the original game. Team-PSRO replaces the exact joint best response with an approximate joint best response learned by **cooperative reinforcement learning** (the paper uses MAPPO: a centralized critic that sees the full game history to reduce variance, with network parameters shared among teammates — centralized training, decentralized execution), which scales to large games; as a byproduct, the algorithm outputs an "approximate exploitability" (the value of the learned approximate best response against the restricted equilibrium — a lower bound on true exploitability) as a progress measure. A variant, **Team-PSRO Mix-and-Match**, additionally allows recombining the individual teammates' policies from different joint best responses into the population, enlarging the population and accelerating convergence at almost no cost. Experimentally: the tabular versions converge to approximate TMECor on Kuhn poker and Liar's Dice, faster than fictitious team-play; on four-player Google Research Football (two players per team, modified to include imperfect information), Team-PSRO and Team-PSRO-MM both beat the self-play baseline on all three metrics (Elo, goal difference against the built-in AI, and relative population performance), with the MM variant best. The cost is the lack of practical convergence guarantees: in the worst case one must enumerate all joint pure strategies, and team best response is itself NP-hard; but for sufficiently large games, this may be the only possible approach.
 
@@ -148,7 +149,7 @@ $$
 The number of last-infosets $k$ exactly measures **information asymmetry**: how much information is known to some team member but is not common knowledge to the whole team. The extreme case $k = 1$ means the teammates have symmetric information, in which case the whole team can be modeled as a single perfect-recall player. Writing $N$ for the size of the game tree,
 
 $$
-\text{CFR per-iteration runtime} \;\propto\; \text{size of the TB-DAG} \;\le\; (b+1)^k \cdot \mathrm{poly}(N),
+\text{CFR per-iteration runtime} \\;\propto\\; \text{size of the TB-DAG} \\;\le\\; (b+1)^k \cdot \mathrm{poly}(N),
 $$
 
 which is polynomial time (and quite efficient in practice) when $k$ is a constant. This is essentially tight: an algorithm running in $2^{O(k)} \cdot \mathrm{poly}(N)$ would disprove the Exponential Time Hypothesis (ETH).
@@ -156,7 +157,7 @@ which is polynomial time (and quite efficient in practice) when $k$ is a constan
 Take contract bridge as a rough estimate: $k = 2\binom{52}{13} < 2^{40}$, $b < 26$, $N \approx 2^{200}$. The naïve algorithm (write down the normal form and solve it) takes time about $2^{2^{200}}$, whereas the TB-DAG has size
 
 $$
-< 2^6 \cdot 2^{40} \cdot \mathrm{poly}\!\left(2^{200}\right) < 2^{2^{43}} \ll 2^{2^{200}}.
+< 2^6 \cdot 2^{40} \cdot \mathrm{poly}\\!\left(2^{200}\right) < 2^{2^{43}} \ll 2^{2^{200}}.
 $$
 
 **Comparison with prior representations.** Both earlier approaches are based on **public states** (connected components of the connectivity graph — information that is unconditionally common knowledge) rather than public observations (information that becomes common knowledge only conditional on the strategy the team has played): Zhang & Sandholm (AAAI 2022) build an LP from tree decompositions, while Carminati et al. (NeurIPS 2022) convert the game into a strategically equivalent but potentially exponentially larger two-player perfect-recall game. The TB-DAG is strictly better: its size never exceeds $2^p$ times that of the public-state-based representation ($p$ being the number of nodes in the largest public state), and there exist instances where the public-state version is exponential while the TB-DAG is polynomial (even when the former is first preprocessed by **inflation**); no exponential gap exists in the reverse direction, and public observations make inflation unnecessary altogether. Experimentally, on multiplayer Kuhn, Leduc, and Liar's Dice benchmarks, CFR variants on the TB-DAG (PCFR+, DCFR, LCFR) are generally 2–3 orders of magnitude faster than the ZS22 LP: for example, on 12-rank three-player Kuhn (about 17,000 leaves) the TB-DAG method converges in about 1.4 seconds while both ZS22 and the column-generation method run out of memory; on L523 (about 775,000 leaves) it takes about 25 seconds, while the column-generation method fails to solve within 6 hours.
@@ -211,7 +212,7 @@ More precisely (Theorem 4.3 of the EC 2024 paper): if Bad has $k$ players with $
 > **Theorem (Lower bounds, informal).**
 > - Assuming (2) and (3) but not (1): NP-hard;
 > - Assuming (2) and (1) but not (3): coNP-hard;
-> - Assuming (2) only: $\Sigma_2^P$-hard.
+> - Assuming (2) only: $\Sigma\_2^P$-hard.
 >
 > Open problem: what about assuming (1) and (3)?
 
@@ -221,9 +222,9 @@ The paper's full complexity landscape (computing the hidden-role value with a co
 |---|---|---|---|
 | coordinated + minority | NP-complete | NP-hard | **P** (main theorem) |
 | coordinated | NP-complete (von Stengel & Koller, 1997) | NP-hard | open problem |
-| minority | $\Sigma_2^P$-complete | $\Sigma_2^P$-hard | coNP-hard |
+| minority | $\Sigma\_2^P$-complete | $\Sigma\_2^P$-hard | coNP-hard |
 
-**The price of hidden roles (PoHR).** Analogous to the price of anarchy, the paper defines the PoHR as the ratio of "the Good team's value once team identities are made public" to "the hidden-role value": for the class of games in which team assignments are drawn from a distribution $D$ and Good wins deterministically (normalized to $1$) once identities are public, the PoHR is exactly $1/p^*$, where $p^*$ is the probability $D$ assigns to the most likely team assignment; the intuition is that in the worst case Good can only open by guessing the entire team roster, winning only if the guess is right. In particular, with $n$ players and $k$ Bad players ($k < n/2$), the PoHR is exactly $\binom{n}{k}$; for $k = 1$ it is at most $n$, in sharp contrast to adversarial team games, where the "price of communication/correlation" can be arbitrarily large.
+**The price of hidden roles (PoHR).** Analogous to the price of anarchy, the paper defines the PoHR as the ratio of "the Good team's value once team identities are made public" to "the hidden-role value": for the class of games in which team assignments are drawn from a distribution $D$ and Good wins deterministically (normalized to $1$) once identities are public, the PoHR is exactly $1/p^\*$, where $p^\*$ is the probability $D$ assigns to the most likely team assignment; the intuition is that in the worst case Good can only open by guessing the entire team roster, winning only if the guess is right. In particular, with $n$ players and $k$ Bad players ($k < n/2$), the PoHR is exactly $\binom{n}{k}$; for $k = 1$ it is at most $n$, in sharp contrast to adversarial team games, where the "price of communication/correlation" can be arbitrarily large.
 
 **Proof ideas for the main theorem.** First suppose there is a player who is **always on the Good team**, called the **mediator**. By the **revelation principle**: the mediator collects each player's information and sends back action recommendations; Good players report honestly and obey the recommendations, while Bad players may lie and may disobey.
 
@@ -258,8 +259,8 @@ Hidden-role games are a new class of games for which one can reasonably define w
 ## Key Takeaways
 
 - In team games, teammates share a utility function but cannot freely communicate private information; the minimax theorem fails for uncorrelated team strategies (in the communication game, $\max\min = 1/4 < 1/2 = \min\max$), and Nash equilibrium cannot express joint team optimality.
-- Two core solution concepts: TME (nonconvex, minimax fails) and TMECor (correlation via team-private randomness; reduces to the convex bilinear saddle point $\max_{\boldsymbol{x}\in\mathrm{conv}X}\min_{\boldsymbol{y}\in\mathrm{conv}Y}\boldsymbol{x}^\top\boldsymbol{A}\boldsymbol{y}$).
+- Two core solution concepts: TME (nonconvex, minimax fails) and TMECor (correlation via team-private randomness; reduces to the convex bilinear saddle point $\max\_{\boldsymbol{x}\in\mathrm{conv}X}\min\_{\boldsymbol{y}\in\mathrm{conv}Y}\boldsymbol{x}^\top\boldsymbol{A}\boldsymbol{y}$).
 - Team games ≡ (timeable) two-player zero-sum imperfect-recall games; TME ↔ optimal behavioral strategy, TMECor ↔ mixed Nash equilibrium, and Kuhn's theorem does not apply.
-- Computing TMECor: NP-complete already for team-vs.-player (3-SAT reduction), $\Delta_2^P$-complete for team-vs.-team (TME is even higher, $\Sigma_2^P$-complete); realization polytopes admit no efficient representation. In practice: for small-to-medium games, the auxiliary game plus fictitious team-play (MILP best responses) or column generation; for large games, Team-PSRO (cooperative RL for approximate joint best responses).
+- Computing TMECor: NP-complete already for team-vs.-player (3-SAT reduction), $\Delta\_2^P$-complete for team-vs.-team (TME is even higher, $\Sigma\_2^P$-complete); realization polytopes admit no efficient representation. In practice: for small-to-medium games, the auxiliary game plus fictitious team-play (MILP best responses) or column generation; for large games, Team-PSRO (cooperative RL for approximate joint best responses).
 - The TB-DAG turns a team game into a strategically equivalent single-player DAG decision problem based on the team's common knowledge; CFR runs directly on it (regret $O(N\sqrt{T})$, $O(E)$ per iteration); CFR's per-iteration time is $\le (b+1)^k \cdot \mathrm{poly}(N)$, where $k$ is the information asymmetry (number of last-infosets), polynomial for bounded $k$, and unimprovable under ETH.
-- Hidden-role games: the hidden-role equilibrium is defined via the split-personality game (inherently asymmetric); efficiently solvable under "private communication + minority Bad + coordinated Bad" (revelation principle + MPC-simulated mediator), with NP / coNP / $\Sigma_2^P$ lower bounds when any one assumption is relaxed; the price of hidden roles is exactly $\binom{n}{k}$; as an application, 5- and 6-player Avalon were solved exactly.
+- Hidden-role games: the hidden-role equilibrium is defined via the split-personality game (inherently asymmetric); efficiently solvable under "private communication + minority Bad + coordinated Bad" (revelation principle + MPC-simulated mediator), with NP / coNP / $\Sigma\_2^P$ lower bounds when any one assumption is relaxed; the price of hidden roles is exactly $\binom{n}{k}$; as an application, 5- and 6-player Avalon were solved exactly.

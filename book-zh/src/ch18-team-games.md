@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # L18 团队博弈
 
 本章转向**团队博弈（team games）**：多个玩家组成团队、共享同一效用函数，与对手（或对手团队）对抗。核心问题是：团队成员不能自由沟通、不能共享私有信息时，“团队的最优策略”应如何定义、又如何计算？我们将看到，看似自然的解概念在计算上极为困难，但通过刻画团队的**公共知识（common knowledge）**结构，可以在信息不对称程度有界时恢复多项式时间算法（团队信念 DAG，TB-DAG）。本章最后还介绍隐藏角色博弈（hidden-role games，即“社交推理”类游戏，如阿瓦隆）的解概念与精确求解。
@@ -12,9 +13,9 @@
 
 $$
 \begin{aligned}
-&\max_{\substack{x_1 \in \Delta(\Pi_1)\\ x_2 \in \Delta(\Pi_2)}}\; \min_{x_3 \in \Delta(\Pi_3)} u(x_1, x_2, y)
-= \max_{a,b,c,d \in [0,1]}\; \min_{e,f \in [0,1]} \tfrac{1}{2}\big(ac\bar{e} + \bar{a}d\bar{f} + b\bar{c}e + \bar{b}df\big) \\
-&\qquad \le \max_{a,b,c,d} \tfrac{1}{2}\big(ac\bar{c} + \bar{a}d\bar{d} + b\bar{c}c + \bar{b}\bar{d}d\big) \qquad (\text{取 } e \gets c,\ f \gets d) \\
+&\max\_{\substack{x\_1 \in \Delta(\Pi\_1)\\\ x\_2 \in \Delta(\Pi\_2)}}\\; \min\_{x\_3 \in \Delta(\Pi\_3)} u(x\_1, x\_2, y)
+= \max\_{a,b,c,d \in [0,1]}\\; \min\_{e,f \in [0,1]} \tfrac{1}{2}\big(ac\bar{e} + \bar{a}d\bar{f} + b\bar{c}e + \bar{b}df\big) \\\
+&\qquad \le \max\_{a,b,c,d} \tfrac{1}{2}\big(ac\bar{c} + \bar{a}d\bar{d} + b\bar{c}c + \bar{b}\bar{d}d\big) \qquad (\text{取 } e \gets c,\ f \gets d) \\\
 &\qquad \le \frac{1}{2}\cdot\frac{1}{4}\cdot\big(a + \bar{a} + b + \bar{b}\big) = \frac{1}{4} \qquad \Big(\text{因为 } x\bar{x} = x(1-x) \le \tfrac{1}{4}\Big)
 \end{aligned}
 $$
@@ -24,9 +25,9 @@ $$
 **极小极大定理在此失效。** 交换 max 与 min 的次序（对手先承诺、团队后动），得到
 
 $$
-\min_{y \in \Delta(\Pi_3)}\; \max_{\substack{x_1 \in \Delta(\Pi_1)\\ x_2 \in \Delta(\Pi_2)}} u(x_1, x_2, y)
-= \min_{e,f}\; \max_{a,b,c,d} \tfrac{1}{2}\big(ac\bar{e} + \bar{a}d\bar{f} + b\bar{c}e + \bar{b}df\big)
-\ge \min_{e,f} \max\big\{\tfrac{f + \bar{e}}{2},\ \tfrac{e + \bar{f}}{2}\big\} = \frac{1}{2},
+\min\_{y \in \Delta(\Pi\_3)}\\; \max\_{\substack{x\_1 \in \Delta(\Pi\_1)\\\ x\_2 \in \Delta(\Pi\_2)}} u(x\_1, x\_2, y)
+= \min\_{e,f}\\; \max\_{a,b,c,d} \tfrac{1}{2}\big(ac\bar{e} + \bar{a}d\bar{f} + b\bar{c}e + \bar{b}df\big)
+\ge \min\_{e,f} \max\big\\{\tfrac{f + \bar{e}}{2},\ \tfrac{e + \bar{f}}{2}\big\\} = \frac{1}{2},
 $$
 
 其中下界由团队的两种纯策略取法（$a=c=0, b=d=1$ 或 $a=c=1, b=d=0$）给出，再令对手取 $e=f$ 使 $f + \bar{e} = e + \bar{f} = 1$。于是 $\min\max = 1/2 > 1/4 = \max\min$。为什么？直观地说，团队的两名成员各自独立随机化时，无法共享一枚“秘密硬币”来协调彼此的随机选择——这正是多人团队与单一玩家的本质差别。
@@ -36,15 +37,15 @@ $$
 纳什均衡不是好答案：策略组合 $(a,b;\ c,d;\ e,f) = (1,0;\ 1,0;\ 1,0)$ 是一个纳什均衡，但 P1/P2 在其中**总是输**——纳什无法表达“团队联合最优”这一目标。
 
 > **定义（团队极小极大均衡，TME）。** 团队极小极大均衡（team min-max equilibrium, TME）是下述优化问题的解：
-> $$\max_{\substack{x_1 \in \Delta(\Pi_1)\\ x_2 \in \Delta(\Pi_2)}}\; \min_{y \in \Delta(\Pi_3)} u(x_1, x_2, y).$$
+> $$\max\_{\substack{x\_1 \in \Delta(\Pi\_1)\\\ x\_2 \in \Delta(\Pi\_2)}}\\; \min\_{y \in \Delta(\Pi\_3)} u(x\_1, x\_2, y).$$
 > （这正是上面计算出的值 $1/4$ 所对应的解。）
 
 问题是：这是**非凸优化**，因而困难，且如上所示极小极大定理不成立——称其为“均衡”都有些勉强。
 
-> **定义（带相关的团队极小极大均衡，TMECor）。** 团队成员可以在赛前利用**团队私有随机性（team-private randomness）**相关化（correlate）各自的策略，即联合采样 $\mu \in \Delta(\Pi_1 \times \Pi_2)$：
-> $$\max_{\mu \in \Delta(\Pi_1 \times \Pi_2)}\; \min_{y \in \Delta(\Pi_3)}\; \mathbb{E}_{(x_1, x_2) \sim \mu}\; u(x_1, x_2, y).$$
+> **定义（带相关的团队极小极大均衡，TMECor）。** 团队成员可以在赛前利用**团队私有随机性（team-private randomness）**相关化（correlate）各自的策略，即联合采样 $\mu \in \Delta(\Pi\_1 \times \Pi\_2)$：
+> $$\max\_{\mu \in \Delta(\Pi\_1 \times \Pi\_2)}\\; \min\_{y \in \Delta(\Pi\_3)}\\; \mathbb{E}\_{(x\_1, x\_2) \sim \mu}\\; u(x\_1, x\_2, y).$$
 
-在通信博弈中：TME 值为 $1/4$；TMECor 值为 $1/2$——P1/P2 以均匀分布在 $(1,0;\,1,0)$ 与 $(0,1;\,0,1)$ 两个纯策略组合之间相关化（“随机一次性密码本”，random one-time pad），从而把那比特信息对 P3 完全隐藏。
+在通信博弈中：TME 值为 $1/4$；TMECor 值为 $1/2$——P1/P2 以均匀分布在 $(1,0;\\,1,0)$ 与 $(0,1;\\,0,1)$ 两个纯策略组合之间相关化（“随机一次性密码本”，random one-time pad），从而把那比特信息对 P3 完全隐藏。
 
 更正式地，TMECor 中的相关化通过**协调装置（coordination device）**实现（Farina, Celli, Gatti, Sandholm, NeurIPS 2018）：赛前队员们约定一组联合纯策略计划，临开赛时装置从分布 $\mu$ 中抽取一个联合纯计划，各队员照此执行。注意这不同于博弈论中通常的相关均衡概念——此处不需要激励相容约束，因为队员天然共享收益，故论文称其为“协调（coordination）”而非“相关（correlation）”。ex ante 协调的价值可能极大：与完全不协调相比，团队效用的提升可以达到与博弈树叶子数同阶的因子；反之，把解概念限制为 TME 也可能造成任意大的效用损失。但收益伴随代价：即使只求团队对给定对手策略的最优反应，也已是 NP-难且不可近似的（Basilico et al., AAAI 2017；Celli & Gatti, AAAI 2018）。
 
@@ -72,10 +73,10 @@ $$
 
 ## 策略组合的表示：实现形式
 
-如何表示团队的相关策略组合？用**实现形式（realization form）**。设 $Z$ 为终结节点集合，团队的纯策略记为向量 $\boldsymbol{x} \in \{0,1\}^Z$：若团队 ▲ 在通往 $z$ 的路径上打完了属于自己的全部动作，则 $\boldsymbol{x}[z] = 1$（团队 ▼ 类似）。于是 TMECor 是如下双线性鞍点问题的鞍点解：
+如何表示团队的相关策略组合？用**实现形式（realization form）**。设 $Z$ 为终结节点集合，团队的纯策略记为向量 $\boldsymbol{x} \in \\{0,1\\}^Z$：若团队 ▲ 在通往 $z$ 的路径上打完了属于自己的全部动作，则 $\boldsymbol{x}[z] = 1$（团队 ▼ 类似）。于是 TMECor 是如下双线性鞍点问题的鞍点解：
 
 $$
-\max_{\boldsymbol{x} \in \mathrm{conv}\, X}\; \min_{\boldsymbol{y} \in \mathrm{conv}\, Y}\; \boldsymbol{x}^{\top} \boldsymbol{A} \boldsymbol{y}, \qquad \text{其中 } \boldsymbol{A}[z, z] = p_{\mathrm{chance}}(z) \cdot u(z).
+\max\_{\boldsymbol{x} \in \mathrm{conv}\\, X}\\; \min\_{\boldsymbol{y} \in \mathrm{conv}\\, Y}\\; \boldsymbol{x}^{\top} \boldsymbol{A} \boldsymbol{y}, \qquad \text{其中 } \boldsymbol{A}[z, z] = p\_{\mathrm{chance}}(z) \cdot u(z).
 $$
 
 这是一个**凸的双线性鞍点问题**！直觉：若两个团队都只有一名玩家，这就（模一个线性变换的意义下）退化为序列形式（sequence form）的 max-min 问题。
@@ -85,31 +86,31 @@ $$
 - **到达概率分解**：每个终结节点 $z$ 的到达概率可唯一分解为各玩家贡献之积乘以机会玩家的贡献——这正是 $\boldsymbol{A}$ 为对角矩阵的原因。
 - **实现函数是线性的**，故其值域——实现多胞形——确实是凸多胞形；诱导同一实现向量的所有混合策略彼此收益等价，表示冗余因此被压缩掉。
 - **与序列形式的关系**：对完美回忆玩家，实现形式恰是序列形式丢弃非终结序列变量后经简单线性变换得到的投影，可用线性规模约束描述；对不完美回忆玩家（如团队），描述约束数可能是指数的。
-- **TMECor 是 TME 的“凸化”**：记 $\tilde\Omega$ 为行为策略可达的实现向量集合（一般非凸），则对非心不在焉（non-absent-minded）的玩家有 $\Omega = \mathrm{conv}\,\tilde\Omega$。
+- **TMECor 是 TME 的“凸化”**：记 $\tilde\Omega$ 为行为策略可达的实现向量集合（一般非凸），则对非心不在焉（non-absent-minded）的玩家有 $\Omega = \mathrm{conv}\\,\tilde\Omega$。
 
 ## 计算 TMECor 是困难的
 
-可惜实现形式本身并不能直接带来高效算法。下面的归约表明困难性是本质的。给定 3-SAT 公式，例如 $\phi(x_1, x_2, x_3) = (x_1 \lor x_2) \land (\neg x_1 \lor x_3)$，构造如下团队博弈：
+可惜实现形式本身并不能直接带来高效算法。下面的归约表明困难性是本质的。给定 3-SAT 公式，例如 $\phi(x\_1, x\_2, x\_3) = (x\_1 \lor x\_2) \land (\neg x\_1 \lor x\_3)$，构造如下团队博弈：
 
 ![SAT 归约构造的博弈树：机会玩家选取子句，P1 选取该子句中的一个变量，P2 得知变量（但不知道是哪个子句）并赋予 T 或 F](assets/ch18-team-games-2-09.png)
 
 - 机会玩家均匀选取一个子句；P1 在该子句中选取一个变量；P2 **得知该变量（但不知来自哪个子句）**，并为其赋值 T 或 F；团队获胜当且仅当赋值满足对应子句。
 
-P2 的纯策略恰为全体赋值 $\boldsymbol{x} \in \{T, F\}^3$；P1 与 P2 能以概率 1 获胜**当且仅当** P2 打出一个满足赋值。因此：
+P2 的纯策略恰为全体赋值 $\boldsymbol{x} \in \\{T, F\\}^3$；P1 与 P2 能以概率 1 获胜**当且仅当** P2 打出一个满足赋值。因此：
 
-- 即便只是计算**单方团队**的最优策略也已是 NP-难的。更精细的复杂度分类如下（$\Delta_2^P$、$\Sigma_2^P$ 是多项式谱系中的类，分别指“带 SAT 预言机的多项式时间”与“带 SAT 预言机的非确定多项式时间”，满足 $\mathrm{NP} \subseteq \Delta_2^P \subseteq \Sigma_2^P$）：
+- 即便只是计算**单方团队**的最优策略也已是 NP-难的。更精细的复杂度分类如下（$\Delta\_2^P$、$\Sigma\_2^P$ 是多项式谱系中的类，分别指“带 SAT 预言机的多项式时间”与“带 SAT 预言机的非确定多项式时间”，满足 $\mathrm{NP} \subseteq \Delta\_2^P \subseteq \Sigma\_2^P$）：
 
   | | 团队 vs 单人 | 团队 vs 团队 |
   |---|---|---|
-  | 计算 TMECor（值） | NP-完全（Koller & Megiddo, 1992） | $\Delta_2^P$-完全（Zhang, Farina, Sandholm, ICML 2023） |
-  | 计算 TME（值） | NP-完全（Koller & Megiddo, 1992） | $\Sigma_2^P$-完全（同上） |
+  | 计算 TMECor（值） | NP-完全（Koller & Megiddo, 1992） | $\Delta\_2^P$-完全（Zhang, Farina, Sandholm, ICML 2023） |
+  | 计算 TME（值） | NP-完全（Koller & Megiddo, 1992） | $\Sigma\_2^P$-完全（同上） |
 
   除非多项式谱系坍塌，团队 vs 团队严格难于团队 vs 单人，且在团队 vs 团队设定下 TME 严格难于 TMECor——这正是两种解概念应当使用不同算法技术的复杂度证据。
 - 推论：**实现多胞形（realization polytopes）不存在高效表示**（否则 TMECor 可用 LP 在多项式时间内求解，与 NP-难矛盾）。
 
 **那我们还能做什么？** 实践中绕过困难性、把“低维但难以表示”的实现多胞形用起来的方法，阅读材料给出了两条主要路线的具体机制。
 
-*辅助博弈与列生成（Farina et al., NeurIPS 2018）。* 把求 TMECor 归约为在一个**辅助博弈 $\Gamma^*$** 中求双人零和纳什均衡：$\Gamma^*$ 是完美回忆双人博弈，根节点 $\phi$ 的每个动作对应团队“枢轴队员”的一个纯策略计划，其后挂接原博弈中固定该计划后得到的子博弈，对手观察不到 $\phi$ 处的选择。$\Gamma^*$ 与原博弈在实现形式下等价，于是可以把虚构对弈运行在其上——即**虚拟团队对弈（fictitious team-play）**算法：它不显式构造指数大的 $\Gamma^*$，而是在原博弈上用混合整数线性规划（MILP）求解两边的最优反应，平均策略以实现形式维护；算法是 anytime 的且保证收敛到 TMECor，在三人 Kuhn 与三人 Leduc 扑克上比之前最优的行列生成算法快若干个数量级。
+*辅助博弈与列生成（Farina et al., NeurIPS 2018）。* 把求 TMECor 归约为在一个**辅助博弈 $\Gamma^\*$** 中求双人零和纳什均衡：$\Gamma^\*$ 是完美回忆双人博弈，根节点 $\phi$ 的每个动作对应团队“枢轴队员”的一个纯策略计划，其后挂接原博弈中固定该计划后得到的子博弈，对手观察不到 $\phi$ 处的选择。$\Gamma^\*$ 与原博弈在实现形式下等价，于是可以把虚构对弈运行在其上——即**虚拟团队对弈（fictitious team-play）**算法：它不显式构造指数大的 $\Gamma^\*$，而是在原博弈上用混合整数线性规划（MILP）求解两边的最优反应，平均策略以实现形式维护；算法是 anytime 的且保证收敛到 TMECor，在三人 Kuhn 与三人 Leduc 扑克上比之前最优的行列生成算法快若干个数量级。
 
 *Team-PSRO（McAleer et al., NeurIPS 2023）。* 第二条路线是运行 PSRO（策略空间响应预言机）。其表格版本**团队双预言机（Team DO）**为每个团队维护联合纯策略的种群，每轮在种群张成的受限零和标准式博弈中求纳什均衡，再把对该均衡的团队联合最优反应加入种群；当最优反应无法改进受限博弈的纳什值时终止，此时受限博弈的均衡即原博弈的 TMECor。Team-PSRO 把精确联合最优反应换成用**合作式强化学习**学到的近似联合最优反应（论文用 MAPPO：集中式评论家可见全局历史以降低方差、队友间共享网络参数——集中训练、分散执行），从而可扩展到大型博弈；作为副产品，算法输出“近似可利用度”（学到的近似最优反应对受限均衡的收益，是真实可利用度的下界）作为进度度量。其变体 **Team-PSRO Mix-and-Match** 还允许把不同联合最优反应中各队员的策略交叉重组进种群，以近乎免费的代价扩大种群、加速收敛。实验上：表格版在 Kuhn 扑克与 Liar's Dice 上收敛到近似 TMECor，且快于虚拟团队对弈；在四人 Google Research Football（每队两名玩家、带不完全信息的改造版）上，Team-PSRO 与 Team-PSRO-MM 在 Elo、对内置 AI 的净胜球、相对种群表现三项指标上均优于自我对弈基线，MM 变体最佳。代价是缺乏实用的收敛保证——最坏情形需枚举全部联合纯策略，且团队最优反应本身 NP-难；但对于足够大的博弈，这或许是唯一可行的办法。
 
@@ -148,7 +149,7 @@ $$
 末信息集的个数 $k$ 恰好度量**信息不对称（information asymmetry）**：有多少信息为某个队员所知、却不是全队的公共知识。极端情形 $k = 1$ 意味着队员们信息对称，此时整个团队可以建模为一个完美回忆玩家。记 $N$ 为博弈树规模，则
 
 $$
-\text{CFR 每轮迭代运行时间} \;\propto\; \text{TB-DAG 的规模} \;\le\; (b+1)^k \cdot \mathrm{poly}(N),
+\text{CFR 每轮迭代运行时间} \\;\propto\\; \text{TB-DAG 的规模} \\;\le\\; (b+1)^k \cdot \mathrm{poly}(N),
 $$
 
 即当 $k$ 为常数时是多项式时间（实践中也相当高效）。这一结果本质上不可改进：若存在 $2^{O(k)} \cdot \mathrm{poly}(N)$ 的算法将否证指数时间假设（ETH）。
@@ -156,7 +157,7 @@ $$
 以合约桥牌（contract bridge）为例粗略估计：$k = 2\binom{52}{13} < 2^{40}$，$b < 26$，$N \approx 2^{200}$。朴素算法（写出标准式再求解）耗时约 $2^{2^{200}}$；而 TB-DAG 的规模
 
 $$
-< 2^6 \cdot 2^{40} \cdot \mathrm{poly}\!\left(2^{200}\right) < 2^{2^{43}} \ll 2^{2^{200}}.
+< 2^6 \cdot 2^{40} \cdot \mathrm{poly}\\!\left(2^{200}\right) < 2^{2^{43}} \ll 2^{2^{200}}.
 $$
 
 **与既有表示的比较。** 此前两种方法都基于**公共状态**（连通图的连通分支，即无条件为公共知识的信息）而非公共观察（条件于团队已打出的策略才成为公共知识的信息）：Zhang & Sandholm（AAAI 2022）用树分解构造 LP，Carminati 等（NeurIPS 2022）则把博弈转换成战略等价但可能指数级更大的双人完美回忆博弈。TB-DAG 严格更优：规模从不超过公共状态版表示的 $2^p$ 倍（$p$ 为最大公共状态的节点数），且存在实例使公共状态版为指数规模而 TB-DAG 为多项式规模（即使前者先做**膨胀（inflation）**预处理）；反向的指数差距不存在，且公共观察使构造不再需要膨胀。实验上，在多人 Kuhn、Leduc 扑克与 Liar's Dice 基准上，TB-DAG 上的 CFR 变体（PCFR+、DCFR、LCFR）普遍比 ZS22 的 LP 快 2–3 个数量级：如 12 秩三人 Kuhn（约 1.7 万叶子）本方法约 1.4 秒收敛而 ZS22 与列生成方法均内存耗尽；L523（约 77.5 万叶子）上本方法约 25 秒，列生成方法超过 6 小时未解出。
@@ -211,7 +212,7 @@ $$
 > **定理（下界，非正式陈述）。**
 > - 假设 (2)、(3) 但无 (1)：NP-难；
 > - 假设 (2)、(1) 但无 (3)：coNP-难；
-> - 仅假设 (2)：$\Sigma_2^P$-难。
+> - 仅假设 (2)：$\Sigma\_2^P$-难。
 >
 > 公开问题：假设 (1) 与 (3) 的情形如何？
 
@@ -221,9 +222,9 @@ $$
 |---|---|---|---|
 | 协调 + 少数派 | NP-完全 | NP-难 | **P**（主定理） |
 | 协调 | NP-完全（von Stengel & Koller, 1997） | NP-难 | 公开问题 |
-| 少数派 | $\Sigma_2^P$-完全 | $\Sigma_2^P$-难 | coNP-难 |
+| 少数派 | $\Sigma\_2^P$-完全 | $\Sigma\_2^P$-难 | coNP-难 |
 
-**隐藏角色的代价（price of hidden roles, PoHR）。** 类比无政府代价，论文定义 PoHR 为“团队身份公开后好人团队的博弈值”与“隐藏角色博弈值”之比：对团队指派服从分布 $D$、且好人身份公开后可确定性获胜（归一化）的博弈类，PoHR 恰为 $1/p^*$，$p^*$ 是 $D$ 赋予最可能团队指派的概率——直觉是最坏情形下好人只能开局猜出全队名单，猜对才赢。特别地，$n$ 名玩家、$k$ 名坏人（$k < n/2$）时 PoHR $= \binom{n}{k}$；$k = 1$ 时至多为 $n$，与对抗团队博弈中“通信/相关的代价”可任意大形成鲜明对比。
+**隐藏角色的代价（price of hidden roles, PoHR）。** 类比无政府代价，论文定义 PoHR 为“团队身份公开后好人团队的博弈值”与“隐藏角色博弈值”之比：对团队指派服从分布 $D$、且好人身份公开后可确定性获胜（归一化）的博弈类，PoHR 恰为 $1/p^\*$，$p^\*$ 是 $D$ 赋予最可能团队指派的概率——直觉是最坏情形下好人只能开局猜出全队名单，猜对才赢。特别地，$n$ 名玩家、$k$ 名坏人（$k < n/2$）时 PoHR $= \binom{n}{k}$；$k = 1$ 时至多为 $n$，与对抗团队博弈中“通信/相关的代价”可任意大形成鲜明对比。
 
 **主定理的证明思路。** 先假设存在一名**始终在好人团队**的玩家，称为**中介者（mediator）**。由**显示原理（revelation principle）**：中介者收集各玩家的信息、返回动作推荐；好人报告真实信息并服从推荐，坏人则可能谎报、可能抗命。
 
@@ -258,8 +259,8 @@ $$
 ## 要点小结
 
 - 团队博弈中，队友共享效用函数但不能自由沟通私有信息；极小极大定理对不相关的团队策略失效（通信博弈中 $\max\min = 1/4 < 1/2 = \min\max$），纳什均衡也无法表达团队联合最优。
-- 两个核心解概念：TME（非凸、极小极大不成立）与 TMECor（允许团队私有随机性相关化，化为凸的双线性鞍点 $\max_{\boldsymbol{x}\in\mathrm{conv}X}\min_{\boldsymbol{y}\in\mathrm{conv}Y}\boldsymbol{x}^\top\boldsymbol{A}\boldsymbol{y}$）。
+- 两个核心解概念：TME（非凸、极小极大不成立）与 TMECor（允许团队私有随机性相关化，化为凸的双线性鞍点 $\max\_{\boldsymbol{x}\in\mathrm{conv}X}\min\_{\boldsymbol{y}\in\mathrm{conv}Y}\boldsymbol{x}^\top\boldsymbol{A}\boldsymbol{y}$）。
 - 团队博弈 ≡（可定时的）不完美回忆双人零和博弈；TME ↔ 最优行为策略，TMECor ↔ 混合纳什均衡，库恩定理不适用。
-- 计算 TMECor：团队 vs 单人已是 NP-完全（3-SAT 归约），团队 vs 团队为 $\Delta_2^P$-完全（TME 更高达 $\Sigma_2^P$-完全）；实现多胞形无高效表示。实践中：中小博弈用辅助博弈 + 虚拟团队对弈（MILP 最优反应）或列生成，大博弈用 Team-PSRO（合作式 RL 近似联合最优反应）。
+- 计算 TMECor：团队 vs 单人已是 NP-完全（3-SAT 归约），团队 vs 团队为 $\Delta\_2^P$-完全（TME 更高达 $\Sigma\_2^P$-完全）；实现多胞形无高效表示。实践中：中小博弈用辅助博弈 + 虚拟团队对弈（MILP 最优反应）或列生成，大博弈用 Team-PSRO（合作式 RL 近似联合最优反应）。
 - TB-DAG 按团队公共知识把团队博弈化为战略等价的单玩家 DAG 决策问题，CFR 可直接在其上运行（遗憾 $O(N\sqrt{T})$、每轮 $O(E)$）；CFR 每轮时间 $\le (b+1)^k \cdot \mathrm{poly}(N)$，其中 $k$ 为信息不对称度（末信息集数），$k$ 有界即多项式，且在 ETH 下不可改进。
-- 隐藏角色博弈：经分裂人格博弈定义隐藏角色均衡（本质上非对称）；在“私有通信 + 坏人少数派 + 坏人协调”下可高效求解（显示原理 + MPC 模拟中介者），放松任一假设分别有 NP / coNP / $\Sigma_2^P$ 下界；隐藏角色的代价恰为 $\binom{n}{k}$；应用上精确求解了 5、6 人阿瓦隆。
+- 隐藏角色博弈：经分裂人格博弈定义隐藏角色均衡（本质上非对称）；在“私有通信 + 坏人少数派 + 坏人协调”下可高效求解（显示原理 + MPC 模拟中介者），放松任一假设分别有 NP / coNP / $\Sigma\_2^P$ 下界；隐藏角色的代价恰为 $\binom{n}{k}$；应用上精确求解了 5、6 人阿瓦隆。

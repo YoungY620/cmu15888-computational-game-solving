@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # Homework 2: CFR Implementation
 
 - Course: 15-888 Computational Game Solving (Fall 2025)
@@ -10,11 +11,11 @@
 
 ### Problem 1: (Coarse) Correlated Equilibria and Dominated Actions (20 points)
 
-An action $a_i \in \mathcal{A}_i$ **strictly dominates** another action $a_i' \in \mathcal{A}_i$ if $u_i(a_i, a_{-i}) > u_i(a_i', a_{-i})$ for every possible opponent action profile $a_{-i}$. In this case, we call $a_i'$ **strictly dominated**. If $a_i$ strictly dominates every other action, then we call it **strictly dominant**.
+An action $a\_i \in \mathcal{A}\_i$ **strictly dominates** another action $a\_i' \in \mathcal{A}\_i$ if $u\_i(a\_i, a\_{-i}) > u\_i(a\_i', a\_{-i})$ for every possible opponent action profile $a\_{-i}$. In this case, we call $a\_i'$ **strictly dominated**. If $a\_i$ strictly dominates every other action, then we call it **strictly dominant**.
 
-**Problem 1.1 (5 points).** Prove that if an action $\hat a_i \in \mathcal{A}_i$ is **strictly dominant**, then Player $i$ plays $\hat a_i$ with probability $1$ in every coarse correlated equilibrium (CCE).
+**Problem 1.1 (5 points).** Prove that if an action $\hat a\_i \in \mathcal{A}\_i$ is **strictly dominant**, then Player $i$ plays $\hat a\_i$ with probability $1$ in every coarse correlated equilibrium (CCE).
 
-**Problem 1.2 (5 points).** Prove that if an action $\hat a_i \in \mathcal{A}_i$ is **strictly dominated**, then Player $i$ plays $\hat a_i$ with probability $0$ in every correlated equilibrium (CE).
+**Problem 1.2 (5 points).** Prove that if an action $\hat a\_i \in \mathcal{A}\_i$ is **strictly dominated**, then Player $i$ plays $\hat a\_i$ with probability $0$ in every correlated equilibrium (CE).
 
 **Problem 1.3 (10 points).** Show that there is a normal-form game with a CCE in which Player 1 plays a strictly dominated action with strictly positive probability.
 
@@ -22,8 +23,8 @@ An action $a_i \in \mathcal{A}_i$ **strictly dominates** another action $a_i' \i
 >
 > $$
 > \begin{bmatrix}
-> (2, 2) & (0, 0) \\
-> (1, 1) & (1, 1) \\
+> (2, 2) & (0, 0) \\\
+> (1, 1) & (1, 1) \\\
 > (0, 0) & (0, 0)
 > \end{bmatrix}.
 > $$
@@ -36,17 +37,17 @@ Consider a two-player zero-sum extensive-form game $\Gamma$ that proceeds as fol
 
 **Step 1:**
 
-- Each player $i \in \{1, 2\}$ privately rolls a fair $n$-sided die, and observes its outcome $\theta_i \in \{1, \dots, n\}$.
-- Both players simultaneously pick actions $a_1, a_2$ from some action set $\mathcal{A}$ of size $m$.
+- Each player $i \in \\{1, 2\\}$ privately rolls a fair $n$-sided die, and observes its outcome $\theta\_i \in \\{1, \dots, n\\}$.
+- Both players simultaneously pick actions $a\_1, a\_2$ from some action set $\mathcal{A}$ of size $m$.
 
 **Step 2:**
 
-- Each player $i \in \{1, 2\}$ privately rolls another fair $n$-sided die, and observes its outcome $\theta_i' \in \{1, \dots, n\}$.
-- Both players again simultaneously pick actions $a_1, a_2 \in \mathcal{A}$.
+- Each player $i \in \\{1, 2\\}$ privately rolls another fair $n$-sided die, and observes its outcome $\theta\_i' \in \\{1, \dots, n\\}$.
+- Both players again simultaneously pick actions $a\_1, a\_2 \in \mathcal{A}$.
 
-The utility of Player 1 (this is a zero-sum game: Player 2's utility is the negative of Player 1's) depends only on the sums $\theta_1 + \theta_1'$ and $\theta_2 + \theta_2'$ and the actions $a_1, a_2, a_1', a_2'$. That is, each player only cares about the **sum** of their two dice, not their individual values.
+The utility of Player 1 (this is a zero-sum game: Player 2's utility is the negative of Player 1's) depends only on the sums $\theta\_1 + \theta\_1'$ and $\theta\_2 + \theta\_2'$ and the actions $a\_1, a\_2, a\_1', a\_2'$. That is, each player only cares about the **sum** of their two dice, not their individual values.
 
-Note that we can identify a decision point (information set) of player $i$ by specifying either $\theta_i$ (for Step 1), or a tuple $(\theta_i, \vec a, \theta'_i)$ (for Step 2), where $\vec a = (a_1, a_2)$.
+Note that we can identify a decision point (information set) of player $i$ by specifying either $\theta\_i$ (for Step 1), or a tuple $(\theta\_i, \vec a, \theta'\_i)$ (for Step 2), where $\vec a = (a\_1, a\_2)$.
 
 #### 2.1 Warm-Up
 
@@ -54,27 +55,27 @@ Note that we can identify a decision point (information set) of player $i$ by sp
 
 #### 2.2 Symmetric Strategies and CFR
 
-Let $j_i = (\theta_i, a_i, a_{-i}, \theta_i')$ and $\tilde j_i = (\tilde \theta_i, a_i, a_{-i}, \tilde \theta_i')$ be two infosets of the same player $i$ in Step 2. We say that $j_i$ and $\tilde j_i$ are **equivalent** if $\theta_i + \theta_i'= \tilde\theta_i + \tilde\theta_i'$ (note that this forces the set of actions to be the same in both infosets).
+Let $j\_i = (\theta\_i, a\_i, a\_{-i}, \theta\_i')$ and $\tilde j\_i = (\tilde \theta\_i, a\_i, a\_{-i}, \tilde \theta\_i')$ be two infosets of the same player $i$ in Step 2. We say that $j\_i$ and $\tilde j\_i$ are **equivalent** if $\theta\_i + \theta\_i'= \tilde\theta\_i + \tilde\theta\_i'$ (note that this forces the set of actions to be the same in both infosets).
 
-Call a behavioral strategy $\vec{b}_i : \mathcal{J}_i \to \Delta(\mathcal{A})$, where $\mathcal{J}_i$ is player $i$'s information partition, **symmetric** if equivalent infosets have identical action distributions, that is, $\vec{b}_i(\cdot|j_i) = \vec{b}_i(\cdot|j_i')$ whenever $j_i, j_i'$ are equivalent.
+Call a behavioral strategy $\vec{b}\_i : \mathcal{J}\_i \to \Delta(\mathcal{A})$, where $\mathcal{J}\_i$ is player $i$'s information partition, **symmetric** if equivalent infosets have identical action distributions, that is, $\vec{b}\_i(\cdot|j\_i) = \vec{b}\_i(\cdot|j\_i')$ whenever $j\_i, j\_i'$ are equivalent.
 
-Suppose both players run CFR with simultaneous (as opposed to alternating) updates. Let $\vec{b}_i^{(t)}$ be the behavioral strategy played by player $i$ at time $t$. In CFR, the counterfactual utility that the regret minimizer at infoset $j_i \in \mathcal{J}_i$ receives at time $t$ is given by
+Suppose both players run CFR with simultaneous (as opposed to alternating) updates. Let $\vec{b}\_i^{(t)}$ be the behavioral strategy played by player $i$ at time $t$. In CFR, the counterfactual utility that the regret minimizer at infoset $j\_i \in \mathcal{J}\_i$ receives at time $t$ is given by
 
 $$
-u_i^{(t)}(a_i|j_i) = \sum_{\substack{h \in j_i\\z \succeq ha}} \vec{b}_i^{(t)}(z|(h,a_i)) \cdot  \vec{b}_{-i}^{(t)}(z)\cdot c(z) \cdot u_i(z), \tag{1}
+u\_i^{(t)}(a\_i|j\_i) = \sum\_{\substack{h \in j\_i\\\z \succeq ha}} \vec{b}\_i^{(t)}(z|(h,a\_i)) \cdot  \vec{b}\_{-i}^{(t)}(z)\cdot c(z) \cdot u\_i(z), \tag{1}
 $$
 
 where
 
-- $(h, a_i)$ is the child of node $h$ reached by playing action $a_i$,
-- the sum is over terminal nodes $z$ that are descendants of nodes $(h,a_i)$ for $h \in j_i$,
-- $\vec{b}_i(z|(h,a_i))$ is the probability that player $i$ plays all actions on the $(h, a_i) \to z$ path,
-- $\vec{b}_{-i}(z)$ (resp. $c(z)$) is the probability that the opponent (resp. chance) plays all actions on the path from the root node to $z$, and
-- $u_i(z)$ is the utility of terminal node $z$ for player $i$.
+- $(h, a\_i)$ is the child of node $h$ reached by playing action $a\_i$,
+- the sum is over terminal nodes $z$ that are descendants of nodes $(h,a\_i)$ for $h \in j\_i$,
+- $\vec{b}\_i(z|(h,a\_i))$ is the probability that player $i$ plays all actions on the $(h, a\_i) \to z$ path,
+- $\vec{b}\_{-i}(z)$ (resp. $c(z)$) is the probability that the opponent (resp. chance) plays all actions on the path from the root node to $z$, and
+- $u\_i(z)$ is the utility of terminal node $z$ for player $i$.
 
-**Problem 2.2 (8 points).** Let $\vec{b}_i^{(t)} : \mathcal{J}_i \to \Delta(\mathcal{A})$ be the behavioral strategy played by player $i$ at time $t$ in CFR. Show that if $\vec{b}_{-i}^{(1)}, \dots, \vec{b}_{-i}^{(t-1)}$ are all symmetric, then $\vec{b}_{i}^{(1)}, \dots, \vec{b}_{i}^{(t)}$ are also symmetric.
+**Problem 2.2 (8 points).** Let $\vec{b}\_i^{(t)} : \mathcal{J}\_i \to \Delta(\mathcal{A})$ be the behavioral strategy played by player $i$ at time $t$ in CFR. Show that if $\vec{b}\_{-i}^{(1)}, \dots, \vec{b}\_{-i}^{(t-1)}$ are all symmetric, then $\vec{b}\_{i}^{(1)}, \dots, \vec{b}\_{i}^{(t)}$ are also symmetric.
 
-> Hint: given two equivalent infosets $(\theta_i, \vec a, \theta_i')$, $(\tilde \theta_i, \vec a, \tilde \theta_i')$, show that these two infosets will observe the same counterfactual utility $u_i^{(t)}(\cdot|j)$ at every timestep $t$.
+> Hint: given two equivalent infosets $(\theta\_i, \vec a, \theta\_i')$, $(\tilde \theta\_i, \vec a, \tilde \theta\_i')$, show that these two infosets will observe the same counterfactual utility $u\_i^{(t)}(\cdot|j)$ at every timestep $t$.
 
 It follows by induction that both players will play symmetric strategies at all timesteps. Use this fact for the remainder of the problem.
 
@@ -84,7 +85,7 @@ It follows by induction that both players will play symmetric strategies at all 
 
 #### 2.3 Imperfect-Recall Abstraction
 
-Now consider the imperfect-recall abstraction of $\Gamma$ in which equivalent information sets have been merged into larger infosets. That is, infosets in Step 2 are now identified by tuples $(\theta_i^*, \vec a)$ where $\theta_i^* = \theta_i + \theta_i'$. Call this game $\hat\Gamma$. We define CFR in imperfect-recall games using formula (1).
+Now consider the imperfect-recall abstraction of $\Gamma$ in which equivalent information sets have been merged into larger infosets. That is, infosets in Step 2 are now identified by tuples $(\theta\_i^\*, \vec a)$ where $\theta\_i^\* = \theta\_i + \theta\_i'$. Call this game $\hat\Gamma$. We define CFR in imperfect-recall games using formula (1).
 
 CFR on imperfect-recall zero-sum games is **not** generally guaranteed to converge to Nash equilibrium, even in averages, but you will show that **in this particular class of games** CFR works.
 
@@ -106,23 +107,23 @@ Let $\mathcal{X}$ and $\mathcal{Y}$ be the sequence-form strategy polytopes corr
 
 A good smoke test when implementing regret minimization algorithms is to verify that they learn to best respond. In particular, you will verify that your implementation of CFR applied to the decision problem of Player 1 learns a best response against Player 2 when Player 2 plays the **uniform** strategy, that is, the strategy that at each decision point picks any of the available actions with equal probability.
 
-Let $\vec{y}_{\text{uni}} \in \mathcal{Y}$ be the sequence-form representation of the strategy for Player 2 that at each decision point selects each of the available actions with equal probability. When Player 2 plays according to that strategy, the utility vector for Player 1 is given by $\vec{u} \coloneqq \mathbf{A} \vec{y}_{\text{uni}}$, where $\mathbf{A}$ is the payoff matrix of the game.
+Let $\vec{y}\_{\text{uni}} \in \mathcal{Y}$ be the sequence-form representation of the strategy for Player 2 that at each decision point selects each of the available actions with equal probability. When Player 2 plays according to that strategy, the utility vector for Player 1 is given by $\vec{u} \coloneqq \mathbf{A} \vec{y}\_{\text{uni}}$, where $\mathbf{A}$ is the payoff matrix of the game.
 
 For each of the three games, take your CFR implementation for the decision problem of Player 1, and let it output strategies $\vec{x}^{(t)} \in \mathcal{X}$ while giving as feedback at each time $t$ the same utility vector $\vec{u}$. As $T \to \infty$, the average strategy
 
 $$
-\bar{\vec{x}}^{(T)} \coloneqq \frac{1}{T} \sum_{t=1}^T \vec{x}^{(t)} \in \mathcal{X} \tag{2}
+\bar{\vec{x}}^{(T)} \coloneqq \frac{1}{T} \sum\_{t=1}^T \vec{x}^{(t)} \in \mathcal{X} \tag{2}
 $$
 
-will converge to a best response to the uniform strategy $\vec{y}_{\text{uni}}$, that is,
+will converge to a best response to the uniform strategy $\vec{y}\_{\text{uni}}$, that is,
 
 $$
-\lim_{T\to\infty} \langle \bar{\vec{x}}^{(T)}, \mathbf{A} \vec{y}_{\text{uni}} \rangle = \max_{\hat{\vec{x}}\in \mathcal{X}}  \hat{\vec{x}}^\top \mathbf{A} \vec{y}_{\text{uni}}.
+\lim\_{T\to\infty} \langle \bar{\vec{x}}^{(T)}, \mathbf{A} \vec{y}\_{\text{uni}} \rangle = \max\_{\hat{\vec{x}}\in \mathcal{X}}  \hat{\vec{x}}^\top \mathbf{A} \vec{y}\_{\text{uni}}.
 $$
 
 If the above doesn't happen empirically, something is wrong with your implementation.
 
-**Problem 3.1.1 (15 points).** In each of the three games, apply your CFR implementation to the tree-form sequential decision problem of Player 1, using as local regret minimizer at each decision point the regret matching algorithm (Lecture 4). At each time $t$, give as feedback to the algorithm the same utility vector $\vec{u} = \mathbf{A} \vec{y}_{\text{uni}}$, where $\vec{y}_{\text{uni}} \in \mathcal{Y}$ is the uniform strategy for Player 2. Run the algorithm for $1000$ iterations. After each iteration $T = 1,\dots,1000$, compute the value $v^{(T)} \coloneqq \langle \bar{\vec{x}}^{(T)}, \mathbf{A} \vec{y}_{\text{uni}} \rangle$ where $\bar{\vec{x}}^{(T)} \in \mathcal{X}$ is the average strategy output so far by CFR, as defined in (2).
+**Problem 3.1.1 (15 points).** In each of the three games, apply your CFR implementation to the tree-form sequential decision problem of Player 1, using as local regret minimizer at each decision point the regret matching algorithm (Lecture 4). At each time $t$, give as feedback to the algorithm the same utility vector $\vec{u} = \mathbf{A} \vec{y}\_{\text{uni}}$, where $\vec{y}\_{\text{uni}} \in \mathcal{Y}$ is the uniform strategy for Player 2. Run the algorithm for $1000$ iterations. After each iteration $T = 1,\dots,1000$, compute the value $v^{(T)} \coloneqq \langle \bar{\vec{x}}^{(T)}, \mathbf{A} \vec{y}\_{\text{uni}} \rangle$ where $\bar{\vec{x}}^{(T)} \in \mathcal{X}$ is the average strategy output so far by CFR, as defined in (2).
 
 Plot $v^{(T)}$ as a function of $T$. Empirically, what limit do you observe $v^{(T)}$ converging to?
 
@@ -137,11 +138,11 @@ Your solution should include three plots (one for each game) and three values. D
 
 Now that you are confident that your implementation of CFR is correct, you will use CFR to converge to Nash equilibrium via the self-play idea described in Lecture 3.
 
-The idea behind using regret minimization to converge to Nash equilibrium in a two-player zero-sum game is **self play**. We instantiate two regret minimization algorithms, $\mathfrak{R}_\mathcal{X}$ and $\mathfrak{R}_\mathcal{Y}$, for the domains of the maximization and minimization problem, respectively. At each time $t$ the two regret minimizers output strategies $\vec{x}^{(t)}$ and $\vec{y}^{(t)}$, respectively. Then they receive as feedback the vectors $\vec{u}_\mathcal{X}^{(t)}, \vec{u}_\mathcal{Y}^{(t)}$ defined as
+The idea behind using regret minimization to converge to Nash equilibrium in a two-player zero-sum game is **self play**. We instantiate two regret minimization algorithms, $\mathfrak{R}\_\mathcal{X}$ and $\mathfrak{R}\_\mathcal{Y}$, for the domains of the maximization and minimization problem, respectively. At each time $t$ the two regret minimizers output strategies $\vec{x}^{(t)}$ and $\vec{y}^{(t)}$, respectively. Then they receive as feedback the vectors $\vec{u}\_\mathcal{X}^{(t)}, \vec{u}\_\mathcal{Y}^{(t)}$ defined as
 
 $$
-\vec{u}_\mathcal{X}^{(t)} \coloneqq \mathbf{A} \vec{y}^{(t)},\qquad\quad
-\vec{u}_\mathcal{Y}^{(t)} \coloneqq -\mathbf{A}^\top \vec{x}^{(t)}, \tag{3}
+\vec{u}\_\mathcal{X}^{(t)} \coloneqq \mathbf{A} \vec{y}^{(t)},\qquad\quad
+\vec{u}\_\mathcal{Y}^{(t)} \coloneqq -\mathbf{A}^\top \vec{x}^{(t)}, \tag{3}
 $$
 
 where $\mathbf{A}$ is Player 1's payoff matrix. (That is: each regret minimizer outputs a strategy, then observes the utility vector constructed from the opponent's current strategy, and so on.)
@@ -149,7 +150,7 @@ where $\mathbf{A}$ is Player 1's payoff matrix. (That is: each regret minimizer 
 As we saw in class, the pair of average strategies produced by the regret minimizers up to any time $T$ converges to a Nash equilibrium, where convergence is measured via the **saddle point gap**
 
 $$
-\max_{\hat{\vec{x}}\in\mathcal{X}} ( \hat{\vec{x}}^\top \mathbf{A} \vec{y}  )  - \min_{\hat{\vec{y}}\in\mathcal{Y}} ( \vec{x}^\top \mathbf{A} \hat{\vec{y}}  ).
+\max\_{\hat{\vec{x}}\in\mathcal{X}} ( \hat{\vec{x}}^\top \mathbf{A} \vec{y}  )  - \min\_{\hat{\vec{y}}\in\mathcal{Y}} ( \vec{x}^\top \mathbf{A} \hat{\vec{y}}  ).
 $$
 
 A point $(\vec{x},\vec{y})\in \mathcal{X}\times\mathcal{Y}$ has zero saddle point gap if and only if it is a Nash equilibrium of the game.
@@ -171,14 +172,14 @@ Your solution should include six plots (two for each game: one for the saddle po
 To achieve better performance in practice when learning Nash equilibria in two-player zero-sum games, we consider the following modifications to the setup of the previous subsection.
 
 - Instead of regret matching, CFR is set up to use the regret matching plus (RM$^+$) algorithm (see Lecture 4) at each decision point.
-- Instead of the classical self-play scheme described above, players **alternate** the iterates and feedback: the utility vector $\vec{u}_\mathcal{X}^{(t)}$ is as defined in (3), whereas
+- Instead of the classical self-play scheme described above, players **alternate** the iterates and feedback: the utility vector $\vec{u}\_\mathcal{X}^{(t)}$ is as defined in (3), whereas
 $$
-\tilde{\vec{u}}_\mathcal{Y}^{(t)} \coloneqq -\mathbf{A}^\top \vec{x}^{(t+1)}.
+\tilde{\vec{u}}\_\mathcal{Y}^{(t)} \coloneqq -\mathbf{A}^\top \vec{x}^{(t+1)}.
 $$
 - Finally, the output is a weighted average of the strategies,
 $$
-\bar{\bar{\vec{x}}}^{(T)} \coloneqq \frac{1}{\sum_{t=1}^{T} t^\gamma}\sum_{t=1}^{T} t^\gamma\vec{x}^{(t)}, \qquad
-\bar{\bar{\vec{y}}}^{(T)} \coloneqq \frac{1}{\sum_{t=1}^{T} t^\gamma}\sum_{t=1}^{T} t^\gamma \vec{y}^{(t)}
+\bar{\bar{\vec{x}}}^{(T)} \coloneqq \frac{1}{\sum\_{t=1}^{T} t^\gamma}\sum\_{t=1}^{T} t^\gamma\vec{x}^{(t)}, \qquad
+\bar{\bar{\vec{y}}}^{(T)} \coloneqq \frac{1}{\sum\_{t=1}^{T} t^\gamma}\sum\_{t=1}^{T} t^\gamma \vec{y}^{(t)}
 $$
 which is considered instead of the regular averages when computing the saddle point gap.
 
@@ -218,9 +219,9 @@ The tree of each decision problem is stored as a list of nodes (given in top-dow
 | `actions` | (decision points only) The set of action strings available at the node |
 | `signals` | (observation points only) The set of signal strings that can be observed at the node |
 | `parent_edge` | The parent edge; `null` for the root, otherwise a pair `(parent_node_id, action_or_signal)` |
-| `parent_sequence` | (decision points only) The parent sequence $p_j$: the last sequence (decision point–action pair) encountered on the path from the root to $j$ |
+| `parent_sequence` | (decision points only) The parent sequence $p\_j$: the last sequence (decision point–action pair) encountered on the path from the root to $j$ |
 
-The bilinear utility function for Player 1 is given through the payoff matrix $\mathbf{A}$: $u_1(\vec{x}, \vec{y}) = \vec{x}^\top \mathbf{A}\vec{y}$, where $\vec{x}$, $\vec{y}$ are the players' sequence-form strategies. In the file, $\mathbf{A}$ is represented as a list of all non-zero entries, each with the fields:
+The bilinear utility function for Player 1 is given through the payoff matrix $\mathbf{A}$: $u\_1(\vec{x}, \vec{y}) = \vec{x}^\top \mathbf{A}\vec{y}$, where $\vec{x}$, $\vec{y}$ are the players' sequence-form strategies. In the file, $\mathbf{A}$ is represented as a list of all non-zero entries, each with the fields:
 
 | Field | Meaning |
 |---|---|
@@ -232,8 +233,8 @@ The bilinear utility function for Player 1 is given through the payoff matrix $\
 
 $$
 \begin{pmatrix}
- 0 & -1 &  1\\
- 1 &  0 & -2\\
+ 0 & -1 &  1\\\
+ 1 &  0 & -2\\\
 -1 &  2 &  0
 \end{pmatrix},
 $$
@@ -249,7 +250,7 @@ The following functions in the stub file are **already implemented** and can be 
 | `get_sequence_set(tfsdp)` | Returns the set of all sequences in the given TFSDP |
 | `is_valid_RSigma_vector(tfsdp, obj)` | Checks that the object is a dictionary keyed on the sequence set of the given TFSDP |
 | `assert_is_valid_sf_strategy(tfsdp, obj)` | Checks whether the object represents a valid sequence-form strategy vector |
-| `best_response_value(tfsdp, utility)` | Computes $\max_{\vec{x} \in Q} \vec{x}^\top u$, where $Q$ is the sequence-form polytope of the given TFSDP |
+| `best_response_value(tfsdp, utility)` | Computes $\max\_{\vec{x} \in Q} \vec{x}^\top u$, where $Q$ is the sequence-form polytope of the given TFSDP |
 | `compute_utility_vector_pl1(game, sf_strategy_pl2)` | Returns $\mathbf{A}\vec{y}$ ($\mathbf{A}$ is the payoff matrix, $\vec{y}$ the given Player 2 strategy) |
 | `compute_utility_vector_pl2(game, sf_strategy_pl1)` | Returns $-\mathbf{A}^\top\vec{x}$ ($\vec{x}$ the given Player 1 strategy) |
 | `gap(game, sf_strategy_pl1, sf_strategy_pl2)` | Computes the saddle point gap of the given sequence-form strategies for the players |

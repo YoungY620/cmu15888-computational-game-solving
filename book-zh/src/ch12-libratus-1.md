@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # L12 Libratus（上）：历史与人机大战
 
 本讲介绍 Libratus——首个在双人无限注德州扑克（two-player no-limit Texas hold'em）上超越人类顶尖职业选手的 AI [Brown & Sandholm, *Science* 2018]。本章覆盖背景部分：不完美信息博弈为何困难、扑克 AI 的历史、人机大战的实验设计与结果，以及 Libratus 的总体架构与蓝图策略（blueprint strategy）模块；子博弈求解（subgame solving）与自我改进器（self-improver）两大核心模块留待后续两章。
@@ -43,7 +44,7 @@ AlphaGo 的成功表明，基于搜索与机器学习的技术可以在围棋这
 
 在 Libratus 之前，双人无限注德州扑克（heads-up no-limit Texas hold'em, HUNL）一直是不完美信息博弈 AI 的**主要基准与挑战问题**：
 
-- 局面数高达 $10^{161}$，比已求解的有限注版本大几十个数量级（该数字按标准赛制计算：两位玩家各持 \$20{,}000、即 200 个大盲注的深筹码，且下注以 1 美元为最小单位）[Brown & Sandholm, IJCAI-17]；
+- 局面数高达 $10^{161}$，比已求解的有限注版本大几十个数量级（该数字按标准赛制计算：两位玩家各持 \\$20{,}000、即 200 个大盲注的深筹码，且下注以 1 美元为最小单位）[Brown & Sandholm, IJCAI-17]；
 - 主要流行于网络对战，也出现在 World Series of Poker、NBC Heads-Up Championship 等赛事，并出现在《Casino Royale》《Rounders》等电影中；
 - 被称为“最纯粹的扑克形式”（purest form of poker）；
 - 此前没有任何 AI 战胜过顶尖人类选手。
@@ -73,7 +74,7 @@ AlphaGo 的成功表明，基于搜索与机器学习的技术可以在围棋这
 Libratus 以很大优势战胜了顶尖人类：
 
 - 赢率 **147 mbb/hand**（milli-big-blinds per hand，每手千分之一大盲注）；
-- 统计显著性达 $99.98\%$（即 $p = 0.0002$）；
+- 统计显著性达 $99.98\\%$（即 $p = 0.0002$）；
 - **每一位**人类选手各自对 Libratus 都是输的。
 
 ### 补充实验：为何博弈论方法优于机器学习
@@ -98,7 +99,7 @@ Libratus 由三个模块组成（如下图所示），完整技术报告见 [Bro
 
 ### Libratus 中的抽象
 
-**对自然的行动（发牌）做抽象**。抽象之所以可行，是因为许多局面在策略上近似、可以按同一方式处理而代价很小——例如下注 \$500 与 \$501 几乎没有任何区别，无需为二者各算一套策略 [Brown & Sandholm, IJCAI-17]。Libratus 采用与 Tartanian8 相同的算法 [Brown, Ganzfried & Sandholm, AAMAS-15]——即课上讲过的、集中式均衡求解中最先进的状态抽象算法的分布式版本：按公共牌 flop 把计算分布到不同节点（blade），使得任何一个样本始终落在单个计算节点内。但抽象粒度细得多：
+**对自然的行动（发牌）做抽象**。抽象之所以可行，是因为许多局面在策略上近似、可以按同一方式处理而代价很小——例如下注 \\$500 与 \\$501 几乎没有任何区别，无需为二者各算一套策略 [Brown & Sandholm, IJCAI-17]。Libratus 采用与 Tartanian8 相同的算法 [Brown, Ganzfried & Sandholm, AAMAS-15]——即课上讲过的、集中式均衡求解中最先进的状态抽象算法的分布式版本：按公共牌 flop 把计算分布到不同节点（blade），使得任何一个样本始终落在单个计算节点内。但抽象粒度细得多：
 
 - 第 1、2 轮下注：不做牌面抽象；
 - 第 3 轮：5500 万（55M）种牌面历史压到 250 万（2.5M）个桶（bucket）；

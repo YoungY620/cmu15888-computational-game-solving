@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # L11 Game Abstraction 2
 
 The previous lecture introduced the motivation for abstraction and its basic types. This lecture goes deeper into four topics: action abstraction with optimality guarantees (via regret transfer and parameter optimization), performing abstraction and equilibrium finding simultaneously, reverse mapping of the abstract game's solution back into the original game, and a unified framework for lossy abstraction with exploitability bounds. All of these techniques are domain independent.
@@ -26,7 +27,7 @@ There are three ways to respond:
 
 - **Start Over**: clear all state and solve from scratch. $\epsilon$ jumps back up to about $0.1$, and all 2000 iterations of prior computation are wasted.
 - **Naïve Regret Transfer**: directly carry the regrets accumulated on the old game into the new game and keep running. $\epsilon$ only jumps to about $0.05$, but then it **stalls**: convergence slows markedly, it lingers around $0.045$, and Start Over eventually overtakes it. The reason is that the old regrets were accumulated on the old payoff scale; their magnitude does not match the new game, and the leftover oversized regrets impede refinement of the equilibrium.
-- **Correct Regret Transfer**: deweight the transferred regrets (and the accumulated strategy used for strategy averaging) by a factor of $O\!\left(\dfrac{1}{(1+\delta\sqrt{T})^2}\right)$, where $T$ is the number of iterations already run. The intuition: the old regrets and old strategy were collected on a slightly different game; the larger the perturbation and the longer the run, the less trustworthy the old data. Warm started this way, $\epsilon$ resumes decreasing at a good rate from about $0.05$ and ends up significantly better than the other two curves.
+- **Correct Regret Transfer**: deweight the transferred regrets (and the accumulated strategy used for strategy averaging) by a factor of $O\\!\left(\dfrac{1}{(1+\delta\sqrt{T})^2}\right)$, where $T$ is the number of iterations already run. The intuition: the old regrets and old strategy were collected on a slightly different game; the larger the perturbation and the longer the run, the less trustworthy the old data. Warm started this way, $\epsilon$ resumes decreasing at a good rate from about $0.05$ and ends up significantly better than the other two curves.
 
 ![Convergence of the three warm-start schemes: correct regret transfer (white) is best, start over (light blue) is next, naïve regret transfer (green) stalls](assets/ch11-abstraction-2-2.png)
 
@@ -36,10 +37,10 @@ Regret transfer lets us **optimize abstraction parameters online**. Return to th
 
 The algorithm is a **warm-started gradient ascent**: in the toy game above, parameterize the Bet–Call payoff as $\pm\theta$ and aim to maximize Player 1's Nash equilibrium value (a smooth unimodal curve in $\theta$, observed only noisily at each step).
 
-1. **Step 1**: run $K_1$ iterations of no-regret learning at the current $\theta$, obtaining an estimate of the equilibrium value with $\epsilon$ error bars.
+1. **Step 1**: run $K\_1$ iterations of no-regret learning at the current $\theta$, obtaining an estimate of the equilibrium value with $\epsilon$ error bars.
 2. **Step 2**: estimate the gradient (by finite differences: run small perturbations around $\theta$).
 3. **Step 3**: move $\theta$ along the gradient direction and warm start via regret transfer: deweight the regrets and the strategies used for averaging as above. The error bars temporarily expand after the move.
-4. **Step 4**: run $K_2$ iterations of no-regret learning at the new $\theta$; the error bars shrink again.
+4. **Step 4**: run $K\_2$ iterations of no-regret learning at the new $\theta$; the error bars shrink again.
 5. Repeat to convergence.
 
 ![Nash equilibrium value as a function of $\theta$; the green dot is the current estimate, the red ticks are $\epsilon$ error bars, and the red dashed line is the estimated gradient direction](assets/ch11-abstraction-2-3.png)
@@ -114,17 +115,17 @@ Why bound approximate solution concepts? The strongest abstractions in practice 
 
 **Definition (lifted strategy)**: given a strategy profile $\sigma'$ of the abstract game, a lifted strategy is a strategy profile $\sigma$ of the original game such that for every abstract information set $I'$ and corresponding original information set $I$, the probability mass on each abstract action can be spread in any way across the set of original actions that map to it. Formally,
 
-$$\sigma'(I', a') = \sum_{a \in g^{-1}(a')} \sigma(I, a),$$
+$$\sigma'(I', a') = \sum\_{a \in g^{-1}(a')} \sigma(I, a),$$
 
 where $g^{-1}(a')$ is the set of original actions mapping to the abstract action $a'$.
 
-**The key proof construction** recursively decomposes the value of an information set onto its descendant information sets. Write $V_i(I)$ for the **counterfactual value** of information set $I$ [Zinkevich et al., NIPS-07]: the expected utility of $I$ when all players play according to the profile $\sigma$ except that player $i$ plays to reach $I$. Following the identity of Kroer & Sandholm [EC-14], $V_i(I)$ can be written as a sum over immediate descendants:
+**The key proof construction** recursively decomposes the value of an information set onto its descendant information sets. Write $V\_i(I)$ for the **counterfactual value** of information set $I$ [Zinkevich et al., NIPS-07]: the expected utility of $I$ when all players play according to the profile $\sigma$ except that player $i$ plays to reach $I$. Following the identity of Kroer & Sandholm [EC-14], $V\_i(I)$ can be written as a sum over immediate descendants:
 
-$$V_i(I) = \sum_{a \in A_I} \sigma(I, a)\left( \sum_{J \in D_{Ia}} \pi^{\sigma}_{-i}(J \mid I)\, V_i(J) \;+\; \sum_{z \in Z_{Ia}} \pi^{\sigma}_{-i}(z \mid I)\, u_i(z) \right),$$
+$$V\_i(I) = \sum\_{a \in A\_I} \sigma(I, a)\left( \sum\_{J \in D\_{Ia}} \pi^{\sigma}\_{-i}(J \mid I)\\, V\_i(J) \\;+\\; \sum\_{z \in Z\_{Ia}} \pi^{\sigma}\_{-i}(z \mid I)\\, u\_i(z) \right),$$
 
-where $D_{Ia}$ and $Z_{Ia}$ are the descendant information sets and leaves reachable after taking action $a$ at $I$ before player $i$ acts again, and $\pi^{\sigma}_{-i}$ is the reach probability excluding player $i$'s actions. The abstract value $W_i$ has the same form. Expanding this identity on both sides and inducting layer by layer (induction over the acyclicity of the abstract information sets), one obtains: the difference between the values of the original and abstract games under the same lifted strategy equals exactly a weighted sum, along the way, of **payoff differences** and **reach-probability differences**. Denote this recursively defined difference by $M(I, \sigma, \sigma'_{-i})$. In particular, at the root there is an exact equality (not merely an inequality):
+where $D\_{Ia}$ and $Z\_{Ia}$ are the descendant information sets and leaves reachable after taking action $a$ at $I$ before player $i$ acts again, and $\pi^{\sigma}\_{-i}$ is the reach probability excluding player $i$'s actions. The abstract value $W\_i$ has the same form. Expanding this identity on both sides and inducting layer by layer (induction over the acyclicity of the abstract information sets), one obtains: the difference between the values of the original and abstract games under the same lifted strategy equals exactly a weighted sum, along the way, of **payoff differences** and **reach-probability differences**. Denote this recursively defined difference by $M(I, \sigma, \sigma'\_{-i})$. In particular, at the root there is an exact equality (not merely an inequality):
 
-$$W_i(r') = V_i(r) \pm M\!\left(r, \sigma, \sigma'_{-i}\right).$$
+$$W\_i(r') = V\_i(r) \pm M\\!\left(r, \sigma, \sigma'\_{-i}\right).$$
 
 That is, for any abstract profile $\sigma'$ and any of its lifted strategies $\sigma$, the difference between the lifted strategy's utility in the original game and the abstract utility is characterized exactly by $M$; the inequality in the final theorem comes only from the abstract game not being solved exactly.
 
@@ -134,17 +135,17 @@ That is, for any abstract profile $\sigma'$ and any of its lifted strategies $\s
 > - a mapping between them satisfying several mild, natural assumptions, and
 > - an $\epsilon$-Nash equilibrium in the abstract game,
 >
-> then **any** lifted strategy is an $\epsilon'$-Nash equilibrium in the original game, where $\epsilon' = \max_i \epsilon'_i$ and
+> then **any** lifted strategy is an $\epsilon'$-Nash equilibrium in the original game, where $\epsilon' = \max\_i \epsilon'\_i$ and
 >
-> $$\epsilon'_i = \epsilon + \text{mapping error}_i + \text{refinement error}_i,$$
+> $$\epsilon'\_i = \epsilon + \text{mapping error}\_i + \text{refinement error}\_i,$$
 >
 > i.e., the mapping error (the error from mapping the real game onto the perfect-recall refinement of the abstract game) plus the refinement error (the error between the perfect-recall refinement and the abstract game).
 
-The paper gives the exact form as follows. Let $\sigma^{*} = (\sigma^{*}_i, \sigma_{-i})$ be the lifted strategy $\sigma$ with player $i$ replaced by a best response in the original game, and let $\sigma^{*0}$ be the profile obtained by spreading $\sigma^{*}$ back onto the abstract game via the action mapping; write $P(\tilde I, \hat\sigma)$ for the (payoff-plus-distribution) value difference between a refinement information set $\tilde I$ and the abstract information set it belongs to. Then
+The paper gives the exact form as follows. Let $\sigma^{\*} = (\sigma^{\*}\_i, \sigma\_{-i})$ be the lifted strategy $\sigma$ with player $i$ replaced by a best response in the original game, and let $\sigma^{\*0}$ be the profile obtained by spreading $\sigma^{\*}$ back onto the abstract game via the action mapping; write $P(\tilde I, \hat\sigma)$ for the (payoff-plus-distribution) value difference between a refinement information set $\tilde I$ and the abstract information set it belongs to. Then
 
-$$\epsilon'_i = \epsilon + \underbrace{M\!\left(r, \sigma^{*}, \sigma'_{-i}\right) - M\!\left(r, \sigma, \sigma'_{-i}\right)}_{\text{mapping error}_i} + \underbrace{\sum_{I \in \mathcal{I}_i} \pi^{\sigma^{*}}(I)\,\big[ P\!\left(f(I), I^{*}\!\!\to\! I\right) - P\!\left(\tilde I_I, \sigma^{*0}\right) \big]}_{\text{refinement error}_i},$$
+$$\epsilon'\_i = \epsilon + \underbrace{M\\!\left(r, \sigma^{\*}, \sigma'\_{-i}\right) - M\\!\left(r, \sigma, \sigma'\_{-i}\right)}\_{\text{mapping error}\_i} + \underbrace{\sum\_{I \in \mathcal{I}\_i} \pi^{\sigma^{\*}}(I)\\,\big[ P\\!\left(f(I), I^{\*}\\!\\!\to\\! I\right) - P\\!\left(\tilde I\_I, \sigma^{\*0}\right) \big]}\_{\text{refinement error}\_i},$$
 
-where $M$ is the mapping difference defined recursively above. Note that both error terms depend on the best response $\sigma^{*}$, so the decomposition is in general **ex post**: one must first solve the abstract game and evaluate, before the numbers can be computed; that is the price paid for exactness.
+where $M$ is the mapping difference defined recursively above. Note that both error terms depend on the best response $\sigma^{\*}$, so the decomposition is in general **ex post**: one must first solve the abstract game and evaluate, before the numbers can be computed; that is the price paid for exactness.
 
 Advantages over prior work:
 
@@ -152,21 +153,21 @@ Advantages over prior work:
 - the equilibrium in the abstract game need not be exact ($\epsilon > 0$ is allowed);
 - no restrictive assumptions of prior work;
 - exponentially better bound than Lanctot et al. [ICML-12];
-- a similar result for solutions of the abstract game with bounded counterfactual regret (gain at most $\epsilon_a$ by switching to any action $a$).
+- a similar result for solutions of the abstract game with bounded counterfactual regret (gain at most $\epsilon\_a$ by switching to any action $a$).
 
-The **mapping error**$_i$ is the sum of two terms:
+The **mapping error**$\_i$ is the sum of two terms:
 
-- **Payoff error**: an expectation over leaf nodes in the real game of the utility difference between the real leaf and the node it maps onto, i.e., $R_i(z, \tilde z) = u_i(z) - \tilde u_i(\tilde z)$, where $\tilde z$ is the refinement leaf that $z$ maps to under the leaf-node mapping;
-- **Distribution error**: a sum over leaf nodes in the abstraction of the difference between the probability of reaching the abstract leaf and the sum of reach probabilities on the real leaves that map to it, i.e., $P_i(\tilde z \mid I, a, \sigma, \sigma') = \sum_{z \mapsto \tilde z} \pi^{\sigma}_{-i}(z \mid I) - \pi^{\sigma'}_{-i}(\tilde z \mid f(I))$.
+- **Payoff error**: an expectation over leaf nodes in the real game of the utility difference between the real leaf and the node it maps onto, i.e., $R\_i(z, \tilde z) = u\_i(z) - \tilde u\_i(\tilde z)$, where $\tilde z$ is the refinement leaf that $z$ maps to under the leaf-node mapping;
+- **Distribution error**: a sum over leaf nodes in the abstraction of the difference between the probability of reaching the abstract leaf and the sum of reach probabilities on the real leaves that map to it, i.e., $P\_i(\tilde z \mid I, a, \sigma, \sigma') = \sum\_{z \mapsto \tilde z} \pi^{\sigma}\_{-i}(z \mid I) - \pi^{\sigma'}\_{-i}(\tilde z \mid f(I))$.
 
-The **refinement error**$_i$: a sum over information sets $I_p$ in the perfect-recall refinement of the abstraction (let $I'$ be the corresponding abstract information set), each term being:
+The **refinement error**$\_i$: a sum over information sets $I\_p$ in the perfect-recall refinement of the abstraction (let $I'$ be the corresponding abstract information set), each term being:
 
-- **Payoff error**: an expectation over leaves under $I'$ of the utility difference compared to the corresponding leaf under $I_p$. The paper allows an arbitrary per-information-set scaling factor $\omega_{I_p} > 0$, i.e., $R_i(z' \mid I_p) = \tilde u_i(\tilde z) - \omega_{I_p}\, u_i(z')$: payoffs only need to be similar in a **relative** sense (for example, two subtrees whose payoffs differ by a common constant factor are strategically equivalent, and choosing the corresponding $\omega$ makes this term zero);
-- **Distribution error**: a sum over leaves under $I_p$ of the difference between the probability of reaching the refinement leaf from $I_p$ and the sum of probabilities of reaching abstract leaves from $I'$.
+- **Payoff error**: an expectation over leaves under $I'$ of the utility difference compared to the corresponding leaf under $I\_p$. The paper allows an arbitrary per-information-set scaling factor $\omega\_{I\_p} > 0$, i.e., $R\_i(z' \mid I\_p) = \tilde u\_i(\tilde z) - \omega\_{I\_p}\\, u\_i(z')$: payoffs only need to be similar in a **relative** sense (for example, two subtrees whose payoffs differ by a common constant factor are strategically equivalent, and choosing the corresponding $\omega$ makes this term zero);
+- **Distribution error**: a sum over leaves under $I\_p$ of the difference between the probability of reaching the refinement leaf from $I\_p$ and the sum of probabilities of reaching abstract leaves from $I'$.
 
-**Solutions with bounded counterfactual regret** (Theorem 2): if the abstract profile $\sigma'$ has counterfactual regret at most $r(I')$ at every abstract information set $I'$ (i.e., the gain from switching to any action $a'$ is at most $r(I')$), then any lifted strategy is an $\epsilon'$-Nash equilibrium of the original game, with a bound of the same form as Theorem 1 except that the abstract-solving error term $\epsilon$ is replaced by a weighted sum of per-information-set terms $\pi^{\sigma'}_{-i}(f(I))\, r(f(I))$; the per-information-set regret bounds take the place of the global $\epsilon$.
+**Solutions with bounded counterfactual regret** (Theorem 2): if the abstract profile $\sigma'$ has counterfactual regret at most $r(I')$ at every abstract information set $I'$ (i.e., the gain from switching to any action $a'$ is at most $r(I')$), then any lifted strategy is an $\epsilon'$-Nash equilibrium of the original game, with a bound of the same form as Theorem 1 except that the abstract-solving error term $\epsilon$ is replaced by a weighted sum of per-information-set terms $\pi^{\sigma'}\_{-i}(f(I))\\, r(f(I))$; the per-information-set regret bounds take the place of the global $\epsilon$.
 
-**Recovering prior ex ante bounds**: the paper further proves that under a **distributional-similarity condition**, namely that leaves and nodes mapped to each other have identical reach distributions (in the sense that disregards Chance moves; this is weaker than the "same sequence of information-set–action pairs" required by prior work), the terms in the mapping and refinement errors that depend on the best response $\sigma^{*}$ vanish, and the bounds become **computable ex ante** (before solving the abstract game, by taking maxima). The framework then recovers and simultaneously tightens all prior extensive-form game abstraction bounds: compared to Sandholm & Singh [EC-12] (stochastic games) and Kroer & Sandholm [EC-14, EC-16], it leaves expectations in several places where they took maxima, hence is tighter; compared to Lanctot et al. [ICML-12] (whose error grows linearly in the number of information sets), the new bound is exponentially better.
+**Recovering prior ex ante bounds**: the paper further proves that under a **distributional-similarity condition**, namely that leaves and nodes mapped to each other have identical reach distributions (in the sense that disregards Chance moves; this is weaker than the "same sequence of information-set–action pairs" required by prior work), the terms in the mapping and refinement errors that depend on the best response $\sigma^{\*}$ vanish, and the bounds become **computable ex ante** (before solving the abstract game, by taking maxima). The framework then recovers and simultaneously tightens all prior extensive-form game abstraction bounds: compared to Sandholm & Singh [EC-12] (stochastic games) and Kroer & Sandholm [EC-14, EC-16], it leaves expectations in several places where they took maxima, hence is tighter; compared to Lanctot et al. [ICML-12] (whose error grows linearly in the number of information sets), the new bound is exponentially better.
 
 ### Future Research Directions
 
@@ -188,5 +189,5 @@ One promising idea: find other specialized but practical game classes where game
 - **Optimal parameter selection**: run no-regret learning at the current $\theta$ → estimate the gradient → move $\theta$ and transfer regrets → keep running, repeating to convergence; applied to no-limit Texas Hold'em and Leduc Hold'em.
 - **Pseudo-harmonic mapping** $f(x) = \frac{(B-x)(1+A)}{(B-A)(1+x)}$ satisfies endpoint preservation, monotonicity, scale invariance, and continuity desiderata, and significantly outperforms the randomized geometric mapping.
 - **Abstraction pathology**: a finer abstraction can give a worse solution in the original game while a coarser one happens to be an equilibrium; abstraction quality is nonmonotonic.
-- **Abstraction Theorem** (Kroer & Sandholm, NeurIPS-18): $\epsilon'_i = \epsilon + \text{mapping error}_i + \text{refinement error}_i$, each error decomposing further into a payoff error and a distribution error; the decomposition is **exact** (the inequality comes only from inexactly solving the abstract game), but is generally ex post and depends on the best response; under distributional-similarity conditions it recovers ex ante computable bounds and tightens all prior results; counterexamples show such distributional assumptions are necessary in general games. Applies to $n$-player general-sum perfect-recall games, with exponentially better bounds than prior work.
+- **Abstraction Theorem** (Kroer & Sandholm, NeurIPS-18): $\epsilon'\_i = \epsilon + \text{mapping error}\_i + \text{refinement error}\_i$, each error decomposing further into a payoff error and a distribution error; the decomposition is **exact** (the inequality comes only from inexactly solving the abstract game), but is generally ex post and depends on the best response; under distributional-similarity conditions it recovers ex ante computable bounds and tightens all prior results; counterexamples show such distributional assumptions are necessary in general games. Applies to $n$-player general-sum perfect-recall games, with exponentially better bounds than prior work.
 - Open problems: distribution errors are in general not computable ex ante; find game classes whose structure makes the error terms ex ante computable, or even mutually canceling.

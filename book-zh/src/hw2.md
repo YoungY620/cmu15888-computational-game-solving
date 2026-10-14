@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # 作业 2：CFR 实现
 
 - 课程：15-888 Computational Game Solving（Fall 2025）
@@ -10,11 +11,11 @@
 
 ### 第一题：（粗）相关均衡与劣势动作（20 分）
 
-如果对每一种可能的对手动作组合 $a_{-i}$ 都有 $u_i(a_i, a_{-i}) > u_i(a_i', a_{-i})$，则称动作 $a_i \in \mathcal{A}_i$ **严格占优**（strictly dominates）于动作 $a_i' \in \mathcal{A}_i$，此时称 $a_i'$ 为**严格劣势**（strictly dominated）动作。如果 $a_i$ 严格占优于其他所有动作，则称其为**严格占优（strictly dominant）动作**。
+如果对每一种可能的对手动作组合 $a\_{-i}$ 都有 $u\_i(a\_i, a\_{-i}) > u\_i(a\_i', a\_{-i})$，则称动作 $a\_i \in \mathcal{A}\_i$ **严格占优**（strictly dominates）于动作 $a\_i' \in \mathcal{A}\_i$，此时称 $a\_i'$ 为**严格劣势**（strictly dominated）动作。如果 $a\_i$ 严格占优于其他所有动作，则称其为**严格占优（strictly dominant）动作**。
 
-**问题 1.1（5 分）** 证明：如果动作 $\hat a_i \in \mathcal{A}_i$ 是严格占优动作，那么在每一个粗相关均衡（coarse correlated equilibrium, CCE）中，玩家 $i$ 以概率 $1$ 选择 $\hat a_i$。
+**问题 1.1（5 分）** 证明：如果动作 $\hat a\_i \in \mathcal{A}\_i$ 是严格占优动作，那么在每一个粗相关均衡（coarse correlated equilibrium, CCE）中，玩家 $i$ 以概率 $1$ 选择 $\hat a\_i$。
 
-**问题 1.2（5 分）** 证明：如果动作 $\hat a_i \in \mathcal{A}_i$ 是严格劣势动作，那么在每一个相关均衡（correlated equilibrium, CE）中，玩家 $i$ 以概率 $0$ 选择 $\hat a_i$。
+**问题 1.2（5 分）** 证明：如果动作 $\hat a\_i \in \mathcal{A}\_i$ 是严格劣势动作，那么在每一个相关均衡（correlated equilibrium, CE）中，玩家 $i$ 以概率 $0$ 选择 $\hat a\_i$。
 
 **问题 1.3（10 分）** 证明：存在某个标准式博弈（normal-form game）以及该博弈中的某个 CCE，使得玩家 1 以严格正的概率选择一个严格劣势动作。
 
@@ -22,8 +23,8 @@
 >
 > $$
 > \begin{bmatrix}
-> (2, 2) & (0, 0) \\
-> (1, 1) & (1, 1) \\
+> (2, 2) & (0, 0) \\\
+> (1, 1) & (1, 1) \\\
 > (0, 0) & (0, 0)
 > \end{bmatrix}.
 > $$
@@ -36,17 +37,17 @@
 
 **第 1 步：**
 
-- 每位玩家 $i \in \{1, 2\}$ 私下掷一枚公平的 $n$ 面骰子，并观察其结果 $\theta_i \in \{1, \dots, n\}$。
-- 两位玩家同时从某个大小为 $m$ 的动作集 $\mathcal{A}$ 中选择动作 $a_1, a_2$。
+- 每位玩家 $i \in \\{1, 2\\}$ 私下掷一枚公平的 $n$ 面骰子，并观察其结果 $\theta\_i \in \\{1, \dots, n\\}$。
+- 两位玩家同时从某个大小为 $m$ 的动作集 $\mathcal{A}$ 中选择动作 $a\_1, a\_2$。
 
 **第 2 步：**
 
-- 每位玩家 $i \in \{1, 2\}$ 再私下掷一枚公平的 $n$ 面骰子，并观察其结果 $\theta_i' \in \{1, \dots, n\}$。
-- 两位玩家再次同时选择动作 $a_1, a_2 \in \mathcal{A}$。
+- 每位玩家 $i \in \\{1, 2\\}$ 再私下掷一枚公平的 $n$ 面骰子，并观察其结果 $\theta\_i' \in \\{1, \dots, n\\}$。
+- 两位玩家再次同时选择动作 $a\_1, a\_2 \in \mathcal{A}$。
 
-玩家 1 的效用（这是零和博弈：玩家 2 的效用是玩家 1 的相反数）只依赖于两个和 $\theta_1 + \theta_1'$、$\theta_2 + \theta_2'$ 以及动作 $a_1, a_2, a_1', a_2'$。也就是说，每位玩家只关心自己两枚骰子的**和**，而不关心各自的点数。
+玩家 1 的效用（这是零和博弈：玩家 2 的效用是玩家 1 的相反数）只依赖于两个和 $\theta\_1 + \theta\_1'$、$\theta\_2 + \theta\_2'$ 以及动作 $a\_1, a\_2, a\_1', a\_2'$。也就是说，每位玩家只关心自己两枚骰子的**和**，而不关心各自的点数。
 
-注意，玩家 $i$ 的一个决策点（信息集，information set）可以用 $\theta_i$（第 1 步）或元组 $(\theta_i, \vec a, \theta'_i)$（第 2 步）来标识，其中 $\vec a = (a_1, a_2)$。
+注意，玩家 $i$ 的一个决策点（信息集，information set）可以用 $\theta\_i$（第 1 步）或元组 $(\theta\_i, \vec a, \theta'\_i)$（第 2 步）来标识，其中 $\vec a = (a\_1, a\_2)$。
 
 #### 2.1 热身
 
@@ -54,27 +55,27 @@
 
 #### 2.2 对称策略与 CFR
 
-设 $j_i = (\theta_i, a_i, a_{-i}, \theta_i')$ 和 $\tilde j_i = (\tilde \theta_i, a_i, a_{-i}, \tilde \theta_i')$ 是同一玩家 $i$ 在第 2 步的两个信息集。如果 $\theta_i + \theta_i'= \tilde\theta_i + \tilde\theta_i'$（注意这迫使两个信息集中的动作集相同），则称 $j_i$ 与 $\tilde j_i$ **等价**（equivalent）。
+设 $j\_i = (\theta\_i, a\_i, a\_{-i}, \theta\_i')$ 和 $\tilde j\_i = (\tilde \theta\_i, a\_i, a\_{-i}, \tilde \theta\_i')$ 是同一玩家 $i$ 在第 2 步的两个信息集。如果 $\theta\_i + \theta\_i'= \tilde\theta\_i + \tilde\theta\_i'$（注意这迫使两个信息集中的动作集相同），则称 $j\_i$ 与 $\tilde j\_i$ **等价**（equivalent）。
 
-如果等价的信息集具有相同的动作分布，即只要 $j_i, j_i'$ 等价就有 $\vec{b}_i(\cdot|j_i) = \vec{b}_i(\cdot|j_i')$，则称行为策略（behavioral strategy）$\vec{b}_i : \mathcal{J}_i \to \Delta(\mathcal{A})$ 为**对称的**（symmetric），其中 $\mathcal{J}_i$ 是玩家 $i$ 的信息划分。
+如果等价的信息集具有相同的动作分布，即只要 $j\_i, j\_i'$ 等价就有 $\vec{b}\_i(\cdot|j\_i) = \vec{b}\_i(\cdot|j\_i')$，则称行为策略（behavioral strategy）$\vec{b}\_i : \mathcal{J}\_i \to \Delta(\mathcal{A})$ 为**对称的**（symmetric），其中 $\mathcal{J}\_i$ 是玩家 $i$ 的信息划分。
 
-假设两位玩家都运行使用同时（simultaneous，而非交替）更新的 CFR。设 $\vec{b}_i^{(t)}$ 为玩家 $i$ 在时刻 $t$ 所采用的行为策略。在 CFR 中，时刻 $t$ 传给信息集 $j_i \in \mathcal{J}_i$ 处遗憾最小化器的反事实效用为
+假设两位玩家都运行使用同时（simultaneous，而非交替）更新的 CFR。设 $\vec{b}\_i^{(t)}$ 为玩家 $i$ 在时刻 $t$ 所采用的行为策略。在 CFR 中，时刻 $t$ 传给信息集 $j\_i \in \mathcal{J}\_i$ 处遗憾最小化器的反事实效用为
 
 $$
-u_i^{(t)}(a_i|j_i) = \sum_{\substack{h \in j_i\\z \succeq ha}} \vec{b}_i^{(t)}(z|(h,a_i)) \cdot  \vec{b}_{-i}^{(t)}(z)\cdot c(z) \cdot u_i(z), \tag{1}
+u\_i^{(t)}(a\_i|j\_i) = \sum\_{\substack{h \in j\_i\\\z \succeq ha}} \vec{b}\_i^{(t)}(z|(h,a\_i)) \cdot  \vec{b}\_{-i}^{(t)}(z)\cdot c(z) \cdot u\_i(z), \tag{1}
 $$
 
 其中
 
-- $(h, a_i)$ 是从节点 $h$ 出发执行动作 $a_i$ 到达的子节点；
-- 求和范围是所有以 $(h,a_i)$（$h \in j_i$）为祖先的终端节点 $z$；
-- $\vec{b}_i(z|(h,a_i))$ 是玩家 $i$ 在 $(h, a_i) \to z$ 路径上执行所有动作的概率；
-- $\vec{b}_{-i}(z)$（相应地 $c(z)$）是对手（相应地机会/chance）在从根节点到 $z$ 的路径上执行所有动作的概率；
-- $u_i(z)$ 是终端节点 $z$ 对玩家 $i$ 的效用。
+- $(h, a\_i)$ 是从节点 $h$ 出发执行动作 $a\_i$ 到达的子节点；
+- 求和范围是所有以 $(h,a\_i)$（$h \in j\_i$）为祖先的终端节点 $z$；
+- $\vec{b}\_i(z|(h,a\_i))$ 是玩家 $i$ 在 $(h, a\_i) \to z$ 路径上执行所有动作的概率；
+- $\vec{b}\_{-i}(z)$（相应地 $c(z)$）是对手（相应地机会/chance）在从根节点到 $z$ 的路径上执行所有动作的概率；
+- $u\_i(z)$ 是终端节点 $z$ 对玩家 $i$ 的效用。
 
-**问题 2.2（8 分）** 设 $\vec{b}_i^{(t)} : \mathcal{J}_i \to \Delta(\mathcal{A})$ 是 CFR 中玩家 $i$ 在时刻 $t$ 采用的行为策略。证明：如果 $\vec{b}_{-i}^{(1)}, \dots, \vec{b}_{-i}^{(t-1)}$ 都是对称的，那么 $\vec{b}_{i}^{(1)}, \dots, \vec{b}_{i}^{(t)}$ 也都是对称的。
+**问题 2.2（8 分）** 设 $\vec{b}\_i^{(t)} : \mathcal{J}\_i \to \Delta(\mathcal{A})$ 是 CFR 中玩家 $i$ 在时刻 $t$ 采用的行为策略。证明：如果 $\vec{b}\_{-i}^{(1)}, \dots, \vec{b}\_{-i}^{(t-1)}$ 都是对称的，那么 $\vec{b}\_{i}^{(1)}, \dots, \vec{b}\_{i}^{(t)}$ 也都是对称的。
 
-> 提示：给定两个等价的信息集 $(\theta_i, \vec a, \theta_i')$、$(\tilde \theta_i, \vec a, \tilde \theta_i')$，证明这两个信息集在每个时刻 $t$ 都会观察到相同的反事实效用 $u_i^{(t)}(\cdot|j)$。
+> 提示：给定两个等价的信息集 $(\theta\_i, \vec a, \theta\_i')$、$(\tilde \theta\_i, \vec a, \tilde \theta\_i')$，证明这两个信息集在每个时刻 $t$ 都会观察到相同的反事实效用 $u\_i^{(t)}(\cdot|j)$。
 
 由归纳法可知，两位玩家在所有时刻都将采用对称策略。在本题剩余部分中请使用这一事实。
 
@@ -84,7 +85,7 @@ $$
 
 #### 2.3 不完美回忆抽象
 
-现在考虑 $\Gamma$ 的不完美回忆（imperfect-recall）抽象：等价的信息集被合并成更大的信息集。也就是说，第 2 步的信息集现在由元组 $(\theta_i^*, \vec a)$ 标识，其中 $\theta_i^* = \theta_i + \theta_i'$。称这个博弈为 $\hat\Gamma$。我们用公式 (1) 来定义不完美回忆博弈中的 CFR。
+现在考虑 $\Gamma$ 的不完美回忆（imperfect-recall）抽象：等价的信息集被合并成更大的信息集。也就是说，第 2 步的信息集现在由元组 $(\theta\_i^\*, \vec a)$ 标识，其中 $\theta\_i^\* = \theta\_i + \theta\_i'$。称这个博弈为 $\hat\Gamma$。我们用公式 (1) 来定义不完美回忆博弈中的 CFR。
 
 一般来说，在不完美回忆的零和博弈上运行 CFR **并不**保证收敛到纳什均衡（即使是平均意义下），但你将证明：**在这一类特定的博弈中**，CFR 是有效的。
 
@@ -106,23 +107,23 @@ $$
 
 实现遗憾最小化算法时，一个好的冒烟测试（smoke test）是验证它们能学会最优反应（best respond）。特别地，你将验证：当玩家 2 采用**均匀**（uniform）策略——即在每个决策点以相等概率选取任一可用动作的策略——时，应用于玩家 1 决策问题的 CFR 实现能学会对玩家 2 的最优反应。
 
-玩家 2 的策略“在每个决策点以相等概率选取每个可用动作”，其序列形式表示记为 $\vec{y}_{\text{uni}} \in \mathcal{Y}$。当玩家 2 按该策略行动时，玩家 1 的效用向量由 $\vec{u} \coloneqq \mathbf{A} \vec{y}_{\text{uni}}$ 给出，其中 $\mathbf{A}$ 是博弈的收益矩阵。
+玩家 2 的策略“在每个决策点以相等概率选取每个可用动作”，其序列形式表示记为 $\vec{y}\_{\text{uni}} \in \mathcal{Y}$。当玩家 2 按该策略行动时，玩家 1 的效用向量由 $\vec{u} \coloneqq \mathbf{A} \vec{y}\_{\text{uni}}$ 给出，其中 $\mathbf{A}$ 是博弈的收益矩阵。
 
 对每个博弈，取你应用于玩家 1 决策问题的 CFR 实现，让它输出策略 $\vec{x}^{(t)} \in \mathcal{X}$，同时在每个时刻 $t$ 都给予相同的效用向量 $\vec{u}$ 作为反馈。当 $T \to \infty$ 时，平均策略
 
 $$
-\bar{\vec{x}}^{(T)} \coloneqq \frac{1}{T} \sum_{t=1}^T \vec{x}^{(t)} \in \mathcal{X} \tag{2}
+\bar{\vec{x}}^{(T)} \coloneqq \frac{1}{T} \sum\_{t=1}^T \vec{x}^{(t)} \in \mathcal{X} \tag{2}
 $$
 
-将收敛到对均匀策略 $\vec{y}_{\text{uni}}$ 的最优反应，即
+将收敛到对均匀策略 $\vec{y}\_{\text{uni}}$ 的最优反应，即
 
 $$
-\lim_{T\to\infty} \langle \bar{\vec{x}}^{(T)}, \mathbf{A} \vec{y}_{\text{uni}} \rangle = \max_{\hat{\vec{x}}\in \mathcal{X}}  \hat{\vec{x}}^\top \mathbf{A} \vec{y}_{\text{uni}}.
+\lim\_{T\to\infty} \langle \bar{\vec{x}}^{(T)}, \mathbf{A} \vec{y}\_{\text{uni}} \rangle = \max\_{\hat{\vec{x}}\in \mathcal{X}}  \hat{\vec{x}}^\top \mathbf{A} \vec{y}\_{\text{uni}}.
 $$
 
 如果上述收敛在实验中没有发生，说明你的实现有问题。
 
-**问题 3.1.1（15 分）** 在每个博弈中，将你的 CFR 实现应用于玩家 1 的树形序贯决策问题，每个决策点处的局部遗憾最小化器使用遗憾匹配算法（第 4 讲）。在每个时刻 $t$，给算法的反馈都是同一个效用向量 $\vec{u} = \mathbf{A} \vec{y}_{\text{uni}}$，其中 $\vec{y}_{\text{uni}} \in \mathcal{Y}$ 是玩家 2 的均匀策略。运行算法 $1000$ 次迭代。每次迭代 $T = 1,\dots,1000$ 之后，计算数值 $v^{(T)} \coloneqq \langle \bar{\vec{x}}^{(T)}, \mathbf{A} \vec{y}_{\text{uni}} \rangle$，其中 $\bar{\vec{x}}^{(T)} \in \mathcal{X}$ 是式 (2) 定义的、CFR 迄今输出的平均策略。
+**问题 3.1.1（15 分）** 在每个博弈中，将你的 CFR 实现应用于玩家 1 的树形序贯决策问题，每个决策点处的局部遗憾最小化器使用遗憾匹配算法（第 4 讲）。在每个时刻 $t$，给算法的反馈都是同一个效用向量 $\vec{u} = \mathbf{A} \vec{y}\_{\text{uni}}$，其中 $\vec{y}\_{\text{uni}} \in \mathcal{Y}$ 是玩家 2 的均匀策略。运行算法 $1000$ 次迭代。每次迭代 $T = 1,\dots,1000$ 之后，计算数值 $v^{(T)} \coloneqq \langle \bar{\vec{x}}^{(T)}, \mathbf{A} \vec{y}\_{\text{uni}} \rangle$，其中 $\bar{\vec{x}}^{(T)} \in \mathcal{X}$ 是式 (2) 定义的、CFR 迄今输出的平均策略。
 
 画出 $v^{(T)}$ 随 $T$ 变化的图像。你从实验中观察到 $v^{(T)}$ 收敛到的极限是多少？
 
@@ -137,11 +138,11 @@ $$
 
 既然你已经确信自己的 CFR 实现是正确的，接下来你将用第 3 讲所述的**自对弈**（self-play）思想，让 CFR 收敛到纳什均衡。
 
-在双人零和博弈中用遗憾最小化收敛到纳什均衡，其思想是实例化两个遗憾最小化算法 $\mathfrak{R}_\mathcal{X}$ 和 $\mathfrak{R}_\mathcal{Y}$，分别对应最大化问题和最小化问题的定义域。在每个时刻 $t$，两个遗憾最小化器分别输出策略 $\vec{x}^{(t)}$ 和 $\vec{y}^{(t)}$，然后分别收到反馈向量 $\vec{u}_\mathcal{X}^{(t)}, \vec{u}_\mathcal{Y}^{(t)}$：
+在双人零和博弈中用遗憾最小化收敛到纳什均衡，其思想是实例化两个遗憾最小化算法 $\mathfrak{R}\_\mathcal{X}$ 和 $\mathfrak{R}\_\mathcal{Y}$，分别对应最大化问题和最小化问题的定义域。在每个时刻 $t$，两个遗憾最小化器分别输出策略 $\vec{x}^{(t)}$ 和 $\vec{y}^{(t)}$，然后分别收到反馈向量 $\vec{u}\_\mathcal{X}^{(t)}, \vec{u}\_\mathcal{Y}^{(t)}$：
 
 $$
-\vec{u}_\mathcal{X}^{(t)} \coloneqq \mathbf{A} \vec{y}^{(t)},\qquad\quad
-\vec{u}_\mathcal{Y}^{(t)} \coloneqq -\mathbf{A}^\top \vec{x}^{(t)}, \tag{3}
+\vec{u}\_\mathcal{X}^{(t)} \coloneqq \mathbf{A} \vec{y}^{(t)},\qquad\quad
+\vec{u}\_\mathcal{Y}^{(t)} \coloneqq -\mathbf{A}^\top \vec{x}^{(t)}, \tag{3}
 $$
 
 其中 $\mathbf{A}$ 是玩家 1 的收益矩阵。（即：每个遗憾最小化器输出策略，再观察以对方当前策略构造的效用向量，如此往复。）
@@ -149,7 +150,7 @@ $$
 如我们在课上所见，到任意时刻 $T$ 为止两个遗憾最小化器产生的平均策略对收敛到纳什均衡，收敛性通过**鞍点间隙**（saddle point gap）
 
 $$
-\max_{\hat{\vec{x}}\in\mathcal{X}} ( \hat{\vec{x}}^\top \mathbf{A} \vec{y}  )  - \min_{\hat{\vec{y}}\in\mathcal{Y}} ( \vec{x}^\top \mathbf{A} \hat{\vec{y}}  )
+\max\_{\hat{\vec{x}}\in\mathcal{X}} ( \hat{\vec{x}}^\top \mathbf{A} \vec{y}  )  - \min\_{\hat{\vec{y}}\in\mathcal{Y}} ( \vec{x}^\top \mathbf{A} \hat{\vec{y}}  )
 $$
 
 来度量。点 $(\vec{x},\vec{y})\in \mathcal{X}\times\mathcal{Y}$ 的鞍点间隙为零，当且仅当它是该博弈的纳什均衡。
@@ -171,14 +172,14 @@ $$
 为了在学习双人零和博弈的纳什均衡时获得更好的实际性能，我们考虑对上一小节的设定做如下修改：
 
 - 不再使用遗憾匹配，CFR 在每个决策点处改用遗憾匹配加强版（regret matching plus，RM$^+$）算法（见第 4 讲）。
-- 不再使用上面描述的经典自对弈方案，两位玩家**交替**（alternate）迭代与反馈：效用向量 $\vec{u}_\mathcal{X}^{(t)}$ 仍按式 (3) 定义，而
+- 不再使用上面描述的经典自对弈方案，两位玩家**交替**（alternate）迭代与反馈：效用向量 $\vec{u}\_\mathcal{X}^{(t)}$ 仍按式 (3) 定义，而
 $$
-\tilde{\vec{u}}_\mathcal{Y}^{(t)} \coloneqq -\mathbf{A}^\top \vec{x}^{(t+1)}.
+\tilde{\vec{u}}\_\mathcal{Y}^{(t)} \coloneqq -\mathbf{A}^\top \vec{x}^{(t+1)}.
 $$
 - 最后，在计算鞍点间隙时，用策略的**加权平均**
 $$
-\bar{\bar{\vec{x}}}^{(T)} \coloneqq \frac{1}{\sum_{t=1}^{T} t^\gamma}\sum_{t=1}^{T} t^\gamma\vec{x}^{(t)}, \qquad
-\bar{\bar{\vec{y}}}^{(T)} \coloneqq \frac{1}{\sum_{t=1}^{T} t^\gamma}\sum_{t=1}^{T} t^\gamma \vec{y}^{(t)}
+\bar{\bar{\vec{x}}}^{(T)} \coloneqq \frac{1}{\sum\_{t=1}^{T} t^\gamma}\sum\_{t=1}^{T} t^\gamma\vec{x}^{(t)}, \qquad
+\bar{\bar{\vec{y}}}^{(T)} \coloneqq \frac{1}{\sum\_{t=1}^{T} t^\gamma}\sum\_{t=1}^{T} t^\gamma \vec{y}^{(t)}
 $$
 取代通常的平均。
 
@@ -218,9 +219,9 @@ $$
 | `actions` | （仅决策点）该节点可用的动作字符串集合 |
 | `signals` | （仅观察点）该节点可观察到的信号字符串集合 |
 | `parent_edge` | 父边；根节点为 `null`，否则为 `(parent_node_id, action_or_signal)` |
-| `parent_sequence` | （仅决策点）父序列 $p_j$，即从根到 $j$ 的路径上遇到的最后一个序列（决策点-动作对） |
+| `parent_sequence` | （仅决策点）父序列 $p\_j$，即从根到 $j$ 的路径上遇到的最后一个序列（决策点-动作对） |
 
-玩家 1 的双线性效用函数由收益矩阵 $\mathbf{A}$ 给出：$u_1(\vec{x}, \vec{y}) = \vec{x}^\top \mathbf{A}\vec{y}$，其中 $\vec{x}$、$\vec{y}$ 为双方的序列形式策略。文件中 $\mathbf{A}$ 以非零项列表表示，每个条目的字段为：
+玩家 1 的双线性效用函数由收益矩阵 $\mathbf{A}$ 给出：$u\_1(\vec{x}, \vec{y}) = \vec{x}^\top \mathbf{A}\vec{y}$，其中 $\vec{x}$、$\vec{y}$ 为双方的序列形式策略。文件中 $\mathbf{A}$ 以非零项列表表示，每个条目的字段为：
 
 | 字段 | 含义 |
 |---|---|
@@ -232,8 +233,8 @@ $$
 
 $$
 \begin{pmatrix}
- 0 & -1 &  1\\
- 1 &  0 & -2\\
+ 0 & -1 &  1\\\
+ 1 &  0 & -2\\\
 -1 &  2 &  0
 \end{pmatrix},
 $$
@@ -249,7 +250,7 @@ stub 文件中以下函数**已经实现**，可直接使用（其中 `game` 是
 | `get_sequence_set(tfsdp)` | 返回给定 TFSDP 的所有序列组成的集合 |
 | `is_valid_RSigma_vector(tfsdp, obj)` | 检查对象是否是以该 TFSDP 的序列集为键的字典 |
 | `assert_is_valid_sf_strategy(tfsdp, obj)` | 检查对象是否是合法的序列形式策略向量 |
-| `best_response_value(tfsdp, utility)` | 计算 $\max_{\vec{x} \in Q} \vec{x}^\top u$，其中 $Q$ 为该 TFSDP 的序列形式多胞形 |
+| `best_response_value(tfsdp, utility)` | 计算 $\max\_{\vec{x} \in Q} \vec{x}^\top u$，其中 $Q$ 为该 TFSDP 的序列形式多胞形 |
 | `compute_utility_vector_pl1(game, sf_strategy_pl2)` | 返回 $\mathbf{A}\vec{y}$（$\mathbf{A}$ 为收益矩阵，$\vec{y}$ 为给定的玩家 2 策略） |
 | `compute_utility_vector_pl2(game, sf_strategy_pl1)` | 返回 $-\mathbf{A}^\top\vec{x}$（$\vec{x}$ 为给定的玩家 1 策略） |
 | `gap(game, sf_strategy_pl1, sf_strategy_pl2)` | 计算给定双方序列形式策略的鞍点间隙 |

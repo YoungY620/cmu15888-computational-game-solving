@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # L14 Libratus III: Self-Improver
 
 The previous chapter covered Libratus's second module, the subgame solver, which re-solves the subgame that has actually been reached, in real time and in a finer-grained abstraction, using the blueprint strategy as context. This chapter completes the picture of Libratus: the two corrections that reach-maxmargin refinement needs when **many subgames are refined simultaneously**; the third module, the **self-improver**; and a design question that runs through the whole system: how Libratus turns human poker knowledge into abstraction.
@@ -18,7 +19,7 @@ When only one subgame is refined, the subgames that produce gifts keep playing t
 
 In the figure above, P1's Sell alternative payoff after Heads is $0.5$, so the total gift to be distributed is $0.5$; the chance node then leads into subgame A and subgame B with probability $P=0.5$ each. The slide animation demonstrates several legal allocations (for example $1.0$ to A and $0$ to B, or $0.5$ to each) as long as the reach-probability-weighted total does not exceed the gift:
 
-$$0.5 \cdot g_A + 0.5 \cdot g_B \;\le\; 0.5 .$$
+$$0.5 \cdot g\_A + 0.5 \cdot g\_B \\;\le\\; 0.5 .$$
 
 Each subgame's solver then "spends" only its own share of the gift. Intuitively, the safety argument for a single subgame requires that "the opponent's EV for entering this subgame is no higher than in the blueprint." After splitting gifts by reach probability, the gifts consumed by all refined subgames, weighted by reach probability and summed, still do not exceed the total gift; so along any path the opponent cannot obtain a higher EV than in the blueprint just because many refinements are happening at once. Safety is preserved under simultaneous refinement.
 
@@ -90,7 +91,7 @@ The Science paper also reports a step-by-step ablation on full HUNL (average win
 
 For comparison, Baby Tartanian8 beat the next two strongest AIs in the ACPC by only $12 \pm 10$ and $24 \pm 20$ mbb/hand; Libratus's advantage over it is order-of-magnitude. These numbers also quantify the contribution of the modules from the previous chapters and this chapter's opening: the blueprint alone is not enough to beat the strongest previous-generation AI; the subgame solver is what opens the gap.
 
-The experiment against humans was the January 2017 Brains vs. AI rematch: 20 days, 120,000 hands, against four HUNL specialist professionals (Jason Les, Dong Kim, Daniel McCauley, and Jimmy Chou). Of the \$200,000 prize pool, each human was guaranteed \$20,000, with the remaining \$120,000 divided based on performance relative to the worst-performing of the four. Libratus won by an overall margin of $147$ mbb/hand, with $p = 0.0002$ if the hands are treated as independent and identically distributed (statistical significance $99.98\%$), and it **beat each of the four professionals individually**.
+The experiment against humans was the January 2017 Brains vs. AI rematch: 20 days, 120,000 hands, against four HUNL specialist professionals (Jason Les, Dong Kim, Daniel McCauley, and Jimmy Chou). Of the \\$200,000 prize pool, each human was guaranteed \\$20,000, with the remaining \\$120,000 divided based on performance relative to the worst-performing of the four. Libratus won by an overall margin of $147$ mbb/hand, with $p = 0.0002$ if the hands are treated as independent and identically distributed (statistical significance $99.98\\%$), and it **beat each of the four professionals individually**.
 
 ## Key Takeaways
 

@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # L15 Knowledge-Limited Subgame Solving
 
 This chapter presents general-purpose search techniques for imperfect-information games that do not rely on common knowledge, together with their flagship application: *Obscuro*, the first superhuman agent for Fog of War chess (also known as Dark Chess). The material is based on joint work by Tuomas Sandholm and his PhD student Brian Hu Zhang.
@@ -50,22 +51,22 @@ The paper [Zhang & Sandholm NeurIPS-21] formalizes this as the **infoset hypergr
 
 The central concept of safe subgame solving is the **margin**. Number the subgame's **entry points** (the information sets through which the subgame is entered) by $j$. P2's margin at entry point $j$ is defined as
 
-$$M_j := u_{\text{enter},j} - u_{\text{alt},j}$$
+$$M\_j := u\_{\text{enter},j} - u\_{\text{alt},j}$$
 
-where $u_{\text{enter},j}$ is P2's best response value against P1's **new strategy**, and $u_{\text{alt},j}$ is P2's best response value against P1's **blueprint strategy**, called the **alternate value**. The quantity $u_{\text{alt},j}$ corresponds to the value P2 can guarantee by "taking a different route" above the entry point, as shown in the figure below.
+where $u\_{\text{enter},j}$ is P2's best response value against P1's **new strategy**, and $u\_{\text{alt},j}$ is P2's best response value against P1's **blueprint strategy**, called the **alternate value**. The quantity $u\_{\text{alt},j}$ corresponds to the value P2 can guarantee by "taking a different route" above the entry point, as shown in the figure below.
 
 > **Theorem (informal):** Any P1 strategy that ensures all of P2's margins are nonnegative is safe (i.e., no more exploitable than the blueprint).
 > [Burch, Johanson, Bowling 2014; Moravcik et al. 2016; Brown & Sandholm 2017]
 
-![A common-knowledge subgame (green box) and its entry points: $u_{\text{alt},j}$ is P2's best response value against P1's blueprint](assets/ch15-klss-3.png)
+![A common-knowledge subgame (green box) and its entry points: $u\_{\text{alt},j}$ is P2's best response value against P1's blueprint](assets/ch15-klss-3.png)
 
 Building on this theorem, two classic objective functions give concrete solving methods:
 
 - **Resolve refinement** [Burch, Johanson, Bowling 2014]: find a subgame strategy maximizing
-$$\sum_{j \in \text{Information sets}} \min\{0, M_j\}.$$
+$$\sum\_{j \in \text{Information sets}} \min\\{0, M\_j\\}.$$
   The idea is to "compensate" the entry points that the new strategy hurts;
 - **Maxmargin subgame solving** [Moravcik et al. 2016]: find a subgame strategy maximizing
-$$\min_{j \in \text{Information sets}} M_j,$$
+$$\min\_{j \in \text{Information sets}} M\_j,$$
   i.e., make the safety margin at every entry point as large as possible.
 
 The previous state-of-the-art safe subgame-solving technique is **reach maxmargin subgame solving** [Brown & Sandholm NeurIPS-17], whose idea is: for the gifts the opponent has given us along the path to information set $j$, we may optionally give them back. This technique achieved superhuman performance in two-player no-limit Texas hold'em [Brown & Sandholm Science 2018]. The new algorithm of this chapter also uses this idea.
@@ -87,7 +88,7 @@ Consequently, the entire methodology based on common-knowledge subgames simply c
 
 ![Illustration of 2-KLUSS: the green box is the retained subgame; nodes at knowledge distance greater than 2 (on the left) are ignored](assets/ch15-klss-4.png)
 
-The figure illustrates 2-KLUSS: centered on the current position, the portion covered by expanding two orders along the knowledge chain (the green box) is included in the subgame and solved within the maxmargin framework (still retaining the alternate values $u_{\text{alt},j}$), while the remaining nodes are simply ignored. One detail of difference: the old algorithm **KLSS** [Zhang & Sandholm NeurIPS-21] would **freeze** the nodes on the truncated boundary to the blueprint strategy, whereas the new algorithm **Knowledge-Limited Unfrozen Subgame Solving (KLUSS)** does not freeze them.
+The figure illustrates 2-KLUSS: centered on the current position, the portion covered by expanding two orders along the knowledge chain (the green box) is included in the subgame and solved within the maxmargin framework (still retaining the alternate values $u\_{\text{alt},j}$), while the remaining nodes are simply ignored. One detail of difference: the old algorithm **KLSS** [Zhang & Sandholm NeurIPS-21] would **freeze** the nodes on the truncated boundary to the blueprint strategy, whereas the new algorithm **Knowledge-Limited Unfrozen Subgame Solving (KLUSS)** does not freeze them.
 
 Concretely, the construction of $k$-KLSS (for positive odd $k$) compresses the game tree in three steps (after fixing our strategy outside the order-$k$ knowledge set $I^k$ of the current information set $I$):
 
@@ -95,7 +96,7 @@ Concretely, the construction of $k$-KLSS (for positive odd $k$) compresses the g
 2. For nodes $h \in I^{k+1} \setminus I^k$, our strategy is likewise fixed, so the payoffs at these nodes are merely a function of the opponent's subgame strategy and the blueprint; they can be precomputed and folded into a single row of the payoff matrix, after which these nodes too are pruned, ultimately leaving a subgame of size $I^k$;
 3. When $k = 1$, one can additionally perform **transposition merging**: two nodes that are transpositions of each other induce two blocks of the subgame payoff matrix that are identical except for the first row, and deleting one of them (or whichever block is weakly dominated) loses very little. In games like dark chess, where information is fleeting and a position's evaluation depends mainly on the position itself, this approximation has negligible impact.
 
-The size reduction from limiting knowledge can be extreme. The paper's parameterized example **$N$-matching pennies**: nature chooses $n \in \{1, \dots, N\}$ uniformly at random, we observe $\lfloor n/2 \rfloor$, the opponent observes $\lfloor (n+1)/2 \rfloor$, and then both players simultaneously choose heads or tails; if both choose heads we score $n$, if both choose tails we score $N - n$, and on a mismatch we score $0$. At any information set $I$ just after nature's move there is **no common knowledge whatsoever**: $I^\infty$ is essentially the entire game tree, whereas $I^k$ has only $\Theta(k)$ nodes.
+The size reduction from limiting knowledge can be extreme. The paper's parameterized example **$N$-matching pennies**: nature chooses $n \in \\{1, \dots, N\\}$ uniformly at random, we observe $\lfloor n/2 \rfloor$, the opponent observes $\lfloor (n+1)/2 \rfloor$, and then both players simultaneously choose heads or tails; if both choose heads we score $n$, if both choose tails we score $N - n$, and on a mismatch we score $0$. At any information set $I$ just after nature's move there is **no common knowledge whatsoever**: $I^\infty$ is essentially the entire game tree, whereas $I^k$ has only $\Theta(k)$ nodes.
 
 ### Is It Safe?
 
@@ -109,7 +110,7 @@ The paper gives a sharper, exact statement:
 
 > **Proposition** [Zhang & Sandholm NeurIPS-21, Proposition 3]: There exists a game and blueprint for which applying 1-KLSS at every information set reached during play increases exploitability by a factor linear in the size of the game.
 
-The counterexample lies in a variant of $N$-matching pennies: nature chooses $n \in \{1, \dots, N\}$ and reveals it only to us, and then the two players play matching pennies (the opponent wins iff the choices match). The blueprint "play heads with probability $1/2 + 2/N$ regardless of $n$" is a $\Theta(1/N)$-equilibrium; but when maxmargin 1-KLSS is applied independently at every information set, it treats the strategy at all $m \ne n$ as fixed and therefore tilts toward tails at each one. The composed strategy always plays tails and is fully exploited by the opponent's "always tails". Intuitively, 1-KLSS takes a **systematic error** in the blueprint (an action played too often overall, rather than too often within a particular information set) and "fully corrects" it separately in every information set, causing overcorrection.
+The counterexample lies in a variant of $N$-matching pennies: nature chooses $n \in \\{1, \dots, N\\}$ and reveals it only to us, and then the two players play matching pennies (the opponent wins iff the choices match). The blueprint "play heads with probability $1/2 + 2/N$ regardless of $n$" is a $\Theta(1/N)$-equilibrium; but when maxmargin 1-KLSS is applied independently at every information set, it treats the strategy at all $m \ne n$ as fixed and therefore tilts toward tails at each one. The composed strategy always plays tails and is fully exploited by the opponent's "always tails". Intuitively, 1-KLSS takes a **systematic error** in the blueprint (an action played too often overall, rather than too often within a particular information set) and "fully corrects" it separately in every information set, causing overcorrection.
 
 There are, however, two mitigations:
 
@@ -122,7 +123,7 @@ There are, however, two mitigations:
 2. **Allocating deviations from the blueprint**: collapse each of our information sets into a single node to obtain a graph $G'$. If 1-KLSS is run at every information set of an **ancestor-closed independent set** $\mathcal{I}$, then an $\varepsilon$-equilibrium blueprint still yields an $\varepsilon$-equilibrium strategy (Theorem 5); independence guarantees that each opponent information set is affected by at most one solve. In practice one can preselect a distribution over independent sets: upon reaching $I$, with probability $1 - p(I)$ simply play the blueprint to the end, otherwise run 1-KLSS; taking $p(I) \le 1/\chi(I^\infty)$ (where $\chi$ is the chromatic number) is always safe.
 3. **Affine equilibrium**: defined as an **affine combination** of Nash equilibrium strategies (the coefficients sum to $1$, but each coefficient may be positive or negative). Key property: every affine equilibrium is a best response to **any equilibrium strategy** of the opponent, so an opponent who wishes to exploit it must deviate from equilibrium herself, thereby exposing herself to counter-exploitation. The paper proves: when the blueprint happens to be an equilibrium strategy, running 1-KLSS at every information set of the game yields a strategy that is necessarily an affine equilibrium (Theorem 9). This equilibrium notion may be of independent research interest.
 
-**The internal-gift perspective: Safe-1-KLSS and OLSS** [Liu et al. ICML-23]. Liu et al. explain from the perspective of **margin decomposition** why 1-KLSS is unsafe, and construct safety fixes on that basis. They rewrite the common-knowledge subgame margin as $\min\{d + R\}$: $d$ is the change term of the new strategy relative to the blueprint, and $R \ge 0$ is called the **internal gift** (its role parallels the gifts in reach maxmargin). The crux: one common-knowledge subgame corresponds to **multiple** order-1 subgames, and 1-KLSS maximizes the margin independently in each order-1 subgame, effectively amplifying the same internal gift (dividing by a reaching belief that is at most $1$) and then spending it separately in several places, so total spending can far exceed the gift itself.
+**The internal-gift perspective: Safe-1-KLSS and OLSS** [Liu et al. ICML-23]. Liu et al. explain from the perspective of **margin decomposition** why 1-KLSS is unsafe, and construct safety fixes on that basis. They rewrite the common-knowledge subgame margin as $\min\\{d + R\\}$: $d$ is the change term of the new strategy relative to the blueprint, and $R \ge 0$ is called the **internal gift** (its role parallels the gifts in reach maxmargin). The crux: one common-knowledge subgame corresponds to **multiple** order-1 subgames, and 1-KLSS maximizes the margin independently in each order-1 subgame, effectively amplifying the same internal gift (dividing by a reaching belief that is at most $1$) and then spending it separately in several places, so total spending can far exceed the gift itself.
 
 - **Safe-1-KLSS**: **distribute** the internal gift among the order-1 subgames according to reaching beliefs, so that total spending never exceeds the gift; one can then prove that exploitability does not increase under nested application; that is, applying it at every information set is safe.
 - **Opponent-Limited Subgame Solving (OLSS)**: OLSS-I limits **how the opponent reaches** the subgame: the opponent may only mix over a prespecified set of strategies for reaching it (provably safe if that set contains all pure undominated strategies; in practice the blueprint plus a few "biased" strategies suffices); OLSS-II additionally fixes the opponent's in-subgame actions to prespecified strategies, degenerating the subgame into a single-agent environment (an "environment model"), whose size is independent of any order of knowledge closure. This is no longer safe, but it is the only feasible approach on games such as two-player Mahjong (whose order-1 closure is about $10^{11}$).
@@ -163,13 +164,13 @@ Obscuro's approach: use **Maxmargin** when all margins can be made nonnegative, 
 
 **Weighted Resolve objective.** In Resolve (when some margin $< 0$), the standard objective is
 
-$$\sum_{j \in [m]} \min\{0, M_j\},$$
+$$\sum\_{j \in [m]} \min\\{0, M\_j\\},$$
 
 but any weighted sum with all-positive weights enjoys the same theoretical guarantees. Obscuro uses
 
-$$\sum_{j \in [m]} \frac{1}{2}\left(\frac{1}{m} + \frac{y_j}{\sum_{j} y_j}\right) \min\{0, M_j\},$$
+$$\sum\_{j \in [m]} \frac{1}{2}\left(\frac{1}{m} + \frac{y\_j}{\sum\_{j} y\_j}\right) \min\\{0, M\_j\\},$$
 
-where $y_j$ measures how likely information set $j$ is to be reached. This both "increases weight on information sets that are more likely to be reached" and "keeps all weights positive" (half uniform weight, half reach-probability weight).
+where $y\_j$ measures how likely information set $j$ is to be reached. This both "increases weight on information sets that are more likely to be reached" and "keeps all weights positive" (half uniform weight, half reach-probability weight).
 
 **Approximately purifying the strategy.** Keep only the $k$ most likely moves from the strategy's support ($k = 1$ when some margin $< 0$; $k = 3$ when all margins $\ge 0$). Purification removes the danger of bad actions ending up in the support with small probability; but good play at a high level requires some mixing, so $k > 1$ is allowed at least when it is "provably safe" (margins $\ge 0$).
 
@@ -201,7 +202,7 @@ Future research directions:
 ## Key Takeaways
 
 - In imperfect-information games, subgames cannot be solved in isolation; the standard approach is real-time subgame refinement on top of a blueprint strategy, with a distinction between "safe" and "unsafe" methods.
-- Prior methods all rest on the **common-knowledge subgame** (the closure defined by recursive connectivity through information sets); safety is characterized by the **margin** $M_j := u_{\text{enter},j} - u_{\text{alt},j}$: any P1 strategy that keeps all P2 margins nonnegative is safe. Representative objectives: Resolve refinement (maximize $\sum_j \min\{0, M_j\}$) and Maxmargin (maximize $\min_j M_j$), plus reach maxmargin with the option of giving gifts back.
+- Prior methods all rest on the **common-knowledge subgame** (the closure defined by recursive connectivity through information sets); safety is characterized by the **margin** $M\_j := u\_{\text{enter},j} - u\_{\text{alt},j}$: any P1 strategy that keeps all P2 margins nonnegative is safe. Representative objectives: Resolve refinement (maximize $\sum\_j \min\\{0, M\_j\\}$) and Maxmargin (maximize $\min\_j M\_j$), plus reach maxmargin with the option of giving gifts back.
 - In games like Fog of War chess, common-knowledge sets can exceed $10^{12}$, making methods based on them completely infeasible.
 - **KLUSS**: ignore nodes at knowledge distance greater than $k$ in the knowledge graph (e.g., 2-KLUSS), without freezing boundary nodes (unlike the older KLSS). In the construction, nodes outside $I^{k+1}$ are pruned outright, and the payoffs at $I^{k+1} \setminus I^k$ are folded into a single row of the payoff matrix. It is theoretically unsafe (exploitability can grow by a factor linear in the game size; counterexample: $N$-matching pennies) but tends to be safe in practice; routes to safety include updating the blueprint, allocating deviations over an ancestor-closed independent set, and affine equilibria [Zhang & Sandholm NeurIPS-21], as well as Safe-1-KLSS, which decomposes the margin via internal gifts, and the opponent-limited OLSS [Liu et al. ICML-23].
-- **Obscuro**, with 2-KLUSS at its core, combined with Stockfish evaluation, nested subgame solving, a new GT-CFR variant (alternating MCTS-like exploration with playing the current strategy, swapping roles each iteration, still provably convergent), PCFR+, the adaptive Maxmargin/Resolve mix, the weighted Resolve objective $\sum_j \frac{1}{2}\big(\frac{1}{m} + \frac{y_j}{\sum_j y_j}\big)\min\{0, M_j\}$, and approximate purification ($k = 1$ or $3$), became the first statistically significant superhuman agent for Fog of War chess (97–3 against amateurs, 16–4 against the world #1).
+- **Obscuro**, with 2-KLUSS at its core, combined with Stockfish evaluation, nested subgame solving, a new GT-CFR variant (alternating MCTS-like exploration with playing the current strategy, swapping roles each iteration, still provably convergent), PCFR+, the adaptive Maxmargin/Resolve mix, the weighted Resolve objective $\sum\_j \frac{1}{2}\big(\frac{1}{m} + \frac{y\_j}{\sum\_j y\_j}\big)\min\\{0, M\_j\\}$, and approximate purification ($k = 1$ or $3$), became the first statistically significant superhuman agent for Fog of War chess (97–3 against amateurs, 16–4 against the world #1).

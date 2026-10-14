@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # L12 Libratus I: History and Match Setup
 
 This lecture introduces Libratus, the first AI to outperform top human professionals in two-player no-limit Texas hold'em [Brown & Sandholm, *Science* 2018]. This chapter covers the background: why imperfect-information games are hard, the history of poker AI, the design and results of the man–machine match, and Libratus's overall architecture together with its blueprint strategy module. The two other core modules (subgame solving and the self-improver) are the subjects of the next two chapters.
@@ -43,7 +44,7 @@ Poker has a long history as a challenge problem in game theory and artificial in
 
 Before Libratus, heads-up no-limit Texas hold'em (HUNL) had long been **the main benchmark and challenge problem** for AI in imperfect-information games:
 
-- it has $10^{161}$ situations, dozens of orders of magnitude larger than the solved limit version (the number is computed for the standard version of the game: both players have \$20{,}000, i.e., 200-big-blind deep stacks, and bets are restricted to dollar increments) [Brown & Sandholm, IJCAI-17];
+- it has $10^{161}$ situations, dozens of orders of magnitude larger than the solved limit version (the number is computed for the standard version of the game: both players have \\$20{,}000, i.e., 200-big-blind deep stacks, and bets are restricted to dollar increments) [Brown & Sandholm, IJCAI-17];
 - it is played mostly on the Internet, and also features in the World Series of Poker, the NBC Heads-Up Championship, and films such as *Casino Royale* and *Rounders*;
 - it has been called the "purest form of poker";
 - no prior AI had beaten top humans.
@@ -55,7 +56,7 @@ Before Libratus, heads-up no-limit Texas hold'em (HUNL) had long been **the main
 In January 2017, Libratus played a match called the "Brains vs AI Rematch" against four of the best heads-up no-limit Texas hold'em specialist pros (all top-10 specialists in this game [Brown & Sandholm, IJCAI-17]):
 
 - 120,000 hands over 20 days;
-- \$200,000 in prize money divided among the four pros based on performance;
+- \\$200,000 in prize money divided among the four pros based on performance;
 - a **conservative experiment design that favored the humans**, to make the conclusion as convincing as possible.
 
 ![The four top human professionals who played against Libratus](assets/ch12-libratus-1-02.png)
@@ -73,7 +74,7 @@ The "favor-the-humans" design comprised a long list of specific arrangements:
 Libratus beat the top humans by a large margin:
 
 - a win rate of **147 mbb/hand** (milli-big-blinds per hand, thousandths of a big blind per hand);
-- statistical significance of $99.98\%$ (i.e., $p = 0.0002$);
+- statistical significance of $99.98\\%$ (i.e., $p = 0.0002$);
 - **each** of the four humans lost to Libratus individually.
 
 ### Follow-up Experiment: Why Game-Theoretic AI Beats Machine Learning
@@ -98,7 +99,7 @@ Libratus consists of three modules (shown below); the full technical report is [
 
 ### Abstraction in Libratus
 
-**Abstracting chance's actions (the cards).** Abstraction is feasible because many situations are strategically similar and can be treated identically at only a small cost. For example, there is little difference between betting \$500 and \$501, so there is no need to compute a separate strategy for each [Brown & Sandholm, IJCAI-17]. Libratus uses the same algorithm as Tartanian8 [Brown, Ganzfried & Sandholm, AAMAS-15], that is, a distributed version of the state-of-the-art state-abstraction algorithm for centralized equilibrium finding presented in class: the computation is distributed across nodes (blades) according to the public flop cards, so that any one sample always stays within a single compute node. The abstraction, however, is much finer:
+**Abstracting chance's actions (the cards).** Abstraction is feasible because many situations are strategically similar and can be treated identically at only a small cost. For example, there is little difference between betting \\$500 and \\$501, so there is no need to compute a separate strategy for each [Brown & Sandholm, IJCAI-17]. Libratus uses the same algorithm as Tartanian8 [Brown, Ganzfried & Sandholm, AAMAS-15], that is, a distributed version of the state-of-the-art state-abstraction algorithm for centralized equilibrium finding presented in class: the computation is distributed across nodes (blades) according to the public flop cards, so that any one sample always stays within a single compute node. The abstraction, however, is much finer:
 
 - 1st and 2nd betting rounds: no card abstraction;
 - 3rd betting round: 55 million card histories compressed into 2.5 million buckets;
@@ -118,7 +119,7 @@ The blueprint equilibrium finder is an improvement on Monte-Carlo Counterfactual
 
 ### System Scale: The Bridges Supercomputer
 
-Libratus ran on the Bridges supercomputer (architected by Hewlett Packard Enterprise and the Pittsburgh Supercomputing Center, about \$17 million including running costs over its lifetime, heterogeneous architecture):
+Libratus ran on the Bridges supercomputer (architected by Hewlett Packard Enterprise and the Pittsburgh Supercomputing Center, about \\$17 million including running costs over its lifetime, heterogeneous architecture):
 
 - it used part of the 800 HPE Apollo 2000 servers, each with 28 cores and 128 GB RAM (but only 14 of the 28 cores per node were used, because that was fastest);
 - official usage for Libratus was about 24 million core-hours from January 2016 to January 2017, making the team the largest user of Bridges in that timeframe (about half of its total usage);

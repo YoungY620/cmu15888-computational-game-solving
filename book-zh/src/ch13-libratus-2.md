@@ -1,3 +1,4 @@
+<!-- escape-math: v1 -->
 # L13 Libratus（中）：子博弈求解
 
 上一章介绍了 Libratus 的总体架构：先在粗抽象中离线算出蓝图策略（blueprint strategy），对局中再由子博弈求解器（subgame solver）在更细的抽象中实时精解当前到达的局面。本章讲授子博弈求解本身——这是 Libratus 中**最重要的技术** [Brown & Sandholm, *Science* 2018]：为什么不完美信息博弈中的"子博弈"不能像完美信息博弈那样独立求解，如何借助蓝图提供的上下文构造可求解的增广子博弈（augmented subgame），以及从贝叶斯方法、Re-solve、Maxmargin 到 Reach-maxmargin 与嵌套子博弈求解（nested subgame solving）的一系列精化（refinement）技术及其安全性保证。
@@ -21,7 +22,7 @@ Libratus 的目标是在**更细的抽象**中求解对局中实际到达的"子
 
 这里"子博弈"的含义需要先说清楚。经典博弈论中的子博弈要求起点处玩家确切知道博弈状态（信息集不被分割）；而扑克中的**不完美信息子博弈**由玩家间的**公共知识**界定——例如由公共牌和到目前为止的行动序列界定。与公共知识一致的每个私有牌组合都是该子博弈的一个根，其所有后代节点都属于子博弈 [Brown & Sandholm, *Science* 2018]。这也是为什么它不能像完美信息子博弈那样从单一根节点出发独立求解。
 
-在增广子博弈中，双方都从蓝图诱导的分布中取样：每次迭代，对手（P1）被随机发一手私有牌；给定我方（P2）在子博弈之前按蓝图策略 $\sigma_2$ 行动、且给定 P1 的这手牌，P2 的牌也按相应的条件概率分布发放 [Brown & Sandholm, *Science* 2018]。因此增广子博弈的根部分布完整地编码了蓝图提供的上下文。
+在增广子博弈中，双方都从蓝图诱导的分布中取样：每次迭代，对手（P1）被随机发一手私有牌；给定我方（P2）在子博弈之前按蓝图策略 $\sigma\_2$ 行动、且给定 P1 的这手牌，P2 的牌也按相应的条件概率分布发放 [Brown & Sandholm, *Science* 2018]。因此增广子博弈的根部分布完整地编码了蓝图提供的上下文。
 
 不同的子博弈求解技术的差别，就在于"如何借助蓝图构造增广子博弈"，以及由此得到的安全性（safety）保证的强弱。
 
@@ -54,7 +55,7 @@ Re-solve 精解（Re-solve refinement）[Burch et al., AAAI-14] 通过给对手�
 
 Maxmargin 精解（Maxmargin refinement）[Moravcik et al., AAAI-16] 与 Re-solve 类似，但更进一步：它**尽可能多地惩罚**对手选择 Enter 而非 Alt。对每种类型定义边际（margin）：
 
-$$\mathit{Margin}_{\text{Heads}} = EV[\mathit{Alt}_{\text{Heads}}] - EV[\mathit{Enter}_{\text{Heads}}],$$
+$$\mathit{Margin}\_{\text{Heads}} = EV[\mathit{Alt}\_{\text{Heads}}] - EV[\mathit{Enter}\_{\text{Heads}}],$$
 
 求解时**最大化最小边际**（而 Re-solve 只是力图让所有边际非负）。直观上，这迫使我们在增广子博弈中尽可能压低对手各类型的 Enter 价值。在掷硬币例子的解中，玩家 2 以 $5/8$ 猜 Heads、弃权概率降到 $0$，玩家 1 Heads 型 Enter 的 EV 被压到 $-0.25$。
 
@@ -62,7 +63,7 @@ $$\mathit{Margin}_{\text{Heads}} = EV[\mathit{Alt}_{\text{Heads}}] - EV[\mathit{
 
 Libratus 实际使用的变体称为 **Estimated-Maxmargin（估计-Maxmargin）** [Brown & Sandholm, *Science* 2018]。它与 Maxmargin 的关键区别在于 Alt 支付的来源：此前的安全精解技术（Re-solve、Maxmargin）用的是对手在子博弈中价值的**上界**——上界能保证新策略的可利用性不超过蓝图，但实践中往往过于保守；Estimated-Maxmargin 改用蓝图给出的**估计值**。用估计值在理论上可能使可利用性略高于蓝图，但超出的量被下面的定理精确控制：
 
-> **定理 1（Estimated-Maxmargin 的代价界）.** 设 $\sigma_i$ 是双人零和完美回忆博弈中玩家 $i$ 的策略，$S$ 是一组互不重叠的子博弈，$\sigma_i^*$ 是仅在 $S$ 内的子博弈上与 $\sigma_i$ 不同、且可利用性最小的策略。若对 $S$ 中任何子博弈和对手的任何决策点（扑克中即任何一手牌），我们对"对手对 $\sigma_i^*$ 最优响应在该子博弈中的价值"的估计误差不超过 $\Delta$，那么对局中对到达的子博弈应用 Estimated-Maxmargin 求解，所得整体策略的可利用性至多比 $\sigma_i^*$ 高 $2\Delta$。
+> **定理 1（Estimated-Maxmargin 的代价界）.** 设 $\sigma\_i$ 是双人零和完美回忆博弈中玩家 $i$ 的策略，$S$ 是一组互不重叠的子博弈，$\sigma\_i^\*$ 是仅在 $S$ 内的子博弈上与 $\sigma\_i$ 不同、且可利用性最小的策略。若对 $S$ 中任何子博弈和对手的任何决策点（扑克中即任何一手牌），我们对"对手对 $\sigma\_i^\*$ 最优响应在该子博弈中的价值"的估计误差不超过 $\Delta$，那么对局中对到达的子博弈应用 Estimated-Maxmargin 求解，所得整体策略的可利用性至多比 $\sigma\_i^\*$ 高 $2\Delta$。
 
 直观地说：只要蓝图提供的价值估计足够准确，实时子博弈求解产生的策略就接近"只允许在到达的子博弈集合内改动蓝图"这一受限类中的最优策略——而蓝图本身离精确均衡通常还很远，因此这个受限最优已经可以是巨大的改进。
 
