@@ -1,0 +1,4 @@
+/* 展示公式与上下文的垂直间距 */
+mjx-container[jax="CHTML"][display="true"] {
+  margin: 1.1em 0 !important;
+}

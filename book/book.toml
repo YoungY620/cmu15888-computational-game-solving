@@ -9,3 +9,4 @@ default-theme = "light"
 preferred-dark-theme = "navy"
 git-repository-url = "https://github.com/YoungY620/cmu15888-computational-game-solving"
 additional-js = ["theme/lang-toggle.js", "theme/mathjax.js"]
+additional-css = ["theme/mathjax.css"]
