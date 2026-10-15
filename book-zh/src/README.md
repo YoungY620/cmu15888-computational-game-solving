@@ -27,3 +27,5 @@
 
 - [CMU 15-888 F25 课程主页](https://www.cs.cmu.edu/~sandholm/cs15-888F25/)（幻灯片、讲义、作业）
 - 姊妹篇：[MIT 15.S50 扑克理论与分析](https://youngy620.github.io/mit15s50-poker-theory/)（入门向，本课的扑克应用背景）
+
+> 本书由 [course-textbook-builder](https://gist.github.com/YoungY620/d4932154735b55903d5a53b5f6f406c9) 流程生成。

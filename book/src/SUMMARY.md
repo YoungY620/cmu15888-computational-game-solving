@@ -39,3 +39,7 @@
 
 - [Homework 1: LP Equilibrium Computation](hw1.md)
 - [Homework 2: CFR Implementation](hw2.md)
+
+# Appendix
+
+- [Glossary](glossary.md)

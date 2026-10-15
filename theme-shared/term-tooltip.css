@@ -1,0 +1,37 @@
+/* 术语链接：点状下划线，不抢眼 */
+a.term-tip {
+  color: inherit;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--links);
+  text-underline-offset: 3px;
+}
+a.term-tip:hover {
+  color: var(--links);
+  text-decoration-style: solid;
+}
+
+/* 悬浮卡片 */
+#term-card {
+  position: fixed;
+  z-index: 1000;
+  display: none;
+  max-width: 320px;
+  padding: 10px 12px;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--table-header-border, #d0d0d0);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-size: 0.85em;
+  line-height: 1.55;
+}
+#term-card strong {
+  display: block;
+  margin-bottom: 4px;
+}
+#term-card p {
+  margin: 0 0 6px;
+}
+#term-card a {
+  color: var(--links);
+}

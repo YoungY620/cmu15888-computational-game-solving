@@ -27,3 +27,5 @@ Note: L20 (guest lecture: game-theoretic LLM training and DeepNash) has no publi
 
 - [CMU 15-888 Fall 2025 course home](https://www.cs.cmu.edu/~sandholm/cs15-888F25/) (slides, notes, homework)
 - Companion book: [MIT 15.S50 Poker Theory and Analytics](https://youngy620.github.io/mit15s50-poker-theory/) (introductory; the poker background for this course)
+
+> Generated with the [course-textbook-builder](https://gist.github.com/YoungY620/d4932154735b55903d5a53b5f6f406c9) workflow.

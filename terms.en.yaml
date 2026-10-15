@@ -1,0 +1,672 @@
+# CMU 15-888 Computational Game Solving glossary (English)
+# Each entry: term / en / short / detail / first. Same term set as terms.zh.yaml.
+
+# ==================== Game theory basics ====================
+
+- term: "extensive-form game"
+  en: "extensive-form game"
+  short: "A game representation that makes the order of moves explicit as a game tree."
+  detail: >-
+    The extensive form (aka tree form) uses a game tree that makes the order of moves explicit: every node is labeled with whose turn it is to move, the leaves give the payoffs of all players, and a non-strategic chance player acts according to a fixed distribution. Converting to matrix form causes a combinatorial explosion, which is exactly why many algorithms in this course operate directly on the extensive form.
+  first: "ch01-introduction"
+
+- term: "normal-form game"
+  en: "normal-form game"
+  short: "A game representation whose rows and columns are pure strategies."
+  detail: >-
+    In the normal form (aka matrix form or strategic form), rows and columns correspond to the players' pure strategies and each cell gives the payoff vector under that strategy profile. Every finite game can be cast into normal form, but converting from extensive form causes a combinatorial explosion: a game with Θ(m) nodes can induce 2^m pure strategies, so the normal-form representation is often inefficient.
+  first: "ch01-introduction"
+
+- term: "imperfect-information game"
+  en: "imperfect-information game"
+  short: "A game in which players do not fully know what others and nature have done."
+  detail: >-
+    Most real-world games are imperfect-information games, because players do not fully know what the other players and nature have done. Imperfect information brings extra problems: private information and signals must be interpreted, and deception and bluffing must be handled, so techniques for perfect-information games (such as AlphaZero) do not apply. Rock-paper-scissors only has strategic content when players act simultaneously — equivalently, when the second mover cannot see the first mover's choice.
+  first: "ch01-introduction"
+
+- term: "information set"
+  en: "information set"
+  short: "A set of decision nodes that the acting player cannot distinguish."
+  detail: >-
+    To capture imperfect information, the decision nodes of each player are partitioned into information sets; an information set contains all nodes that the player cannot distinguish between, so all nodes in it must share the same action set. The acting player does not know which node of the set they are at, and therefore cannot condition on the opponent's actual choice. Information sets are the central concept of imperfect-information games.
+  first: "ch01-introduction"
+
+- term: "mixed strategy"
+  en: "mixed strategy"
+  short: "A probability distribution over pure strategies chosen by the agent."
+  detail: >-
+    Imperfect-information games may require mixed strategies — probability distributions over pure strategies chosen by the agent itself. A basic fact: in a mixed-strategy equilibrium, every pure strategy in an agent's mixing support yields that agent the same expected utility. A pure strategy assigns an action to every information set, and their number grows exponentially in the number of information sets, so the mixed-strategy representation is not compact.
+  first: "ch01-introduction"
+
+- term: "behavioral strategy"
+  en: "behavioral strategy"
+  short: "A strategy that randomizes independently at each information set."
+  detail: >-
+    A behavioral strategy assigns, at each of the agent's information sets, a probability distribution over actions — rolling the dice on the fly rather than committing to a single pure strategy upfront. Its representation is compact (dimension equal to the number of sequences rather than pure strategies), but the utility is not linear, or even concave, in one's own behavioral strategy, which is a fundamental obstacle for optimization.
+  first: "ch01-introduction"
+
+- term: "perfect recall"
+  en: "perfect recall"
+  short: "All nodes in the same information set share the same past sequence."
+  detail: >-
+    A player has perfect recall if, for all nodes belonging to the same information set, the ordered list of that player's own information sets and actions on the path to the node is identical. Intuitively, perfect recall means a player never forgets previously acquired information. It is the premise of Kuhn's theorem and of most of the theory including CFR; in imperfect-recall games a behavioral-strategy Nash equilibrium may even fail to exist.
+  first: "ch05-efg-cfr"
+
+- term: "Kuhn's theorem"
+  en: "Kuhn's theorem"
+  short: "Under perfect recall, mixed and behavioral strategies are payoff-equivalent."
+  detail: >-
+    Kuhn's theorem states that if an agent has perfect recall, then for every mixed strategy there is a payoff-equivalent behavioral strategy; the equivalence is two-way, so one can safely consider only behavioral strategies when computing equilibria, and the theorem also holds for infinite games. The conclusion fails beyond perfect-recall games: there is an example where a mixed strategy guarantees 1/2 while every behavioral strategy guarantees only 1/4.
+  first: "ch01-introduction"
+
+- term: "Nash equilibrium"
+  en: "Nash equilibrium"
+  short: "A strategy profile from which no player has an incentive to deviate unilaterally."
+  detail: >-
+    A strategy profile is a Nash equilibrium if and only if no player has an incentive to deviate unilaterally given that the others do not deviate. A dominant strategy equilibrium is always a Nash equilibrium, but not vice versa. A Nash equilibrium may fail to be unique (calling for refinements, focal points, and the like) and may fail to exist in pure strategies; Nash (1950) proved that every finite game has at least one Nash equilibrium once mixed strategies are allowed.
+  first: "ch01-introduction"
+
+- term: "dominant strategy equilibrium"
+  en: "dominant strategy equilibrium"
+  short: "A strategy profile in which every agent plays a dominant strategy."
+  detail: >-
+    A dominant strategy is a best response against every profile of the opponents' strategies; a profile in which every agent picks its dominant strategy is a dominant strategy equilibrium. Its virtue is that it requires no counterspeculation: one's own choice is optimal no matter what the opponent does, as in (Defect, Defect) in the Prisoners' Dilemma. A dominant strategy does not always exist; inferior strategies are called dominated.
+  first: "ch01-introduction"
+
+- term: "two-player zero-sum game"
+  en: "two-player zero-sum game"
+  short: "A two-player game in which one player's gain is the other's loss."
+  detail: >-
+    In a zero-sum game the two players' interests are exactly opposed: u₁ = −u₂ for every action profile. Such games have elegant properties other games lack: equilibria are swappable (so there is no equilibrium-selection problem), each player's equilibrium strategies form a bounded convex polytope, the Nash equilibria are exactly the solutions of the minmax problem, and an equilibrium can be computed in polynomial time by linear programming. An equilibrium strategy guarantees the game value; any non-equilibrium strategy is exploitable.
+  first: "ch01-introduction"
+
+- term: "minimax theorem"
+  en: "minimax theorem"
+  short: "In zero-sum games, revealing one's mixed strategy first costs nothing."
+  detail: >-
+    Von Neumann's minimax theorem (1928) states that max_x min_y u₁(x,y) = min_y max_x u₁(x,y): it does not matter which side reveals its mixed strategy first, and this common value is called the game value. The theorem also has a convex-analytic form (the saddle-point theorem): for a continuous concave-convex function on compact convex sets, max-min equals min-max. Linear programming duality directly implies the theorem.
+  first: "ch01-introduction"
+
+- term: "minimax search"
+  en: "minimax search"
+  short: "Tree search that alternately backs up max and min values."
+  detail: >-
+    Minimax is the basic algorithm for solving zero-sum perfect-information games: the MAX player picks the successor of maximum value at her nodes, the MIN player the minimum, leaf values come from an evaluation function, and values are backed up level by level. Theoretical work uncovered the search depth pathology: in certain models, backed-up values turn out to be less trustworthy than the heuristic evaluations themselves.
+  first: "ch02-perfect-info-1"
+
+- term: "alpha-beta pruning"
+  en: "alpha-beta pruning"
+  short: "Prunes subtrees that cannot affect the decision, without changing the returned value."
+  detail: >-
+    Alpha-beta pruning discards subtrees that provably cannot influence the final decision while returning exactly the minimax value: it maintains α, the best score MAX can already guarantee, and β, the best score MIN can guarantee, and stops searching a node once it falls outside that window. In the best case it examines only about 2b^(d/2) terminal positions — doubling the searchable depth for the same compute; move ordering and iterative deepening are the keys to approaching the best case.
+  first: "ch02-perfect-info-1"
+
+- term: "Monte Carlo tree search"
+  en: "Monte Carlo tree search (MCTS)"
+  short: "A lookahead search framework that iteratively builds a partial search tree via random simulations."
+  detail: >-
+    MCTS does not try to expand the whole game tree; it iteratively builds a partial search tree, focusing computation on the most promising branches. Each iteration has four phases — selection, expansion, simulation, and backpropagation — with a tree policy trading off exploration against exploitation and a default policy rolling the game out to the end. AlphaGo used a value network to compress depth and a policy network to compress width; AlphaGo Zero went further and used MCTS itself as a policy improvement operator: the search distribution improves on the network's raw output, and the network is then trained toward it.
+  first: "ch03-mcts"
+
+- term: "upper confidence bound"
+  en: "upper confidence bound (UCB)"
+  short: "A bandit strategy that always pulls the arm with the highest upper confidence bound."
+  detail: >-
+    Each node in the selection phase can be viewed as a multi-armed bandit problem, balancing trying new arms against pulling the currently best one. The classical UCB strategy maintains a confidence interval for each arm and always pulls the arm with the highest upper confidence bound, unifying exploration and exploitation in a single scalar criterion. Using UCB as the tree policy yields UCT: unvisited children get infinite weight, so every child is explored at least once, and MCTS with UCT action selection finds the optimal policy (Kocsis & Szepesvári, ECML-06).
+  first: "ch03-mcts"
+
+- term: "PPAD- and FIXP-completeness"
+  en: "PPAD- and FIXP-completeness"
+  short: "Complexity of computing a Nash equilibrium: PPAD for two players, FIXP for three."
+  detail: >-
+    The complexity landscape of computing one Nash equilibrium in normal-form games: two-player zero-sum games are solvable in polynomial time by linear programming; two-player general-sum games are PPAD-complete even with 0/1 payoffs, and computing even an approximately good Nash equilibrium is NP-complete; three-player games are FIXP-complete. Computing approximate fixed points of general functions is equivalent to computing Nash equilibria.
+  first: "ch01-introduction"
+
+# ==================== Online learning and regret minimization ====================
+
+- term: "regret"
+  en: "regret"
+  short: "The gap between the best fixed strategy in hindsight and the learner's cumulative utility."
+  detail: >-
+    Regret is defined as the best cumulative utility achievable in hindsight by some fixed strategy, minus the learner's actual cumulative utility over T rounds. An online algorithm whose regret is o(T) on every (possibly adversarially chosen) utility sequence is called a no-regret algorithm. Regret can be negative; no deterministic online algorithm can avoid linear regret, so randomization is essential to the no-regret property.
+  first: "ch04-normal-form"
+
+- term: "external regret"
+  en: "external regret"
+  short: "Φ-regret when the deviation set contains only constant maps."
+  detail: >-
+    External regret is the most standard regret notion in online learning, corresponding to deviation sets containing only constant maps — that is, comparison against the best fixed strategy in hindsight. Small external regret does not imply small swap regret: there are utility sequences on which external regret is zero while swap regret grows linearly (MWU has this property). Self-play of external-regret minimizers converges to coarse correlated equilibria.
+  first: "ch04-normal-form"
+
+- term: "internal regret"
+  en: "internal regret"
+  short: "Regret allowing only deviations that swap one action for another everywhere."
+  detail: >-
+    Internal regret allows only deviations that replace one action with another everywhere and leave everything else untouched — |A|(|A|−1) single-swap maps. Since the gain of any swap deviation decomposes over the original actions, swap regret is at most |A| times internal regret, so the two are equivalent for the purpose of sublinearity. Self-play with sublinear internal regret converges to correlated equilibria.
+  first: "ch04-normal-form"
+
+- term: "swap regret"
+  en: "swap regret"
+  short: "The strongest classical regret notion, allowing all strategy remappings as deviations."
+  detail: >-
+    Swap regret takes the deviation set to be all m^m mappings; it upper-bounds both external and internal regret. Swap regret is always nonnegative (the deviation set contains the identity map), a property that makes it the key to near-optimal regret analysis in general-sum games. The Blum–Mansour algorithm reduces swap-regret minimization to |A| external-regret problems, achieving regret O(√(T|A|log|A|)).
+  first: "ch04-normal-form"
+
+- term: "Φ-regret"
+  en: "Φ-regret"
+  short: "A hindsight-rationality measure parameterized by a family of strategy deviations."
+  detail: >-
+    Φ-regret is parameterized by a deviation family Φ: it compares the learner's cumulative utility against playing φ(x^(t)) each round; the richer the deviation set, the stronger the induced notion of hindsight rationality — constant deviations give external regret, all deviations give swap regret. In convex games there is a strictly refining hierarchy Φ_EXT ⊂ Φ_EF ⊂ Φ_LIN ⊂ Φ_FE ⊂ Φ_SWAP. Gordon, Greenwald and Marks' framework reduces Φ-regret minimization to fixed-point computation plus external-regret minimization over the deviation set.
+  first: "ch06-phi-regret"
+
+- term: "fictitious play"
+  en: "fictitious play"
+  short: "Best-responding each round to the opponent's historical average strategy."
+  detail: >-
+    Fictitious play, introduced by Brown (1951), has each player best-respond at every round to the opponent's average strategy so far — the most basic form of opponent modeling. Robinson (1951) proved that its time average converges in every zero-sum game, but the rate can be exponentially slow, and convergence requires both sides to follow the algorithm — an opponent who knows we are using fictitious play can exploit us. As an online algorithm (follow the leader), it is not no-regret: there are utility sequences on which it suffers linear regret.
+  first: "ch04-normal-form"
+
+- term: "follow the regularized leader"
+  en: "follow the regularized leader (FTRL)"
+  short: "An online algorithm that adds a strictly convex regularizer to the cumulative-utility objective."
+  detail: >-
+    FTRL subtracts a strictly convex regularizer (divided by a learning rate) from fictitious play's cumulative-utility objective, injecting randomness into the strategy so the opponent can less easily exploit the learner; as the learning rate tends to infinity it degenerates to fictitious play. The negative-entropy regularizer yields multiplicative weights update, and the Euclidean regularizer yields a projected update. Its regret bound is R/η + ηΣ‖u^(t)‖²_*, which becomes 2B√(RT) after optimally tuning the learning rate.
+  first: "ch04-normal-form"
+
+- term: "multiplicative weights update"
+  en: "multiplicative weights update (MWU)"
+  short: "An online algorithm that plays actions proportionally to the exponential of cumulative utility."
+  detail: >-
+    MWU is FTRL with the negative-entropy regularizer: each action's probability is proportional to exp(η·cumulative utility); it is also known as exponential weights or randomized weighted majority, and is perhaps the most thoroughly studied online algorithm. Its regret bound 2√(T ln m) is known to be optimal against adversarial utility sequences; there is also a direct proof using the total weight as a potential: each round removes exactly an η fraction of the total weight equal to the expected loss.
+  first: "ch04-normal-form"
+
+- term: "mirror descent"
+  en: "mirror descent (MD)"
+  short: "An online algorithm balancing the last observed utility against staying close to the last strategy."
+  detail: >-
+    Mirror descent's update balances optimizing against the most recently observed utility against staying close to the previous strategy as measured by a Bregman divergence. The Euclidean regularizer generates squared Euclidean distance (yielding online gradient descent), and negative entropy generates KL divergence. Under Legendre regularizers, mirror descent and FTRL are equivalent and enjoy nearly identical regret bounds.
+  first: "ch04-normal-form"
+
+- term: "regret matching"
+  en: "regret matching (RM)"
+  short: "A parameter-free algorithm that plays actions proportionally to positive cumulative regret."
+  detail: >-
+    Regret matching picks a strategy proportional to the positive part of the cumulative (counterfactual) regret vector; it is parameter-free and scale-invariant. Its analysis uses the Pythagorean lemma: the instantaneous regret is always orthogonal to the accumulated positive regret, giving regret at most √(mT). Hart and Mas-Colell's original result targets the stronger internal regret; in practice, regret matching and its variants are the most common local regret minimizers inside CFR.
+  first: "ch04-normal-form"
+
+- term: "regret matching+"
+  en: "regret matching+ (RM+)"
+  short: "A regret-matching variant that truncates negative regrets to zero at every update."
+  detail: >-
+    RM+, due to Tammelin (2014), differs from regret matching only in truncating negative regrets to zero at each update. It enjoys a similar regret guarantee but in practice is typically far better than RM. Farina et al. (2021) revealed a subtle connection: on a certain lifted space, RM+ is an instance of mirror descent while RM is an instance of FTRL — the difference between the two is fundamental.
+  first: "ch04-normal-form"
+
+- term: "Blackwell approachability"
+  en: "Blackwell approachability"
+  short: "A vector-payoff repeated-game framework whose goal is to steer the average payoff toward a target cone."
+  detail: >-
+    Blackwell approachability casts regret minimization as a repeated game with vector payoffs: the i-th component of the payoff vector is exactly the regret change relative to always playing action i, and the goal is to make the average payoff approach the nonpositive cone. The constructive proof of Blackwell's theorem picks, each round, a halfspace containing the target set and forces the payoff into it. Using FTRL to choose the halfspace produces iterates identical to regret matching; using OMD produces iterates identical to RM+.
+  first: "ch04-normal-form"
+
+- term: "self-play"
+  en: "self-play"
+  short: "A solving paradigm in which all players of the game run regret minimizers."
+  detail: >-
+    Self-play means having all players of the game run regret-minimizing algorithms. In zero-sum games, as long as both sides are no-regret, the average strategies converge to a minimax equilibrium, with the equilibrium accuracy ε equal to the sum of the two average regrets; the duality gap (the difference between the two sides' best-response improvements) converges to zero at rate O(1/√T). In general-sum games, self-play of external-regret minimizers converges to coarse correlated equilibria, and of internal- or swap-regret minimizers to correlated equilibria.
+  first: "ch04-normal-form"
+
+- term: "optimistic online learning"
+  en: "optimistic online learning (OFTRL/OMD)"
+  short: "FTRL/mirror-descent variants that predict the next utility vector."
+  detail: >-
+    Optimistic (aka predictive) algorithms maintain a dynamically updated prediction vector each round, aiming to track the next utility; the most common prediction is the simple one-step recency bias m^(t) = u^(t−1). Optimistic FTRL differs from FTRL only in this prediction vector; optimistic mirror descent additionally maintains an auxiliary strategy sequence. In two-player self-play with MWU, at least one player necessarily suffers Ω(√T) regret — breaking this barrier requires new algorithmic ideas of this kind, not better analysis alone.
+  first: "ch08-optimism"
+
+- term: "RVU (regret bounded by variation in utilities)"
+  en: "RVU (regret bounded by variation in utilities)"
+  short: "A property bounding regret by prediction error minus a strategy-variation term."
+  detail: >-
+    The RVU (regret bounded by variation in utilities) property requires constants α, β, γ > 0 such that regret ≤ α + βΣ‖u^(t) − m^(t)‖²_* − γΣ‖x^(t) − x^(t−1)‖². Two differences from the usual bounds: regret is bounded by the misprediction error, and a negative term appears — the more violently the strategy changes, the smaller the regret. OFTRL and OMD both satisfy RVU; in games whose per-player regrets sum to a nonnegative quantity (including two-player zero-sum and polymatrix zero-sum games, the latter composed of pairwise zero-sum edge games on a graph), it yields O(1) individual regret and a bounded second-order path length (the sum of squared strategy variations).
+  first: "ch08-optimism"
+
+- term: "predictive regret matching"
+  en: "predictive regret matching (PRM/PRM+)"
+  short: "Variants that bring predictions into the regret-matching framework."
+  detail: >-
+    Predictive regret matching uses the prediction vector to guess the next regret vector: before playing, it corrects the cumulative regret with the prediction and then normalizes. PRM and PRM+ enjoy regret bounds in terms of the prediction error, but they do not satisfy the RVU property. Instantiating PRM+ as the local regret minimizer at every information set, together with quadratic averaging and alternation, gives PCFR+: on non-poker benchmark games it is several orders of magnitude faster than CFR+, DCFR, and LCFR, while on poker-like games DCFR remains fastest.
+  first: "ch08-optimism"
+
+- term: "last-iterate convergence"
+  en: "last-iterate convergence"
+  short: "Convergence of the algorithm's iterates themselves, not just their time average."
+  detail: >-
+    Regret-based guarantees hold only after some form of averaging; the iterates of traditional no-regret algorithms such as MWU fail to converge even in zero-sum games — the dynamics keep spiraling around, or even away from, the equilibrium. Optimistic mirror descent with a smooth regularizer, in games whose regrets sum to a nonnegative quantity, makes most iterates approximate Nash equilibria at a T^(−1/2) rate, which is tight. Last-iterate convergence is deeply connected to near-optimal regret.
+  first: "ch08-optimism"
+
+- term: "smooth game"
+  en: "smooth game"
+  short: "A game in which collectively switching to the welfare-optimal components secures a share of optimal welfare."
+  detail: >-
+    A game is (λ, μ)-smooth with respect to a welfare-optimal profile if, for every strategy profile, having each player switch to her component of the welfare-optimal profile collectively guarantees λ·OPT − μ·SW. Roughgarden showed that many important game classes are smooth; in a sense it is a generalization of zero-sum games. In a (λ, μ)-smooth game, no-regret dynamics always secure a λ/(1+μ) share of optimal welfare — a ratio called the robust price of anarchy; OMD either converges to an approximate Nash equilibrium or strictly exceeds that share in average welfare.
+  first: "ch08-optimism"
+
+- term: "Blum–Mansour algorithm"
+  en: "Blum–Mansour algorithm"
+  short: "An algorithm reducing swap regret to per-action external regret."
+  detail: >-
+    The algorithm maintains one external-regret minimizer per action, assembles their outputs as columns of a stochastic matrix, and plays a stationary distribution of the induced Markov chain as its strategy; after observing the utility, it forwards utility scaled by the current strategy to each minimizer. Its swap regret is bounded by O(√(T|A|log|A|)), and when all players run it, the average correlated play distribution converges to a correlated equilibrium.
+  first: "ch06-phi-regret"
+
+- term: "ellipsoid against hope"
+  en: "ellipsoid against hope (EAH)"
+  short: "Runs the ellipsoid method on a provably infeasible dual program to compute correlated equilibria."
+  detail: >-
+    EAH, first proposed by Papadimitriou and Roughgarden (2008), runs the ellipsoid algorithm on an infeasible dual program, using a good-enough-response (GER) oracle at every step to refute the candidate point; once the ellipsoid volume shrinks to exponentially small, the minimax theorem reads off a certificate of dual infeasibility from a much smaller zero-sum game — an ε-Φ-equilibrium. It computes (coarse) correlated equilibria in multiplayer games in time polynomial in log(1/ε); for linear deviations, a fixed point of the deviation exactly implements the GER.
+  first: "ch07-nonlinear-deviations"
+
+- term: "expected fixed point"
+  en: "expected fixed point"
+  short: "A distributional fixed point requiring only the average of φ(x)−x to be small."
+  detail: >-
+    A distribution μ is an ε-expected fixed point of φ if the norm of the expectation of φ(x)−x under μ is at most ε — small only on average, not pointwise. Unlike true fixed points, expected fixed points are easy to compute: iterating the map makes the sum telescope, and O(1/ε) iterations suffice. Replacing the true fixed point in Gordon et al.'s framework with an expected fixed point lets the learner output mixed strategies, bypassing the intractability of fixed-point computation (which is equivalent to computing Nash equilibria).
+  first: "ch07-nonlinear-deviations"
+
+- term: "semi-separation oracle"
+  en: "semi-separation oracle"
+  short: "A disjunctive oracle returning either an expected fixed point or evidence of leaving the set."
+  detail: >-
+    The semi-separation problem asks for one of two things: an ε-expected fixed point of φ, or a point x with φ(x) ∉ X. It relaxes the "separation oracle plus fixed point" requirement of Gordon's framework and EAH into a disjunction of the two, thereby tolerating functions that do not map the strategy set back into itself. Combined with a shrinking shell and the ellipsoid method, it minimizes Φ-regret for polynomial-dimension nonlinear deviations (including low-degree polynomial deviations) and computes Φ-equilibria in time poly(n, m, k, log(1/ε)).
+  first: "ch07-nonlinear-deviations"
+
+# ==================== Extensive-form game solving ====================
+
+- term: "sequence form"
+  en: "sequence form"
+  short: "A strategy representation using path-probability products that makes utility linear."
+  detail: >-
+    Each component of a sequence-form vector stores the product of the player's own probabilities along the path from the root to taking an action at an information set; legal strategies are characterized by probability-flow conservation constraints, forming a convex polytope described by polynomially many constraints in the game-tree size, and the number of sequences is linear in the tree size. Its key advantage: each player's utility is linear in their own sequence-form strategy. Consequently, minimax equilibria of zero-sum extensive-form games can be computed by an LP of polynomial size in the game tree.
+  first: "ch05-efg-cfr"
+
+- term: "tree-form decision problem"
+  en: "tree-form decision problem (TFDP)"
+  short: "The sequential decision problem one player faces after abstracting away all other players."
+  detail: >-
+    A TFDP abstracts the decision problem faced by a single player of an extensive-form game: the player selects actions at decision points and observes signals at observation points, which together form a tree. Its sequence-form strategy set decomposes inductively via two basic operations: observation points correspond to Cartesian products, and decision points to convex hulls. This decomposition is the structural basis of regret circuits and CFR.
+  first: "ch05-efg-cfr"
+
+- term: "regret circuits"
+  en: "regret circuits"
+  short: "Constructions that compose local no-regret algorithms into one on a composite strategy set."
+  detail: >-
+    Regret circuits (Farina, Kroer & Sandholm, ICML 2019) answer: given efficient regret minimizers on some sets, can we compose them into one for a more complex composite set? The regret of a Cartesian product equals the sum of the component regrets; the regret of a convex hull is at most the mixer's regret plus the maximum branch regret. Combining the two circuits with the inductive decomposition of sequence-form polytopes yields efficient no-regret algorithms on sequence-form polytopes — and this is exactly CFR.
+  first: "ch05-efg-cfr"
+
+- term: "counterfactual regret minimization"
+  en: "counterfactual regret minimization (CFR)"
+  short: "A family of algorithms that independently minimizes counterfactual regret at every decision point."
+  detail: >-
+    CFR, first proposed by Zinkevich et al. (NIPS 2007), runs a local regret minimizer at every decision point (most commonly regret matching and its variants), driven by counterfactual utilities — which measure the value of each action "had the player contrived to reach that information set". The overall regret is bounded by the sum of the positive parts of the local regrets, only linearly in the number of information sets. In two-player zero-sum games, both players' time-averaged strategies converge to a minimax equilibrium; CFR is the core algorithm behind many game-solving breakthroughs of the past two decades.
+  first: "ch05-efg-cfr"
+
+- term: "CFR+"
+  en: "CFR+"
+  short: "A CFR variant that floors regrets at zero and weights iteration t by t² in the average strategy."
+  detail: >-
+    CFR+ floors regrets at zero (negative regrets are set to zero) and weights iteration t by t² in the average strategy; in the DCFR family it corresponds to parameters (∞, −∞, 2). It used to be the fastest CFR variant in practice, but it does not discount early bad iterations: in a toy example with an extremely suboptimal action it needs 471,407 iterations to learn the right action, while linear CFR needs only 970. CFR+ also works poorly with Monte Carlo sampling.
+  first: "ch09-cfr-speedups"
+
+- term: "linear CFR"
+  en: "linear CFR (LCFR)"
+  short: "CFR that weights both regrets and average-strategy contributions of iteration t by t."
+  detail: >-
+    Linear CFR discounts the regrets and average-strategy contributions of early bad iterations by weighting iteration t by t; in the DCFR family it is DCFR_{1,1,1}. It reduces the convergence of the toy example with an extremely suboptimal action from 471,407 iterations to 970, while the worst-case bound only degrades by a small constant factor. Unlike CFR+ and DCFR, linear CFR works well with Monte Carlo sampling (discounted MCCFR); Pluribus uses Linear MCCFR.
+  first: "ch09-cfr-speedups"
+
+- term: "discounted CFR"
+  en: "discounted CFR (DCFR)"
+  short: "A CFR family discounting positive regrets, negative regrets, and the average strategy separately."
+  detail: >-
+    DCFR multiplies positive regrets by t^α/(t^α+1), negative regrets by t^β/(t^β+1), and weights average-strategy contributions by (t/(t+1))^γ at every iteration; it unifies linear CFR and CFR+ into one parametric family. With α=1.5, β=0, γ=2, DCFR consistently outperforms CFR+ in practice (typically 2–3× faster on HUNL endgames and Goofspiel), while its worst-case bound is only a small constant factor worse than CFR's. Letting the hyperparameters vary linearly with the iteration (HS-DCFR) yields further order-of-magnitude speedups.
+  first: "ch09-cfr-speedups"
+
+- term: "regret-based pruning"
+  en: "regret-based pruning (RBP)"
+  short: "Techniques that dynamically prune subtrees of zero-probability or very-negative-regret actions."
+  detail: >-
+    In imperfect-information games pruning must be dynamic (temporary): a branch that looks useless now may become relevant later. Partial pruning cuts paths where the opponent's reach probability is zero; interval and total regret-based pruning further cut one's own zero-probability actions, and when pruning ends, a single catch-up iteration is performed using a counterfactual best response (CBR — a strategy that maximizes counterfactual value even at information sets unreachable due to one's own earlier actions) against the opponent's (interval or total) average strategy. Total RBP also reduces the required space to be proportional to the number of unpruned information sets.
+  first: "ch09-cfr-speedups"
+
+- term: "Monte Carlo CFR"
+  en: "Monte Carlo CFR (MCCFR)"
+  short: "A stochastic approximation of CFR that traverses only a sampled part of the game tree per iteration."
+  detail: >-
+    MCCFR replaces exact utilities with unbiased sparse estimators: the terminal nodes are partitioned into blocks, each iteration samples one block with some probability, and only information sets on the sampled paths are updated, making each iteration far cheaper than vanilla CFR. As long as the estimator is conditionally unbiased, stochastic regret minimization incurs only a √T-scale additional regret over its deterministic core (proved via a martingale difference sequence and the Azuma–Hoeffding inequality). Libratus computed its blueprint strategy with an improved version of MCCFR.
+  first: "ch17-deep-learning"
+
+- term: "external sampling"
+  en: "external sampling"
+  short: "An MCCFR variant that samples only the opponent's and chance's strategies."
+  detail: >-
+    External sampling independently samples one pure strategy for the opponent and one for the chance player, yielding an unbiased utility estimator; only information sets reachable on the sampled paths need updating. In normal-form games it reduces the per-iteration cost from O(nnz(A)) to O(m₁+m₂), giving the Grigoriadis–Khachiyan sublinear algorithm: an ε-equilibrium in time less than reading the entire input. For balanced games its per-iteration cost is O(√|H|), asymptotically better than vanilla CFR.
+  first: "ch17-deep-learning"
+
+- term: "outcome sampling"
+  en: "outcome sampling"
+  short: "An MCCFR variant that samples every player's strategy and corrects via importance sampling."
+  detail: >-
+    Outcome sampling samples every player's strategy: it draws one terminal node from the product distribution of the reference strategy and the other players' strategies, then corrects with importance sampling, costing only O(d·|A|) per iteration (d being the tree depth). The price is variance proportional to the inverse of the minimum sampling probability. It does not require knowing the opponent's strategy, so it can serve as an online regret-minimization algorithm for extensive-form games, in the same spirit as Exp3 for normal-form games.
+  first: "ch17-deep-learning"
+
+- term: "neural fictitious self-play"
+  en: "neural fictitious self-play (NFSP)"
+  short: "Fictitious play whose best-response oracle is implemented with deep reinforcement learning."
+  detail: >-
+    NFSP maintains two neural networks: a value network trained with Q-learning to give an approximate best response — exactly what fictitious play requires — and a policy network trained with supervised learning to imitate the player's past behavior, capturing the average strategy, since only the average strategy converges in fictitious play. When acting, the player mixes between the approximate best response and the average strategy in a fixed proportion. NFSP is a common baseline for evaluating deep-learning approaches to large games, and the forerunner of Deep CFR.
+  first: "ch17-deep-learning"
+
+- term: "Deep CFR"
+  en: "Deep CFR"
+  short: "CFR that approximates per-information-set counterfactual regrets with neural networks."
+  detail: >-
+    Deep CFR maintains a regret network for each player that outputs approximate counterfactual regrets for each action at every information set, relying on the network's ability to generalize across similar information sets and thereby removing the need for manual abstraction; a separate policy network approximates the average strategy, and external-sampling traversals of the game tree collect the training data. Its soundness theorem explicitly incorporates the function-approximation error into the convergence bound: the error enters the asymptotic floor only through a square root, so as the error vanishes the algorithm converges to a Nash equilibrium.
+  first: "ch17-deep-learning"
+
+- term: "DREAM"
+  en: "DREAM"
+  short: "A Deep CFR variant using outcome sampling with a baseline for variance reduction."
+  detail: >-
+    DREAM (Steinberger et al., 2020) is a popular Deep CFR variant: it switches to outcome sampling and introduces a bootstrapped baseline to mitigate importance-sampling variance. Because the baseline is imperfect and the bootstrapping still recursively divides by sampling probabilities, its estimator variance remains high; on large games such as Dark Chess, DREAM and NFSP retain no advantage over a uniformly random opponent and are significantly outperformed by ESCHER.
+  first: "ch17-deep-learning"
+
+- term: "ESCHER"
+  en: "ESCHER"
+  short: "An outcome-sampling method with a fixed reference policy that estimates conditional values directly."
+  detail: >-
+    ESCHER (McAleer et al., 2023) uses a fixed reference policy for each player and estimates conditional values instead of counterfactual values with a neural network: the estimate equals the counterfactual value times a fixed scaling factor r_i(j), and the scale invariance of regret matching guarantees that the iterates are unaffected. This completely eliminates importance sampling and its high variance, and function-approximation error enters the regret only as a linear additive term; it is also fully model-free. In practice ESCHER significantly outperforms popular algorithms such as DREAM.
+  first: "ch17-deep-learning"
+
+# ==================== Abstraction ====================
+
+- term: "automated game abstraction"
+  en: "automated game abstraction"
+  short: "A framework that compresses the original game, solves the smaller game, and maps the solution back."
+  detail: >-
+    Automated game abstraction proceeds in three steps: an abstraction algorithm compresses the original game into an abstract game; an equilibrium-finding algorithm computes a Nash equilibrium of the abstract game; and a reverse model interprets the abstract equilibrium as a strategy in the original game. Abstractions are classified as lossless or lossy: lossless abstraction only merges strategically equivalent nodes, while lossy abstraction is the key to tackling extremely large games.
+  first: "ch10-abstraction-1"
+
+- term: "GameShrink"
+  en: "GameShrink"
+  short: "A lossless abstraction algorithm that merges isomorphic nodes in the signal tree."
+  detail: >-
+    GameShrink works in two passes: bottom-up dynamic programming on the signal tree (whose edges correspond to events where nature reveals a signal to some player) marks all isomorphic node pairs, and a top-down pass then applies the abstraction transformation (merging) to applicable sibling pairs. The isomorphism relation captures strategic symmetry between nodes, and the algorithm runs in Õ(n²) time. A theorem guarantees that a Nash equilibrium of the abstract game, interpreted back in the original game, is still a Nash equilibrium. It losslessly abstracted the 3.1-billion-node Rhode Island Hold'em in one second, making it the largest imperfect-information game ever solved exactly at the time.
+  first: "ch10-abstraction-1"
+
+- term: "potential-aware abstraction"
+  en: "potential-aware abstraction"
+  short: "An abstraction that captures hand potential via distributions over next-round buckets."
+  detail: >-
+    Earlier abstraction algorithms used the probability of winning assuming no further betting (expected hand strength, EHS) as the similarity between hands, but that fails to capture a hand's potential — a drawing hand may have a mediocre current win rate yet a large chance of becoming strong later, and hands with identical EHS can have very different strength distributions. Potential-aware abstraction represents each hand as a histogram of its transition probabilities into the next round's buckets and clusters those histograms, capturing multi-dimensional potential. The 2014 state-of-the-art algorithm further combines imperfect recall with high-dimensional earth mover's distance (the minimum cost of turning one distribution into another): a single bottom-up pass with no integer program, beating the best previous abstractions.
+  first: "ch10-abstraction-1"
+
+- term: "imperfect-recall abstraction"
+  en: "imperfect-recall abstraction"
+  short: "An abstraction that lets players in the abstract game forget distinctions that are no longer relevant."
+  detail: >-
+    A perfect-recall abstraction forces a player to keep distinguishing in later rounds everything she could distinguish in earlier rounds, even when the distinction is strategically meaningless later; imperfect recall allows forgetting such irrelevant distinctions, decoupling the per-round abstractions and greatly reducing the cost of both abstraction and equilibrium computation. The price is the loss of theoretical guarantees: CFR-type algorithms have no convergence guarantee on imperfect-recall games, and a behavioral-strategy Nash equilibrium may even fail to exist. In practice, however, poker programs using imperfect-recall abstractions have consistently outperformed those using perfect-recall abstractions.
+  first: "ch10-abstraction-1"
+
+- term: "action abstraction"
+  en: "action abstraction"
+  short: "An abstraction that discretizes a continuous or huge action space."
+  detail: >-
+    In no-limit Texas hold'em the betting space is essentially continuous (any amount up to all-in) and must be discretized into finitely many actions. The first action-abstraction algorithm with quality guarantees used regret transfer to warm-start a gradient-ascent procedure that optimizes bet sizes online: run no-regret learning at the current parameter, estimate the gradient with finite differences, move the parameter and transfer the regrets, and repeat until convergence. Combined with reverse mapping, thresholding and purification must first merge fine-grained actions into meta-actions (fold/call/bet) to avoid diluting probability mass.
+  first: "ch11-abstraction-2"
+
+- term: "regret transfer"
+  en: "regret transfer"
+  short: "A warm-starting technique that rescales old regret values after payoffs change."
+  detail: >-
+    When a game's payoffs change while its topology stays fixed, naïvely carrying the old regret values over stalls because the old regrets were accumulated at the old payoff scale, while starting over wastes all prior computation. The correct approach deweights the transferred regrets and accumulated strategies by a factor of O(1/(1+δ√T)²): the larger the perturbation and the longer the run, the less trustworthy the old data. This lets the equilibrium error keep decreasing steadily after warm-starting, and it underpins online optimization of abstraction parameters such as bet sizes.
+  first: "ch11-abstraction-2"
+
+- term: "reverse mapping"
+  en: "reverse mapping (action translation)"
+  short: "Translating an opponent's off-abstraction action back to a nearby abstract action."
+  detail: >-
+    The opponent may take actions not present in the abstraction (e.g., arbitrary bet sizes), so action translation maps her actual action to a nearby abstract one. A good mapping should preserve endpoints, be monotone, scale-invariant, and continuous; the pseudo-harmonic mapping f(x) = (B−x)(1+A)/((B−A)(1+x)), derived from the Nash equilibrium of a simplified poker game, satisfies all these desiderata and significantly outperforms the randomized geometric mapping. The problem is that the opponent can deliberately pick bet sizes whose translation is worst for us — the translation itself can be exploited.
+  first: "ch11-abstraction-2"
+
+- term: "abstraction pathology"
+  en: "abstraction pathology"
+  short: "The phenomenon that a finer abstraction can yield a worse solution in the original game."
+  detail: >-
+    The intuition that a finer abstraction always yields a better solution does not hold: there is a zero-sum example where a finer abstraction (deleting one attacker action) gives a strategy far from the original game's equilibrium, while a coarser abstraction (additionally deleting one defender action) happens to give exactly an equilibrium strategy. Such pathologies also exist in small poker games, showing that abstraction quality is non-monotone.
+  first: "ch11-abstraction-2"
+
+- term: "abstraction theorem"
+  en: "abstraction theorem"
+  short: "Decomposes the exploitability bound of a lifted strategy into mapping error plus refinement error."
+  detail: >-
+    Kroer and Sandholm's unified framework (NeurIPS-18) decomposes the mapping from the original game to the abstract game into two steps: first onto a perfect-recall refinement of the abstraction, then a coarsening of the information sets. The theorem gives ε′ᵢ = ε + mapping errorᵢ + refinement errorᵢ, each further decomposed into a payoff error and a distribution error; the decomposition is exact (the inequality comes only from the abstract game not being solved exactly) but is generally ex post, depending on the best response. Under a distributional-similarity condition the bounds become computable ex ante, and they are exponentially tighter than prior work.
+  first: "ch11-abstraction-2"
+
+# ==================== Poker AI ====================
+
+- term: "blueprint strategy"
+  en: "blueprint strategy"
+  short: "A precomputed coarse-abstraction strategy that provides context for real-time refinement."
+  detail: >-
+    Systems such as Libratus follow this framework: offline, solve the entire game in a coarse abstraction to obtain a blueprint strategy, which approximately provides the context for every situation (reach probabilities, expected values of each opponent type, and so on); during play, use the blueprint as context to solve the currently reached subgame in real time in a finer abstraction. Libratus's abstraction compresses the game from 10^161 decision points to about 10^12, and the blueprint gives a detailed strategy for the first two rounds and a coarse one for the last two — which the subgame solver then refines in real time.
+  first: "ch12-libratus-1"
+
+- term: "subgame solving"
+  en: "subgame solving"
+  short: "Real-time techniques that refine the currently reached situation in a finer abstraction during play."
+  detail: >-
+    In perfect-information games, a subgame can be solved independently using only information inside it; this fails in imperfect-information games — optimal play within a subgame depends on the reach distribution and counterfactual values, which are determined endogenously by the rest of the game. Subgame solving constructs a self-consistent augmented subgame with the blueprint as context and solves it in real time; the techniques differ in how the blueprint is used to build the augmented subgame, and in the strength of the resulting safety guarantees. It is the most important technique in Libratus.
+  first: "ch13-libratus-2"
+
+- term: "augmented subgame"
+  en: "augmented subgame"
+  short: "A self-consistent subgame whose root distribution encodes the blueprint's context."
+  detail: >-
+    In an augmented subgame, both players are sampled from blueprint-induced distributions: each iteration the opponent is dealt a random private hand, and our own cards are dealt according to the corresponding conditional distribution, so the root distribution of the augmented subgame fully encodes the context provided by the blueprint. An imperfect-information subgame in poker is delimited by common knowledge among the players (e.g., the community cards and the action sequence so far); every private-card combination consistent with that common knowledge is a root of the subgame.
+  first: "ch13-libratus-2"
+
+- term: "Re-solve refinement"
+  en: "Re-solve refinement"
+  short: "A safe refinement that gives the opponent an opt-out worth her blueprint value."
+  detail: >-
+    Re-solve refinement lets each opponent type choose at the root of the augmented subgame between Enter (enter the subgame and play the newly solved strategy) and Alt (walk away with the expected value of entering under the blueprint strategy). Since the opponent only enters when Enter is worth no more than Alt, the construction guarantees that her EV from entering the subgame does not exceed the blueprint's, so the new strategy's exploitability does not exceed the blueprint's. The price is that it can miss obvious improvements — the construction only requires keeping the opponent at or below her blueprint value and has no drive to eliminate residual suboptimal play.
+  first: "ch13-libratus-2"
+
+- term: "Maxmargin refinement"
+  en: "Maxmargin refinement"
+  short: "A refinement that maximizes the minimum margin to push down the opponent's entry values."
+  detail: >-
+    Maxmargin defines a margin Margin = EV[Alt] − EV[Enter] for each opponent type and maximizes the minimum margin when solving, whereas Re-solve merely tries to keep all margins nonnegative. Its weakness is that it can waste solving effort on types the blueprint has already punished. The Estimated-Maxmargin variant actually used by Libratus replaces the upper bound on Alt payoffs with the blueprint's estimated values: with estimation error at most Δ, the overall exploitability exceeds that of the best strategy allowed to change only within the subgame set by at most 2Δ.
+  first: "ch13-libratus-2"
+
+- term: "Reach-maxmargin refinement"
+  en: "Reach-maxmargin refinement"
+  short: "A refinement that accounts for the mistakes the opponent already made to reach the subgame."
+  detail: >-
+    If some opponent type's blueprint EV of reaching the subgame is below what she could get elsewhere, her very arrival at the subgame proves she made a mistake, and the difference is a gift to us; the type's Alt payoff can then be raised by that amount without breaking safety, letting the solver focus on suppressing the EV of her other types. When many subgames are refined simultaneously, gifts are split among subgames in proportion to their reach probabilities, and a lower bound on the gift replaces its nominal value. Experimentally it reduces exploitability by about an order of magnitude relative to the blueprint while remaining safe.
+  first: "ch13-libratus-2"
+
+- term: "nested subgame solving"
+  en: "nested subgame solving"
+  short: "Solving a fresh subgame in real time whenever the opponent takes an off-tree action."
+  detail: >-
+    A real opponent can bet arbitrary amounts — actions outside the abstracted tree; traditional action translation maps off-tree bets back into the tree, and the opponent can deliberately pick sizes whose translation is worst for us. Nested subgame solving instead solves a new augmented subgame in real time for every off-tree action, with the Alt payoff set to that type's value of her best in-tree action; a theorem guarantees that the resulting strategy maintains an ε-equilibrium in the new abstraction that includes the new action, and the process can be repeated for each subsequent off-tree action. Experimentally it reduces exploitability by more than an order of magnitude versus action translation. DeepStack's independently proposed continual re-solving is similar but lacks the gift mechanism and does not change the action abstraction between hands.
+  first: "ch13-libratus-2"
+
+- term: "self-improver"
+  en: "self-improver"
+  short: "The Libratus module that finds and patches the most-exploited holes in the blueprint's action abstraction."
+  detail: >-
+    The self-improver is the only Libratus module that modifies the blueprint during the match: it locates the top-k most-exploited holes in the blueprint's action abstraction, freezes the rest of the strategy, computes an ε-equilibrium for the partial game containing each new action using asymmetric coarser abstractions on the two sides, and merges the new action abstraction into the blueprint. It is not opponent modeling — it only uses opponent data to decide where to patch, so the repairs are universal across opponents. Running every night during the match, it made the weaknesses professionals found stop working within days.
+  first: "ch14-libratus-3"
+
+- term: "common-knowledge subgame"
+  en: "common-knowledge subgame"
+  short: "A subgame defined as a common-knowledge closure via recursive infoset connectivity."
+  detail: >-
+    Two nodes on the same level are connected if some information set links a descendant of one to a descendant of the other; the common-knowledge subgame at a node consists of all recursively connected nodes and their descendants — exactly the nodes that "both players know that both players know … they could be in". All previous safe subgame-solving methods were built on common-knowledge subgames; but in games such as Fog of War chess, common-knowledge sets can exceed 10^12 nodes, making such methods completely infeasible.
+  first: "ch15-klss"
+
+- term: "knowledge-limited subgame solving"
+  en: "knowledge-limited subgame solving (KLSS/KLUSS)"
+  short: "Constructs a subgame from nodes within knowledge distance k of the current position."
+  detail: >-
+    KLUSS's idea is to ignore nodes that are too far away in the knowledge graph, keeping only those within knowledge distance k of the current position to form the subgame; unlike the older KLSS, it does not freeze the truncated boundary nodes to the blueprint strategy. It is theoretically unsafe — counterexamples show exploitability can grow by a factor linear in the game size — but it tends to be safe in practice; routes to safety include updating the blueprint, distributing deviations over ancestor-closed independent sets, affine equilibria, and the internal-gift-based Safe-1-KLSS and opponent-limited OLSS. Obscuro, built around 2-KLUSS, became the first superhuman agent for Fog of War chess.
+  first: "ch15-klss"
+
+- term: "depth-limited subgame solving"
+  en: "depth-limited subgame solving"
+  short: "Search with limited lookahead plus a choice among opponent continuation strategies at the leaves."
+  detail: >-
+    In imperfect-information games, states have no well-defined value: an information set's value depends on both players' strategies in the rest of the game, so naïve truncation can be exploited by the opponent. Depth-limited solving lets the opponent take one final action at every leaf, choosing among multiple continuation strategies, and iterates "solve the subgame → compute a best response → add it to the strategy set"; this iterative algorithm converges to a Nash equilibrium in two-player zero-sum games. It generalizes the "limited lookahead + leaf evaluation" paradigm of perfect-information games: both Modicum and Pluribus are built on it.
+  first: "ch16-pluribus"
+
+- term: "continuation strategy"
+  en: "continuation strategy"
+  short: "A strategy that fully specifies play beyond a leaf of a depth-limited subgame."
+  detail: >-
+    In depth-limited solving, each continuation strategy specifies complete play beyond a leaf, thereby determining the leaf's value; letting the opponent choose among several continuation strategies at the leaf makes the searcher's strategy more balanced — if the searcher plays an unbalanced strategy, the opponent can punish it by switching to another continuation strategy. Pluribus uses k=4: the precomputed blueprint strategy and blueprint variants biased toward folding, calling, and raising.
+  first: "ch16-pluribus"
+
+- term: "AIVAT"
+  en: "AIVAT"
+  short: "The variance-reduction evaluation method used in Pluribus's matches against professionals."
+  detail: >-
+    Pluribus's matches against top human professionals used AIVAT [Burch et al., AAAI-18] for variance reduction, reporting results in milli-big-blinds per game, with statistical significance determined by a one-sided t-test at 95% confidence. After AIVAT adjustment, in the "5 professionals vs 1 Pluribus" experiment Pluribus won 48±25 mbb/game on average, a statistically significant victory (p = 0.028).
+  first: "ch16-pluribus"
+
+# ==================== Correlated equilibria and frontiers ====================
+
+- term: "coarse correlated equilibrium"
+  en: "coarse correlated equilibrium (CCE)"
+  short: "A correlated distribution that players commit to before receiving any recommendation."
+  detail: >-
+    A correlated distribution μ is a coarse correlated equilibrium if, for every player and deviation action, the expected utility of following the distribution is no worse than unilaterally switching to that fixed deviation. It requires players to commit before receiving any recommendation; every Nash equilibrium is a CCE — a Nash equilibrium is an uncorrelated (coarse) correlated equilibrium. Self-play of external-regret minimizers converges to coarse correlated equilibria.
+  first: "ch04-normal-form"
+
+- term: "correlated equilibrium"
+  en: "correlated equilibrium (CE)"
+  short: "A correlated distribution that players still do not want to deviate from after seeing their recommendation."
+  detail: >-
+    Correlated equilibrium (Aumann 1974) allows deviation functions that depend on the recommended action (swap deviations), making it a stronger concept than CCE: Nash ⊆ CE ⊆ CCE. Both concepts can be interpreted through a mediator, who samples a joint action profile from the correlated distribution and privately tells each player her recommended action. In stark contrast to Nash equilibria, a correlated equilibrium can be computed in polynomial time by linear programming; self-play of internal- or swap-regret minimizers converges to correlated equilibria.
+  first: "ch06-phi-regret"
+
+- term: "communication equilibrium"
+  en: "communication equilibrium"
+  short: "A tuple in which the players' strategies form a Nash equilibrium once the mediator's strategy is fixed."
+  detail: >-
+    A communication equilibrium is a strategy tuple (μ, x₁, …, xₙ) such that, with the mediator's strategy μ fixed, every player is best-responding. Stackelberg equilibrium, optimal correlated equilibrium, mechanism design, and information design are all special cases of optimal communication equilibria in extensive-form games. The main theorem (Zhang & Sandholm, NeurIPS 2022) gives a unified algorithm polynomial in the game-tree size: the revelation principle reduces the message space to "truthful reports + action recommendations", two observations compress the communication game to polynomial size, and the incentive constraints are turned into a single LP via LP duality.
+  first: "ch19-mechanism-design"
+
+- term: "extensive-form correlated equilibrium"
+  en: "extensive-form correlated equilibrium (EFCE)"
+  short: "An equilibrium in which the mediator privately recommends actions gradually as play proceeds."
+  detail: >-
+    In EFCE (von Stengel & Forges, 2008), the mediator privately recommends actions step by step as the game proceeds. Writing the mediator as an augmented game, its pure strategies correspond to assigning an action to every information set of the original game, and its mixed strategies to distributions over pure strategy profiles; since the mediator cannot remember its own earlier recommendations at later information sets, the mediator has imperfect recall — which is exactly why optimal EFCE is NP-hard. EFCE can be seen as information design plus a privacy constraint: the mediator may not leak one player's information to the others.
+  first: "ch19-mechanism-design"
+
+- term: "Stackelberg equilibrium"
+  en: "Stackelberg equilibrium"
+  short: "An equilibrium in which a leader commits to a strategy and a follower best-responds."
+  detail: >-
+    A Stackelberg equilibrium is a strategy of the leader such that, with the leader's strategy fixed, the direct strategy (obeying the recommendation) is a best response for the follower. Commitment power brings enormous value: in the course example, the unique Nash equilibrium gives the leader only 1, but by committing to playing X with probability just under 1/2, the follower's best response becomes Y and the leader's expected utility is about 10.5. Ignoring the leader's own incentive constraints, it is the "leader-optimal equilibrium"; adding those constraints turns it into the optimal Nash equilibrium problem.
+  first: "ch19-mechanism-design"
+
+- term: "mechanism design"
+  en: "mechanism design"
+  short: "The party with commitment power designs the rules of the game to optimize its objective."
+  detail: >-
+    In mechanism design, the auctioneer does not know the buyers' valuations and must design a mechanism under which truthful bidding forms an equilibrium. Myerson (1981) proved that for i.i.d. valuations there is a reserve price r such that the mechanism "if the highest bid exceeds r, the highest bidder wins and pays max{second-highest bid, r}" maximizes expected revenue. An optimal mechanism fits the unified form: a strategy of the auctioneer such that, with it fixed, the direct strategy profile (truthful reporting) is a Nash equilibrium for the other players.
+  first: "ch19-mechanism-design"
+
+- term: "information design"
+  en: "information design (Bayesian persuasion)"
+  short: "A sender commits to a signaling scheme to influence a receiver's action."
+  detail: >-
+    Information design, aka Bayesian persuasion (Kamenica & Gentzkow, AER 2011): a state is drawn from a public prior, the sender commits to a signal, and the receiver observes the signal realization, forms a posterior by Bayes' rule, and takes her optimal action. Bayesian rationality imposes only one constraint on the distribution of posteriors induced by a signal — Bayes plausibility: the posterior expectation must equal the prior. The value of the optimal signal is exactly the concave closure of the sender's indirect utility function evaluated at the prior; the sender strictly benefits from persuasion if and only if the concave closure strictly exceeds the original function there.
+  first: "ch19-mechanism-design"
+
+- term: "revelation principle"
+  en: "revelation principle"
+  short: "Every communication equilibrium is equivalent to a direct one."
+  detail: >-
+    The revelation principle states that for every communication equilibrium there is an equivalent direct communication equilibrium: players' messages to the mediator are reports of their private information and are truthful in equilibrium, and the mediator's messages to players are action recommendations that are obeyed in equilibrium. The proof is a simulation argument: the new mediator internally simulates the old mediator and the original equilibrium strategies, so any deviation against the direct equilibrium corresponds one-to-one to a deviation against the original one. It reduces the infinite message space to the finite structure of "type reports + action recommendations".
+  first: "ch19-mechanism-design"
+
+- term: "team game"
+  en: "team game"
+  short: "Teammates sharing one utility function play against opponents without free communication."
+  detail: >-
+    In team games, several players form a team sharing the same utility function, but they cannot communicate freely or share private information. Natural-looking solution concepts face essential difficulties: teammates randomizing independently cannot share a secret coin to coordinate their random choices, so the minimax theorem fails; and Nash equilibrium cannot express the goal of joint team optimality either. Team games correspond exactly to (timeable) imperfect-recall two-player zero-sum games, where Kuhn's theorem does not apply.
+  first: "ch18-team-games"
+
+- term: "team min-max equilibrium"
+  en: "team min-max equilibrium (TME)"
+  short: "The max-min solution when the team commits to an uncorrelated strategy profile first."
+  detail: >-
+    TME is the solution of the optimization problem max_{x₁,x₂} min_y u(x₁, x₂, y): teammates mix independently and the team commits first. This is a non-convex optimization and hence hard, and the minimax theorem fails — in the communication game the TME value is 1/4 while swapping max and min gives 1/2. Restricting the solution concept to TME can cost arbitrarily much utility; even computing the team's best response to a given opponent strategy is already NP-hard.
+  first: "ch18-team-games"
+
+- term: "team min-max equilibrium with correlation"
+  en: "team min-max equilibrium with correlation (TMECor)"
+  short: "The convexified TME allowing team-private randomness to correlate strategies."
+  detail: >-
+    TMECor lets teammates correlate their strategies ex ante using team-private randomness: a coordination device samples a joint pure plan from a joint distribution and each teammate follows it; no incentive-compatibility constraints are needed since teammates share payoffs. TMECor is a convex bilinear saddle-point problem, and the minimax theorem holds; in the communication game the TMECor value 1/2 strictly exceeds the TME value 1/4. Computing TMECor is NP-complete even for a team against a single player, and Δ₂^P-complete for team versus team.
+  first: "ch18-team-games"
+
+- term: "team belief DAG"
+  en: "team belief DAG (TB-DAG)"
+  short: "A strategically equivalent single-player decision problem built from the team's common knowledge."
+  detail: >-
+    The TB-DAG represents a team game as a single-player decision problem on a DAG: decision points are labeled by sets of game-tree nodes (beliefs), actions are prescriptions selecting one action at each intersected information set, and observation points split along public observations. It is strategically equivalent to the original team decision problem, and a DAG version of CFR runs efficiently on it. Its size is governed by the information asymmetry k (the number of last-infosets, measuring how much is known to some teammate but not common knowledge): per-iteration time ≤ (b+1)^k·poly(N), polynomial when k is bounded, and essentially unimprovable under ETH.
+  first: "ch18-team-games"
+
+- term: "hidden-role game"
+  en: "hidden-role game"
+  short: "A social-deduction game in which the good team does not know who its teammates are."
+  detail: >-
+    In hidden-role games (aka social deduction games), the good team does not know who its teammates are, and communication is central. Its solution concept — the hidden-role equilibrium — is defined via the split-personality game: each player is split into a good and a bad version, turning the game into a 2n-player adversarial team game; the concept is inherently asymmetric. Under three assumptions — private communication, the bad team being a minority, and the bad team being coordinated — an efficient algorithm exists (revelation principle plus MPC simulating a mediator); relaxing any one assumption gives NP, coNP, or Σ₂^P lower bounds respectively. The framework exactly solved the 5- and 6-player versions of Avalon.
+  first: "ch18-team-games"
+
+- term: "double oracle"
+  en: "double oracle (DO)"
+  short: "A framework alternating between solving a restricted game and computing full-game best responses."
+  detail: >-
+    The double oracle method (McMahan et al., ICML 2003) maintains only a small restricted set of pure strategies throughout: it computes a Nash equilibrium of the restricted subgame, computes a full-game best response for each player and adds it to the strategy set, and stops when the best-response gap is zero — at which point the restricted equilibrium is a Nash equilibrium of the original game. DO is guaranteed to terminate at an exact Nash equilibrium, but in the worst case it needs exponentially many iterations (even in two-player zero-sum extensive-form games), and exploitability does not decrease monotonically.
+  first: "ch20-double-oracle"
+
+- term: "anytime double oracle"
+  en: "anytime double oracle (ADO)"
+  short: "A double-oracle variant guaranteeing monotonically non-increasing exploitability."
+  detail: >-
+    ADO defines a separate restricted game for each player: the player's own strategy must come from her population, while the opponent may use any strategy in the whole game. Since the restricted distribution is computed against the worst case of an unrestricted opponent, exploitability never rises after adding a new strategy, so training can be safely stopped at any time. Its scalable implementation, RM-BR DO, uses regret minimization plus best response: the side with the huge strategy set only needs a best-response oracle, because that side's regret does not depend on the size of its action set.
+  first: "ch20-double-oracle"
+
+- term: "policy-space response oracles"
+  en: "policy-space response oracles (PSRO)"
+  short: "A unifying framework of a meta-solver plus RL-approximated best responses."
+  detail: >-
+    PSRO (Lanctot et al., NeurIPS 2017) is a conceptual unification and generalization of double oracle and fictitious play: a meta-solver outputs a meta-strategy on a meta-game constructed by empirical game-theoretic analysis — taking a Nash equilibrium recovers DO, taking the uniform average recovers fictitious play; best responses are approximated with reinforcement learning, strategies are parameterized by neural networks, and the population is an ever-growing policy library. Moving ADO's restricted-game definition onto the meta-solver yields Anytime PSRO. AlphaStar's league training and OpenAI Five's historical-opponent mixing are both PSRO-style designs.
+  first: "ch20-double-oracle"
+
+- term: "AlphaStar"
+  en: "AlphaStar"
+  short: "A StarCraft II Grandmaster-level agent trained via league training and prioritized fictitious self-play."
+  detail: >-
+    AlphaStar was trained through league training: agents were initially trained by supervised learning from human replays to solve the exploration problem, and then played each other in a league of agents. Main agents used prioritized fictitious self-play (PFSP), sampling opponents in proportion to their win rate against the agent — stronger opponents are more likely to be picked; main exploiters find potential flaws of the main agents, and league exploiters find systematic weaknesses of the whole league. AlphaStar Final surpassed 99.8% of human ranked players on the ladder, reaching Grandmaster level, but exploitable weaknesses were later discovered.
+  first: "ch20-double-oracle"
+
+- term: "OpenAI Five"
+  en: "OpenAI Five"
+  short: "A Dota 2 world-champion-beating agent trained purely by self-play with dynamic historical-opponent sampling."
+  detail: >-
+    OpenAI Five used no human game data at all: 80% of training games were played against the latest parameters and 20% against historical versions, preventing the policy from overfitting to the newest opponent (strategy collapse); each historical opponent carries a quality score and is sampled from a softmax distribution. The policy is parameterized by a single-layer 4096-unit LSTM and trained with PPO; the key to success was scaling existing RL systems to an unprecedented level (about 800 PFlops/s·days). In April 2019 it defeated The International's championship team and beat 99.5% of its human opponents.
+  first: "ch20-double-oracle"
